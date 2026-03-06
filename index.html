@@ -4,13 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>You Know - Personalized Recommender</title>
-    <meta name="description" content="Discover bars, restaurants and clubs through your friends' real experiences. Powered by vibe search." />
+    <meta
+      name="description"
+      content="Discover bars, restaurants and clubs through your friends' real experiences. Powered by vibe search."
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>
+
+    <form name="waitlist" method="POST" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="waitlist" />
+      <input type="email" name="email" />
+    </form>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
