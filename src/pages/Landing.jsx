@@ -189,7 +189,8 @@ export default function Landing() {
           </div>
         </section>
 
-        <form name="waitlist" data-netlify="true" hidden>
+        <form name="waitlist" method="POST" data-netlify="true" hidden>
+          <input type="hidden" name="form-name" value="waitlist" />
           <input type="email" name="email" />
         </form>
       </div>
