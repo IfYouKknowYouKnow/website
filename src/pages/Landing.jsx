@@ -148,8 +148,7 @@ export default function Landing() {
                   friends as the guides.
                 </p>
 
-                <form
-                  name="waitlist"
+                <form name="waitlist" netlify
                   method="POST"
                   data-netlify="true"
                   onSubmit={handleSubmit}
