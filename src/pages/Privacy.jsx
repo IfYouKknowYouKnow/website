@@ -80,7 +80,7 @@ export default function Privacy() {
 
           <section className={styles.section}>
             <h2>4. Data deletion</h2>
-            <p>You can request deletion of your account and all associated data at any time by emailing <a href="mailto:privacy@ifykyk.app">privacy@ifykyk.app</a>.</p>
+            <p>You can request deletion of your account and all associated data at any time by emailing <a href="mailto:ifyouknowyouknowrecs@gmail.com">privacy@ifykyk.app</a>.</p>
           </section>
 
           <section className={styles.section}>
@@ -90,7 +90,7 @@ export default function Privacy() {
 
           <section className={styles.section}>
             <h2>6. Contact</h2>
-            <p>Questions about this policy? Contact us at <a href="mailto:privacy@ifykyk.app">privacy@ifykyk.app</a>.</p>
+            <p>Questions about this policy? Contact us at <a href="mailto:ifyouknowyouknowrecs@gmail.com">ifyouknowyouknowrecs@gmail.com</a>.</p>
           </section>
         </div>
       </main>
