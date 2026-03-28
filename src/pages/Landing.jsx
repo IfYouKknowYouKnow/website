@@ -1,10 +1,36 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
 import styles from './Landing.module.css'
 
-const ZURICH = [8.541, 47.366]
+const ANDROID_DOWNLOAD_PATH = '/downloads/iykyk-android.apk'
+const TESTFLIGHT_URL = 'https://testflight.apple.com/join/sg6HhJjE'
+const APP_SCREENSHOTS = [
+  {
+    src: '/feed_screen.PNG',
+    label: 'Feed',
+    alt: 'IYKYK feed screen showing friend activity and trending places.',
+  },
+  {
+    src: '/map_screen.PNG',
+    label: 'Map',
+    alt: 'IYKYK map screen with place pins and filters.',
+  },
+  {
+    src: '/vibe_screen.PNG',
+    label: 'Vibe Search',
+    alt: 'IYKYK vibe search screen.',
+  },
+  {
+    src: '/placesheet_screen.PNG',
+    label: 'Place Details',
+    alt: 'IYKYK place detail screen.',
+  },
+  {
+    src: '/profile_screen.PNG',
+    label: 'Profile',
+    alt: 'IYKYK profile screen.',
+  },
+]
 
 const DESKTOP_BUBBLES = [
   { top: '10%', left: '6%' },
@@ -34,35 +60,9 @@ function encode(data) {
 }
 
 export default function Landing() {
-  const mapContainer = useRef(null)
-  const map = useRef(null)
-
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
-
-  useEffect(() => {
-    if (map.current) return
-
-    const isMobile = window.innerWidth <= 768
-
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: isMobile ? [8.541, 47.366] : [8.541, 47.376],
-      zoom: 13,
-      interactive: false,
-      attributionControl: false,
-    })
-
-    map.current.on('load', () => map.current?.resize())
-
-    return () => {
-      map.current?.remove()
-      map.current = null
-    }
-  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -96,7 +96,7 @@ export default function Landing() {
   return (
     <div className={styles.page}>
       <div className={styles.heroWrap}>
-        <div ref={mapContainer} className={styles.mapBg} />
+        <div className={styles.mapBg} />
         <div className={styles.mapOverlay} />
 
         <div className={styles.bubblesLayer}>
@@ -127,7 +127,7 @@ export default function Landing() {
 
         <nav className={styles.nav}>
           <div className={`container ${styles.navInner}`}>
-            <span className={styles.navBrand}>#IYKYK</span>
+            <span className={styles.navBrand}>#You Know</span>
             <Link to="/privacy" className={styles.navPrivacy}>Privacy</Link>
           </div>
         </nav>
@@ -137,8 +137,28 @@ export default function Landing() {
             <div className={styles.heroTextBlock}>
               <h1 className={styles.youKnow}>You Know.</h1>
 
+              <div className={styles.screenshotsSection}>
+                <div className={styles.screenshotsRail}>
+                  {APP_SCREENSHOTS.map((screenshot) => (
+                    <figure className={styles.screenshotCard} key={screenshot.src}>
+                      <div className={styles.phoneFrame}>
+                        <img
+                          className={styles.phoneScreen}
+                          src={screenshot.src}
+                          alt={screenshot.alt}
+                        />
+                      </div>
+
+                      <figcaption className={styles.screenshotLabel}>
+                        {screenshot.label}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+
               <div className={styles.heroContent}>
-                <p className={styles.eyebrow}>Coming soon</p>
+                <p className={styles.eyebrow}>iPhone and Android beta available</p>
 
                 <p className={styles.sub}>
                   Share your favorite spots with friends. IYKYK combines
@@ -148,7 +168,40 @@ export default function Landing() {
                   friends as the guides.
                 </p>
 
-                <form name="waitlist" netlify
+                <div className={styles.downloadPanel}>
+                  <div>
+                    <p className={styles.downloadLabel}>Download the app</p>
+                    <p className={styles.downloadMeta}>Install on iPhone with TestFlight or download the Android APK.</p>
+                  </div>
+
+                  <div className={styles.downloadActions}>
+                    <a
+                      className={styles.secondaryDownloadButton}
+                      href={TESTFLIGHT_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Join TestFlight
+                    </a>
+
+                    <a
+                      className={styles.downloadButton}
+                      href={ANDROID_DOWNLOAD_PATH}
+                      download
+                    >
+                      Download APK
+                    </a>
+                  </div>
+                </div>
+
+                <p className={styles.downloadNote}>
+                  iPhone users can install through TestFlight. On Android, if your
+                  phone asks, allow installs from your browser first.
+                </p>
+
+                <form
+                  name="waitlist"
+                  netlify
                   method="POST"
                   data-netlify="true"
                   onSubmit={handleSubmit}
@@ -182,7 +235,7 @@ export default function Landing() {
                 )}
 
                 <p className={styles.formNote}>
-                  No spam. Be the first to know when we launch.
+                  Join the waitlist for launch updates, iOS access, and feature drops.
                 </p>
               </div>
             </div>
