@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
 const ANDROID_DOWNLOAD_PATH =
-  'https://github.com/IfYouKknowYouKnow/website/releases/tag/v0.1.0'
+  'https://github.com/IfYouKknowYouKnow/website/releases/download/v0.1.0/app-release.apk'
 const ANDROID_APK_SHA256 =
   '3765f25fec80d5c9df4492d4d0b48a945f98711be1903c68eba6d018e7f5a472'
 const TESTFLIGHT_URL = 'https://testflight.apple.com/join/sg6HhJjE'
@@ -188,8 +188,6 @@ export default function Landing() {
                   <a
                     className={styles.downloadButton}
                     href={ANDROID_DOWNLOAD_PATH}
-                    target="_blank"
-                    rel="noreferrer"
                   >
                     Download APK
                   </a>
