@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
-const ANDROID_DOWNLOAD_PATH = '/downloads/iykyk-android.apk'
+const ANDROID_DOWNLOAD_PATH =
+  'https://github.com/IfYouKknowYouKnow/website/releases/tag/v0.1.0'
+const ANDROID_APK_SHA256 =
+  '3765f25fec80d5c9df4492d4d0b48a945f98711be1903c68eba6d018e7f5a472'
 const TESTFLIGHT_URL = 'https://testflight.apple.com/join/sg6HhJjE'
 const APP_SCREENSHOTS = [
   {
@@ -187,7 +190,8 @@ export default function Landing() {
                     <a
                       className={styles.downloadButton}
                       href={ANDROID_DOWNLOAD_PATH}
-                      download
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       Download APK
                     </a>
@@ -198,6 +202,11 @@ export default function Landing() {
                   iPhone users can install through TestFlight. On Android, if your
                   phone asks, allow installs from your browser first.
                 </p>
+
+                <div className={styles.checksumBlock}>
+                  <p className={styles.checksumLabel}>Android APK SHA-256</p>
+                  <code className={styles.checksumValue}>{ANDROID_APK_SHA256}</code>
+                </div>
 
                 <form
                   name="waitlist"

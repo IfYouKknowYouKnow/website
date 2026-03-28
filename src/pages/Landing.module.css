@@ -252,7 +252,32 @@
 .downloadNote {
   font-size: 13px;
   color: #666;
+  margin-bottom: 14px;
+}
+
+.checksumBlock {
   margin-bottom: 28px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.checksumLabel {
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.checksumValue {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #222;
+  word-break: break-all;
 }
 
 /* Form */
@@ -451,6 +476,7 @@
   .sub,
   .downloadMeta,
   .downloadNote,
+  .checksumBlock,
   .formNote {
     margin-left: auto;
     margin-right: auto;
