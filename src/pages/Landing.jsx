@@ -98,11 +98,7 @@ export default function Landing() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.heroWrap}>
-        <div className={styles.mapBg} />
-        <div className={styles.mapOverlay} />
-
-        <div className={styles.bubblesLayer}>
+      <div className={styles.bubblesLayer}>
           <div className={styles.bubblesDesktop}>
             {DESKTOP_BUBBLES.map((pos, i) => (
               <div
@@ -126,136 +122,137 @@ export default function Landing() {
               </div>
             ))}
           </div>
+      </div>
+
+      <nav className={styles.nav}>
+        <div className={`container ${styles.navInner}`}>
+          <span className={styles.navBrand}>#You Know</span>
+          <Link to="/privacy" className={styles.navPrivacy}>Privacy</Link>
         </div>
+      </nav>
 
-        <nav className={styles.nav}>
-          <div className={`container ${styles.navInner}`}>
-            <span className={styles.navBrand}>#You Know</span>
-            <Link to="/privacy" className={styles.navPrivacy}>Privacy</Link>
-          </div>
-        </nav>
+      <section className={styles.hero}>
+        <div className="container">
+          <div className={styles.heroTextBlock}>
+            <h1 className={styles.youKnow}>You Know.</h1>
 
-        <section className={styles.hero}>
-          <div className="container">
-            <div className={styles.heroTextBlock}>
-              <h1 className={styles.youKnow}>You Know.</h1>
+            <div className={styles.screenshotsSection}>
+              <div className={styles.screenshotsRail}>
+                {APP_SCREENSHOTS.map((screenshot) => (
+                  <figure className={styles.screenshotCard} key={screenshot.src}>
+                    <div className={styles.phoneFrame}>
+                      <img
+                        className={styles.phoneScreen}
+                        src={screenshot.src}
+                        alt={screenshot.alt}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
 
-              <div className={styles.screenshotsSection}>
-                <div className={styles.screenshotsRail}>
-                  {APP_SCREENSHOTS.map((screenshot) => (
-                    <figure className={styles.screenshotCard} key={screenshot.src}>
-                      <div className={styles.phoneFrame}>
-                        <img
-                          className={styles.phoneScreen}
-                          src={screenshot.src}
-                          alt={screenshot.alt}
-                        />
-                      </div>
-
-                      <figcaption className={styles.screenshotLabel}>
-                        {screenshot.label}
-                      </figcaption>
-                    </figure>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.heroContent}>
-                <p className={styles.eyebrow}>iPhone and Android beta available</p>
-
-                <p className={styles.sub}>
-                  Share your favorite spots with friends. IYKYK combines
-                  recommendations from people you trust with AI that understands
-                  your taste. It knows the city like a concierge — and you like a
-                  friend. A new kind of social feed: your city as the feed, your
-                  friends as the guides.
-                </p>
-
-                <div className={styles.downloadPanel}>
-                  <div>
-                    <p className={styles.downloadLabel}>Download the app</p>
-                    <p className={styles.downloadMeta}>Install on iPhone with TestFlight or download the Android APK.</p>
-                  </div>
-
-                  <div className={styles.downloadActions}>
-                    <a
-                      className={styles.secondaryDownloadButton}
-                      href={TESTFLIGHT_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Join TestFlight
-                    </a>
-
-                    <a
-                      className={styles.downloadButton}
-                      href={ANDROID_DOWNLOAD_PATH}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Download APK
-                    </a>
-                  </div>
-                </div>
-
-                <p className={styles.downloadNote}>
-                  iPhone users can install through TestFlight. On Android, if your
-                  phone asks, allow installs from your browser first.
-                </p>
-
-                <div className={styles.checksumBlock}>
-                  <p className={styles.checksumLabel}>Android APK SHA-256</p>
-                  <code className={styles.checksumValue}>{ANDROID_APK_SHA256}</code>
-                </div>
-
-                <form
-                  name="waitlist"
-                  netlify
-                  method="POST"
-                  data-netlify="true"
-                  onSubmit={handleSubmit}
-                  className={styles.form}
-                >
-                  <input type="hidden" name="form-name" value="waitlist" />
-
-                  <input
-                    className={styles.input}
-                    type="email"
-                    name="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-
-                  <button
-                    className={styles.btn}
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Joining...' : 'Join waitlist'}
-                  </button>
-                </form>
-
-                {toast && (
-                  <p className={styles.successMessage}>
-                    {toast}
-                  </p>
-                )}
-
-                <p className={styles.formNote}>
-                  Join the waitlist for launch updates, iOS access, and feature drops.
-                </p>
+                    <figcaption className={styles.screenshotLabel}>
+                      {screenshot.label}
+                    </figcaption>
+                  </figure>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
 
-        <form name="waitlist" method="POST" data-netlify="true" hidden>
-          <input type="hidden" name="form-name" value="waitlist" />
-          <input type="email" name="email" />
-        </form>
-      </div>
+            <div className={styles.heroContent}>
+              <p className={styles.eyebrow}>iPhone and Android beta available</p>
+
+              <p className={styles.sub}>
+                Share your favorite spots with friends. IYKYK combines
+                recommendations from people you trust with AI that understands
+                your taste. It knows the city like a concierge — and you like a
+                friend. A new kind of social feed: your city as the feed, your
+                friends as the guides.
+              </p>
+
+              <div className={styles.downloadPanel}>
+                <div>
+                  <p className={styles.downloadLabel}>Download the app</p>
+                  <p className={styles.downloadMeta}>Install on iPhone with TestFlight or download the Android APK.</p>
+                </div>
+
+                <div className={styles.downloadActions}>
+                  <a
+                    className={styles.secondaryDownloadButton}
+                    href={TESTFLIGHT_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Join TestFlight
+                  </a>
+
+                  <a
+                    className={styles.downloadButton}
+                    href={ANDROID_DOWNLOAD_PATH}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Download APK
+                  </a>
+                </div>
+              </div>
+
+              <p className={styles.downloadNote}>
+                iPhone users can install through TestFlight. On Android, if your
+                phone asks, allow installs from your browser first.
+              </p>
+
+              <div className={styles.checksumBlock}>
+                <p className={styles.checksumLabel}>Android APK SHA-256</p>
+                <code className={styles.checksumValue}>{ANDROID_APK_SHA256}</code>
+              </div>
+
+              <form
+                name="waitlist"
+                netlify
+                method="POST"
+                data-netlify="true"
+                onSubmit={handleSubmit}
+                className={styles.form}
+              >
+                <input type="hidden" name="form-name" value="waitlist" />
+
+                <input
+                  className={styles.input}
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+
+                <button
+                  className={styles.btn}
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Joining...' : 'Join waitlist'}
+                </button>
+              </form>
+
+              {toast && (
+                <p className={styles.successMessage}>
+                  {toast}
+                </p>
+              )}
+
+              <p className={styles.formNote}>
+                Join the waitlist for launch updates, iOS access, and feature drops.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <form name="waitlist" method="POST" data-netlify="true" hidden>
+        <input type="hidden" name="form-name" value="waitlist" />
+        <input type="email" name="email" />
+      </form>
 
       <section className={styles.features}>
         <div className="container">
