@@ -4,9 +4,7 @@ import styles from './Landing.module.css'
 
 const ANDROID_DOWNLOAD_PATH =
   'https://github.com/IfYouKknowYouKnow/website/releases/download/v0.1.0/app-release.apk'
-const ANDROID_APK_SHA256 =
-  '3765f25fec80d5c9df4492d4d0b48a945f98711be1903c68eba6d018e7f5a472'
-const TESTFLIGHT_URL = 'https://testflight.apple.com/join/sg6HhJjE'
+const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const APP_SCREENSHOTS = [
   {
     src: '/feed_screen.PNG',
@@ -159,7 +157,7 @@ export default function Landing() {
             </div>
 
             <div className={styles.heroContent}>
-              <p className={styles.eyebrow}>iPhone and Android beta available</p>
+              <p className={styles.eyebrow}>iPhone on the App Store, Android beta available</p>
 
               <p className={styles.sub}>
                 Share your favorite spots with friends. IYKYK combines
@@ -172,17 +170,17 @@ export default function Landing() {
               <div className={styles.downloadPanel}>
                 <div>
                   <p className={styles.downloadLabel}>Download the app</p>
-                  <p className={styles.downloadMeta}>Install on iPhone with TestFlight or download the Android APK.</p>
+                  <p className={styles.downloadMeta}>Download on the App Store or install the Android APK.</p>
                 </div>
 
                 <div className={styles.downloadActions}>
                   <a
                     className={styles.secondaryDownloadButton}
-                    href={TESTFLIGHT_URL}
+                    href={APP_STORE_URL}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Join TestFlight
+                    View on App Store
                   </a>
 
                   <a
@@ -195,14 +193,9 @@ export default function Landing() {
               </div>
 
               <p className={styles.downloadNote}>
-                iPhone users can install through TestFlight. On Android, if your
+                iPhone users can install from the App Store. On Android, if your
                 phone asks, allow installs from your browser first.
               </p>
-
-              <div className={styles.checksumBlock}>
-                <p className={styles.checksumLabel}>Android APK SHA-256</p>
-                <code className={styles.checksumValue}>{ANDROID_APK_SHA256}</code>
-              </div>
 
               <form
                 name="waitlist"
@@ -240,7 +233,7 @@ export default function Landing() {
               )}
 
               <p className={styles.formNote}>
-                Join the waitlist for launch updates, iOS access, and feature drops.
+                Join the waitlist for launch updates, Android news, and feature drops.
               </p>
             </div>
           </div>
