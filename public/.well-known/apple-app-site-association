@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "RDGPLA4Z2W.com.iykyk.marielouise.app",
+        "paths": [
+          "/place",
+          "/place/*"
+        ]
+      }
+    ]
+  }
+}
