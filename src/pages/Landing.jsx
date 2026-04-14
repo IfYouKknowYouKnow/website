@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
 const ANDROID_DOWNLOAD_PATH =
-  'https://github.com/IfYouKknowYouKnow/website/releases/download/v0.1.0/app-release.apk'
+  'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
+const INVITE_CODE = 'QNU9JKFX'
 const APP_SCREENSHOTS = [
   {
     src: '/feed_screen.PNG',
@@ -60,10 +61,49 @@ function encode(data) {
     .join('&')
 }
 
+function fallbackCopyText(text) {
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.setAttribute('readonly', '')
+  textArea.style.position = 'absolute'
+  textArea.style.left = '-9999px'
+  document.body.appendChild(textArea)
+  textArea.select()
+
+  const didCopy = document.execCommand('copy')
+  document.body.removeChild(textArea)
+
+  return didCopy
+}
+
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
+  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy')
+
+  function resetCopyButtonLabel() {
+    window.setTimeout(() => {
+      setCopyButtonLabel('Copy')
+    }, 2000)
+  }
+
+  async function handleInviteCodeCopy() {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(INVITE_CODE)
+      } else if (!fallbackCopyText(INVITE_CODE)) {
+        throw new Error('Clipboard API unavailable')
+      }
+
+      setCopyButtonLabel('Copied')
+    } catch (error) {
+      console.error('Invite code copy failed:', error)
+      setCopyButtonLabel('Copy code')
+    }
+
+    resetCopyButtonLabel()
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -168,9 +208,34 @@ export default function Landing() {
               </p>
 
               <div className={styles.downloadPanel}>
-                <div>
+                <div className={styles.downloadDetails}>
                   <p className={styles.downloadLabel}>Download the app</p>
                   <p className={styles.downloadMeta}>Download on the App Store or install the Android APK.</p>
+
+                  <div className={styles.inviteCodeBlock}>
+                    <label className={styles.inviteCodeLabel} htmlFor="invite-code">
+                      Invite code
+                    </label>
+
+                    <div className={styles.inviteCodeRow}>
+                      <input
+                        id="invite-code"
+                        className={styles.inviteCodeInput}
+                        type="text"
+                        value={INVITE_CODE}
+                        readOnly
+                        aria-label="Invite code"
+                      />
+
+                      <button
+                        type="button"
+                        className={styles.inviteCodeButton}
+                        onClick={handleInviteCodeCopy}
+                      >
+                        {copyButtonLabel}
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.downloadActions}>

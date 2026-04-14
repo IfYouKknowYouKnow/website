@@ -3,3 +3,4 @@ dist/
 .env
 public/downloads/*.apk
 public/downloads/*.aab
+public/app-release.apk

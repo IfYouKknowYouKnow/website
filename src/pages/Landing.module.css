@@ -204,11 +204,72 @@
   max-width: 340px;
 }
 
+.downloadDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
 .downloadActions {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.inviteCodeBlock {
+  width: 100%;
+  max-width: 350px;
+}
+
+.inviteCodeLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.inviteCodeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inviteCodeInput {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.inviteCodeButton {
+  flex-shrink: 0;
+  padding: 11px 14px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 10px;
+  color: #111;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.inviteCodeButton:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
 .secondaryDownloadButton,
@@ -445,6 +506,14 @@
   .downloadActions {
     width: 100%;
     justify-content: center;
+  }
+
+  .inviteCodeBlock {
+    max-width: none;
+  }
+
+  .inviteCodeLabel {
+    text-align: left;
   }
 
   .secondaryDownloadButton,
