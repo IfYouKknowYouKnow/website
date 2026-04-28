@@ -25,12 +25,12 @@ const APP_SCREENSHOTS = [
     alt: 'YouKnow vibe search screen.',
   },
   {
-    src: '/placesheet_screen.PNG',
+    src: '/placesheet_screen.jpg',
     label: 'Place Details',
     alt: 'YouKnow place detail screen.',
   },
   {
-    src: '/profile_screen.PNG',
+    src: '/profile_screen.jpg',
     label: 'Profile',
     alt: 'YouKnow profile screen.',
   },
