@@ -5,7 +5,7 @@
   flex-direction: column;
   overflow-x: hidden;
   isolation: isolate;
-  background: #f7f3ed;
+  background: #090909;
 }
 
 .page::before {
@@ -14,10 +14,10 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: url('/map_screen.PNG');
+  background-image: url('/auth_bg_zurich.jpg');
   background-size: cover;
-  background-position: center top;
-  opacity: 0.28;
+  background-position: center;
+  opacity: 1;
 }
 
 .page::after {
@@ -27,14 +27,18 @@
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.28) 42%, rgba(255, 255, 255, 0.78) 100%),
-    linear-gradient(180deg, rgba(255, 250, 245, 0.46), rgba(255, 255, 255, 0.82));
+    linear-gradient(180deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.38) 42%, rgba(0, 0, 0, 0.78)),
+    radial-gradient(circle at 50% 18%, rgba(255, 106, 0, 0.18), transparent 36%);
 }
 
 .bubblesLayer,
 .bubblesDesktop,
 .bubblesMobile {
   pointer-events: none;
+}
+
+.bubblesMobile {
+  display: none;
 }
 
 /* Speech bubbles */
@@ -79,7 +83,6 @@
   position: relative;
   z-index: 10;
   padding: 18px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .navInner {
@@ -91,33 +94,34 @@
 .logo {
   font-size: 20px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: 0;
+  color: #111;
 }
 
 .navLink {
   font-size: 14px;
   font-weight: 500;
-  color: #555;
+  color: rgba(255, 255, 255, 0.78);
   transition: color 0.15s;
 }
 
 .navLink:hover {
-  color: #000;
+  color: #fff;
 }
 
 .navPrivacy {
   font-size: 13px;
   font-weight: 600;
-  color: #0a0a0a;
-  background: white;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
   padding: 7px 16px;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  transition: box-shadow 0.15s;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.15s;
 }
 
 .navPrivacy:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* Hero */
@@ -125,7 +129,7 @@
   position: relative;
   z-index: 10;
   flex: 1;
-  padding: 80px 0 100px;
+  padding: 54px 0 86px;
 }
 
 .hero :global(.container) {
@@ -136,6 +140,10 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .eyebrow {
@@ -143,7 +151,7 @@
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #555;
+  color: rgba(255, 255, 255, 0.72);
   margin-bottom: 16px;
 }
 
@@ -164,20 +172,94 @@
 }
 
 .youKnow {
-  font-size: clamp(56px, 10vw, 110px);
+  max-width: 760px;
+  font-size: clamp(34px, 7vw, 76px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: #fff;
+  margin-bottom: 24px;
+  text-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+}
+
+.heroLogo {
+  display: block;
+  font-size: clamp(54px, 11vw, 118px);
   font-weight: 900;
-  line-height: 1;
-  letter-spacing: -5px;
+  line-height: 0.95;
+  letter-spacing: 0;
   color: #e01c1c;
-  margin-bottom: 32px;
+  margin: 0 auto 18px;
+  text-shadow: none;
 }
 
 .sub {
-  font-size: 17px;
-  color: #333;
-  max-width: 480px;
-  line-height: 1.65;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.84);
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.stats {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 8px;
+  max-width: 100%;
   margin-bottom: 24px;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+}
+
+.statNumber {
+  color: #e01c1c;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+
+.sphMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sphLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+}
+
+.sphLogo {
+  display: block;
+  width: 92px;
+  height: auto;
+  padding: 6px 8px;
+  background: #fff;
+  border-radius: 6px;
 }
 
 .downloadPanel {
@@ -187,20 +269,20 @@
   gap: 18px;
   padding: 18px 20px;
   margin-bottom: 14px;
-  background: rgba(255, 255, 255, 0.84);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
 }
 
 .downloadLabel {
   font-size: 15px;
   font-weight: 700;
-  color: #111;
+  color: #fff;
 }
 
 .downloadMeta {
   font-size: 13px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.68);
   max-width: 340px;
 }
 
@@ -230,7 +312,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #555;
+  color: rgba(255, 255, 255, 0.68);
 }
 
 .inviteCodeRow {
@@ -244,7 +326,7 @@
   min-width: 0;
   padding: 11px 14px;
   background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 10px;
   color: #111;
   font-size: 14px;
@@ -256,8 +338,8 @@
 .inviteCodeButton {
   flex-shrink: 0;
   padding: 11px 14px;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 10px;
   color: #111;
   font-size: 13px;
@@ -282,8 +364,8 @@
   align-items: center;
   justify-content: center;
   padding: 13px 18px;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   color: #111;
   font-size: 14px;
@@ -303,9 +385,9 @@
   align-items: center;
   justify-content: center;
   padding: 13px 18px;
-  background: #0a0a0a;
+  background: #fff;
   border-radius: 12px;
-  color: #fff;
+  color: #090909;
   font-size: 14px;
   font-weight: 700;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
@@ -319,7 +401,7 @@
 
 .downloadNote {
   font-size: 13px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.68);
   margin-bottom: 14px;
 }
 
@@ -328,14 +410,16 @@
   display: flex;
   gap: 10px;
   max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 12px;
 }
 
 .input {
   flex: 1;
   padding: 13px 16px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: var(--radius-sm);
   color: #0a0a0a;
   font-size: 15px;
@@ -353,7 +437,7 @@
 
 .btn {
   padding: 13px 22px;
-  background: linear-gradient(135deg, var(--orange), var(--pink));
+  background: #e01c1c;
   border: none;
   border-radius: var(--radius-sm);
   color: white;
@@ -370,8 +454,8 @@
 
 .formNote {
   font-size: 13px;
-  color: #888;
-  margin-bottom: 48px;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 0;
 }
 
 /* Vibe pills */
@@ -398,16 +482,19 @@
   width: min(100%, 560px);
   padding: 28px 28px 16px;
   margin: 0 auto;
-  border-radius: 24px;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 18px;
+  background: #090909;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .screenshotsSection {
   position: relative;
   z-index: 10;
-  margin-bottom: 30px;
+  padding: 28px 0 84px;
+  background: #fff;
 }
 
 .phoneFrame {
@@ -415,9 +502,9 @@
   width: 100%;
   padding: 4px;
   border-radius: 26px;
-  background: rgba(255, 255, 255, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.54);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
 }
 
 .phoneFrame::before {
@@ -472,30 +559,32 @@
 .navBrand {
   font-size: 13px;
   font-weight: 700;
-  color: #e01c1c;
-  background: rgba(255, 255, 255, 0.96);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
   padding: 7px 16px;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 @media (max-width: 768px) {
   .hero {
-    padding: 44px 0 72px;
+    padding: 34px 0 64px;
   }
 
   .heroContent {
     max-width: 100%;
     padding: 20px 20px 12px;
-    border-radius: 20px;
+    border-radius: 18px;
     text-align: center;
-    background: #fff;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    background: #090909;
   }
 
   .youKnow {
     margin-bottom: 20px;
+  }
+
+  .heroLogo {
+    font-size: clamp(48px, 16vw, 82px);
   }
 
   .downloadPanel {
@@ -527,6 +616,28 @@
   .formNote {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .stat {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sphMark {
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+  }
+
+  .sphLogo {
+    width: 108px;
   }
 
   .form {
@@ -586,8 +697,8 @@
 .features {
   position: relative;
   z-index: 10;
-  padding: 80px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 0 0 80px;
+  background: #fff;
 }
 
 .grid {
@@ -628,7 +739,8 @@
   position: relative;
   z-index: 10;
   padding: 32px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .footerInner {
@@ -640,6 +752,14 @@
 .footerCopy {
   font-size: 13px;
   color: #5f5f5f;
+}
+
+.footer .navLink {
+  color: #555;
+}
+
+.footer .navLink:hover {
+  color: #111;
 }
 
 /* Responsive */

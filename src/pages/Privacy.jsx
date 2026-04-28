@@ -8,7 +8,7 @@ export default function Privacy() {
     <div className={styles.page}>
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
-          <Link to="/" className={`gradient-text ${styles.logo}`}>IYKYK</Link>
+          <Link to="/" className={styles.logo}>YouKnow</Link>
         </div>
       </nav>
 
@@ -31,7 +31,7 @@ export default function Privacy() {
             <iframe
               className={styles.noticeFrame}
               src={NOTICE_PATH}
-              title="IYKYK Privacy Notice"
+              title="YouKnow Privacy Notice"
             />
           </div>
         </div>

@@ -6,31 +6,33 @@ const ANDROID_DOWNLOAD_PATH =
   'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const INVITE_CODE = 'QNU9JKFX'
+const CURATED_PLACE_COUNT = '3,035'
+const CITY_COUNT = '87'
 const APP_SCREENSHOTS = [
   {
     src: '/feed_screen.PNG',
     label: 'Feed',
-    alt: 'IYKYK feed screen showing friend activity and trending places.',
+    alt: 'YouKnow feed screen showing friend activity and trending places.',
   },
   {
     src: '/map_screen.PNG',
     label: 'Map',
-    alt: 'IYKYK map screen with place pins and filters.',
+    alt: 'YouKnow map screen with place pins and filters.',
   },
   {
     src: '/vibe_screen.PNG',
     label: 'Vibe Search',
-    alt: 'IYKYK vibe search screen.',
+    alt: 'YouKnow vibe search screen.',
   },
   {
     src: '/placesheet_screen.PNG',
     label: 'Place Details',
-    alt: 'IYKYK place detail screen.',
+    alt: 'YouKnow place detail screen.',
   },
   {
     src: '/profile_screen.PNG',
     label: 'Profile',
-    alt: 'IYKYK profile screen.',
+    alt: 'YouKnow profile screen.',
   },
 ]
 
@@ -39,8 +41,7 @@ const DESKTOP_BUBBLES = [
   { top: '16%', left: '28%' },
   { top: '12%', left: '78%' },
   { top: '26%', left: '60%' },
-  { top: '34%', left: '14%' },
-  { top: '42%', left: '48%' },
+  { top: '34%', left: '4%' },
   { top: '50%', left: '76%' },
   { top: '58%', left: '22%' },
   { top: '66%', left: '56%' },
@@ -50,7 +51,7 @@ const DESKTOP_BUBBLES = [
 ]
 
 const MOBILE_BUBBLES = [
-  { top: '6%', left: '25%' },
+  { top: '2%', left: '25%' },
   { top: '16%', left: '78%' },
   { top: '15%', left: '15%' },
 ]
@@ -127,7 +128,7 @@ export default function Landing() {
         setToast('')
       }, 3000)
     } catch (error) {
-      console.error('Waitlist submission failed:', error)
+      console.error('Mailing list submission failed:', error)
       setToast('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -144,7 +145,7 @@ export default function Landing() {
                 className={styles.bubble}
                 style={{ top: pos.top, left: pos.left }}
               >
-                #IYKYK
+                #iykyk
               </div>
             ))}
           </div>
@@ -156,7 +157,7 @@ export default function Landing() {
                 className={styles.bubble}
                 style={{ top: pos.top, left: pos.left }}
               >
-                #IYKYK
+                #iykyk
               </div>
             ))}
           </div>
@@ -164,7 +165,7 @@ export default function Landing() {
 
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
-          <span className={styles.navBrand}>#You Know</span>
+          <span className={styles.navBrand}>YouKnow</span>
           <Link to="/privacy" className={styles.navPrivacy}>Privacy</Link>
         </div>
       </nav>
@@ -172,45 +173,34 @@ export default function Landing() {
       <section className={styles.hero}>
         <div className="container">
           <div className={styles.heroTextBlock}>
-            <h1 className={styles.youKnow}>You Know.</h1>
-
-            <div className={styles.screenshotsSection}>
-              <div className={styles.screenshotsRail}>
-                {APP_SCREENSHOTS.map((screenshot) => (
-                  <figure className={styles.screenshotCard} key={screenshot.src}>
-                    <div className={styles.phoneFrame}>
-                      <img
-                        className={styles.phoneScreen}
-                        src={screenshot.src}
-                        alt={screenshot.alt}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-
-                    <figcaption className={styles.screenshotLabel}>
-                      {screenshot.label}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
+            <p className={styles.heroLogo}>YouKnow</p>
+            <h1 className={styles.youKnow}>A map curated by real people.</h1>
 
             <div className={styles.heroContent}>
               <p className={styles.eyebrow}>iPhone on the App Store, Android beta available</p>
 
               <p className={styles.sub}>
-                Share your favorite spots with friends. IYKYK combines
-                recommendations from people you trust with AI that understands
-                your taste. It knows the city like a concierge — and you like a
-                friend. A new kind of social feed: your city as the feed, your
-                friends as the guides.
+                Save the places you love, see where your friends actually go,
+                and search the city by vibe. YouKnow turns trusted
+                recommendations into a living map of bars, restaurants, clubs,
+                and plans worth remembering.
               </p>
+
+              <div className={styles.stats}>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{CURATED_PLACE_COUNT}</span>
+                  <span className={styles.statLabel}>curated places</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{CITY_COUNT}</span>
+                  <span className={styles.statLabel}>cities</span>
+                </div>
+              </div>
 
               <div className={styles.downloadPanel}>
                 <div className={styles.downloadDetails}>
                   <p className={styles.downloadLabel}>Download the app</p>
-                  <p className={styles.downloadMeta}>Download on the App Store or install the Android APK.</p>
+                  <p className={styles.downloadMeta}>Use the invite code below after installing.</p>
 
                   <div className={styles.inviteCodeBlock}>
                     <label className={styles.inviteCodeLabel} htmlFor="invite-code">
@@ -287,7 +277,7 @@ export default function Landing() {
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Joining...' : 'Join waitlist'}
+                  {isSubmitting ? 'Joining...' : 'Join mailing list'}
                 </button>
               </form>
 
@@ -298,9 +288,44 @@ export default function Landing() {
               )}
 
               <p className={styles.formNote}>
-                Join the waitlist for launch updates, Android news, and feature drops.
+                Join the mailing list for launch updates, Android news, and new city drops.
               </p>
+
+              <div className={styles.sphMark} aria-label="ETH Student Project House">
+                <span className={styles.sphLabel}>Built with support from</span>
+                <img
+                  className={styles.sphLogo}
+                  src="/sph_logo.png"
+                  alt="ETH Student Project House"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.screenshotsSection} aria-label="App screens">
+        <div className="container">
+          <div className={styles.screenshotsRail}>
+            {APP_SCREENSHOTS.map((screenshot) => (
+              <figure className={styles.screenshotCard} key={screenshot.src}>
+                <div className={styles.phoneFrame}>
+                  <img
+                    className={styles.phoneScreen}
+                    src={screenshot.src}
+                    alt={screenshot.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <figcaption className={styles.screenshotLabel}>
+                  {screenshot.label}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
@@ -316,17 +341,17 @@ export default function Landing() {
             <div className={styles.card}>
               <div className={styles.cardIcon}>🔍</div>
               <h3>Search by vibe</h3>
-              <p>Type a feeling. Get places that match your vibe, not just keyword hits.</p>
+              <p>Ask for a feeling, a plan, or a kind of night. Get places that fit the mood.</p>
             </div>
             <div className={styles.card}>
               <div className={styles.cardIcon}>👥</div>
-              <h3>Powered by your community</h3>
-              <p>See where your friends have actually been. Their taste, your map.</p>
+              <h3>Friends as guides</h3>
+              <p>Build a map from places your friends saved, visited, and would actually recommend.</p>
             </div>
             <div className={styles.card}>
               <div className={styles.cardIcon}>✨</div>
-              <h3>AI taste profile</h3>
-              <p>The more you use it, the more accurate it gets. Five stars mean nothing.</p>
+              <h3>Your taste, learned</h3>
+              <p>The more you save, search, and share, the sharper your recommendations become.</p>
             </div>
           </div>
         </div>
@@ -334,8 +359,8 @@ export default function Landing() {
 
       <footer className={styles.footer}>
         <div className={`container ${styles.footerInner}`}>
-          <span className={`gradient-text ${styles.logo}`}>IYKYK</span>
-          <p className={styles.footerCopy}>© 2026 IYKYK</p>
+          <span className={styles.logo}>YouKnow</span>
+          <p className={styles.footerCopy}>© 2026 YouKnow</p>
           <Link to="/privacy" className={styles.navLink}>Privacy Policy</Link>
         </div>
       </footer>
