@@ -174,7 +174,7 @@ export default function Landing() {
         <div className="container">
           <div className={styles.heroTextBlock}>
             <p className={styles.heroLogo}>YouKnow</p>
-            <h1 className={styles.youKnow}>A map curated by real people.</h1>
+            <h1 className={styles.youKnow}>A map curated by people who know.</h1>
 
             <div className={styles.heroContent}>
               <p className={styles.eyebrow}>iPhone on the App Store, Android beta available</p>
