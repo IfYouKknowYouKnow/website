@@ -595,6 +595,7 @@
   .downloadActions {
     width: 100%;
     justify-content: center;
+    flex-wrap: nowrap;
   }
 
   .inviteCodeBlock {
@@ -607,7 +608,12 @@
 
   .secondaryDownloadButton,
   .downloadButton {
-    width: 100%;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
   }
 
   .sub,
