@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
@@ -6,8 +6,18 @@ const ANDROID_DOWNLOAD_PATH =
   'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const INVITE_CODE = 'QNU9JKFX'
-const CURATED_PLACE_COUNT = '3,035'
-const CITY_COUNT = '87'
+const FALLBACK_STATS = {
+  curatedPlaces: 3200,
+  users: import.meta.env.VITE_FALLBACK_USER_COUNT
+    ? Number(import.meta.env.VITE_FALLBACK_USER_COUNT)
+    : null,
+  cities: 87,
+}
+const COUNT_REFRESH_INTERVAL_MS = 60000
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
+const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
 const APP_SCREENSHOTS = [
   {
     src: '/feed_screen.PNG',
@@ -77,11 +87,81 @@ function fallbackCopyText(text) {
   return didCopy
 }
 
+function formatCount(count) {
+  return new Intl.NumberFormat('en-US').format(count)
+}
+
+async function fetchLandingStats(signal) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return null
+  }
+
+  const url = new URL(`/rest/v1/${STATS_TABLE}`, SUPABASE_URL)
+  url.searchParams.set('id', `eq.${STATS_ROW_ID}`)
+  url.searchParams.set('select', 'curated_places_count,user_count,city_count')
+  url.searchParams.set('limit', '1')
+
+  const response = await fetch(url, {
+    signal,
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('Unable to fetch website stats')
+  }
+
+  const [stats] = await response.json()
+
+  if (!stats) {
+    return null
+  }
+
+  return {
+    curatedPlaces: stats.curated_places_count,
+    users: stats.user_count,
+    cities: stats.city_count,
+  }
+}
+
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy')
+  const [stats, setStats] = useState(FALLBACK_STATS)
+
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    async function refreshCounts() {
+      try {
+        const nextStats = await fetchLandingStats(abortController.signal)
+
+        if (nextStats) {
+          setStats({
+            curatedPlaces: nextStats.curatedPlaces ?? FALLBACK_STATS.curatedPlaces,
+            users: nextStats.users ?? FALLBACK_STATS.users,
+            cities: nextStats.cities ?? FALLBACK_STATS.cities,
+          })
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Stats refresh failed:', error)
+        }
+      }
+    }
+
+    refreshCounts()
+    const intervalId = window.setInterval(refreshCounts, COUNT_REFRESH_INTERVAL_MS)
+
+    return () => {
+      abortController.abort()
+      window.clearInterval(intervalId)
+    }
+  }, [])
 
   function resetCopyButtonLabel() {
     window.setTimeout(() => {
@@ -188,11 +268,19 @@ export default function Landing() {
 
               <div className={styles.stats}>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>{CURATED_PLACE_COUNT}</span>
+                  <span className={styles.statNumber}>{formatCount(stats.curatedPlaces)}</span>
                   <span className={styles.statLabel}>curated places</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>{CITY_COUNT}</span>
+                  <span className={styles.statNumber}>
+                    {stats.users === null
+                      ? '-'
+                      : formatCount(stats.users)}
+                  </span>
+                  <span className={styles.statLabel}>users</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{formatCount(stats.cities)}</span>
                   <span className={styles.statLabel}>cities</span>
                 </div>
               </div>
