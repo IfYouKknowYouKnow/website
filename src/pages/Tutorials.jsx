@@ -5,8 +5,8 @@ const TUTORIALS = [
   {
     title: 'Instagram / TikTok',
     steps: [
-      'When you see a restaurant, bar, cafe, or place on Instagram or TikTok, copy the post or video link.',
-      'Open YouKnow and paste the link into the save flow.',
+      'When you see a restaurant, bar, cafe, or place on Instagram or TikTok, share it with the app!',
+      'YouKnow will open automatically and indentify the likeliest matching places.',
       'Review the detected place and save it once it looks right.',
     ],
     screenshots: [

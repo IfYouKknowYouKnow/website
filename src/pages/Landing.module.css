@@ -574,13 +574,15 @@
   100% {
     box-shadow:
       0 0 0 0 rgba(23, 21, 19, 0),
-      0 16px 36px rgba(23, 21, 19, 0.18);
+      0 16px 36px rgba(23, 21, 19, 0.2);
+    transform: translateY(0) scale(1);
   }
 
   50% {
     box-shadow:
-      0 0 0 6px rgba(23, 21, 19, 0.06),
-      0 22px 44px rgba(23, 21, 19, 0.24);
+      0 0 0 9px rgba(23, 21, 19, 0.09),
+      0 26px 54px rgba(23, 21, 19, 0.3);
+    transform: translateY(-1px) scale(1.015);
   }
 }
 
