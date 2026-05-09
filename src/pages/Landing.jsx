@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
@@ -6,6 +6,7 @@ const ANDROID_DOWNLOAD_PATH =
   'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const INVITE_CODE = 'QNU9JKFX'
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 const FALLBACK_STATS = {
   curatedPlaces: 3200,
   users: import.meta.env.VITE_FALLBACK_USER_COUNT
@@ -18,73 +19,60 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
 const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
-const APP_SCREENSHOTS = [
+
+const FLOATING_TAGS = [
+  { text: 'Cute brunch spot', className: styles.floatOne },
+  { text: 'Natural Wine in Zurich', className: styles.floatTwo },
+  { text: 'Saved by friends', className: styles.floatThree },
+  { text: 'Date night', className: styles.floatFour },
+  { text: 'Karaoke night with the girls', className: styles.floatFive },
+  { text: 'IYKYK', className: styles.floatSix },
+]
+
+const HERO_SCREENSHOTS = [
   {
-    src: '/feed_screen.PNG',
-    label: 'Feed',
+    src: '/new_screen_iphon.PNG',
+    alt: 'YouKnow app screen showing the latest place recommendation view.',
+  },
+  {
+    src: '/feed_new.png',
     alt: 'YouKnow feed screen showing friend activity and trending places.',
   },
   {
-    src: '/map_screen.PNG',
-    label: 'Map',
-    alt: 'YouKnow map screen with place pins and filters.',
-  },
-  {
-    src: '/vibe_screen.PNG',
-    label: 'Vibe Search',
-    alt: 'YouKnow vibe search screen.',
-  },
-  {
-    src: '/placesheet_screen.PNG',
-    label: 'Place Details',
-    alt: 'YouKnow place detail screen.',
-  },
-  {
-    src: '/profile_screen.PNG',
-    label: 'Profile',
-    alt: 'YouKnow profile screen.',
+    src: '/profile_new.png',
+    alt: 'YouKnow profile screen showing saved places and personal recommendations.',
   },
 ]
 
-const DESKTOP_BUBBLES = [
-  { top: '10%', left: '6%' },
-  { top: '16%', left: '28%' },
-  { top: '12%', left: '78%' },
-  { top: '26%', left: '60%' },
-  { top: '34%', left: '4%' },
-  { top: '50%', left: '76%' },
-  { top: '58%', left: '22%' },
-  { top: '66%', left: '56%' },
-  { top: '74%', left: '10%' },
-  { top: '78%', left: '72%' },
-  { top: '84%', left: '40%' },
+const QUIET_POINTS = [
+  {
+    text: 'Save places you like',
+    tutorialLink: true,
+  },
+  {
+    text: 'Get recommendations from people you trust',
+  },
+  {
+    text: 'Plan nights out without endless searching',
+  },
 ]
 
-const MOBILE_BUBBLES = [
-  { top: '2%', left: '25%' },
-  { top: '16%', left: '78%' },
-  { top: '15%', left: '15%' },
-]
+function getStaticMapUrl() {
+  if (!MAPBOX_TOKEN) {
+    return null
+  }
+
+  const params = new URLSearchParams({
+    access_token: MAPBOX_TOKEN,
+  })
+
+  return `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/8.5417,47.3769,12,0,0/1280x900@2x?${params}`
+}
 
 function encode(data) {
   return Object.keys(data)
     .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
     .join('&')
-}
-
-function fallbackCopyText(text) {
-  const textArea = document.createElement('textarea')
-  textArea.value = text
-  textArea.setAttribute('readonly', '')
-  textArea.style.position = 'absolute'
-  textArea.style.left = '-9999px'
-  document.body.appendChild(textArea)
-  textArea.select()
-
-  const didCopy = document.execCommand('copy')
-  document.body.removeChild(textArea)
-
-  return didCopy
 }
 
 function formatCount(count) {
@@ -130,8 +118,10 @@ export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
-  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy')
   const [stats, setStats] = useState(FALLBACK_STATS)
+  const [activeSlide, setActiveSlide] = useState(0)
+  const carouselRef = useRef(null)
+  const staticMapUrl = getStaticMapUrl()
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -163,29 +153,6 @@ export default function Landing() {
     }
   }, [])
 
-  function resetCopyButtonLabel() {
-    window.setTimeout(() => {
-      setCopyButtonLabel('Copy')
-    }, 2000)
-  }
-
-  async function handleInviteCodeCopy() {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(INVITE_CODE)
-      } else if (!fallbackCopyText(INVITE_CODE)) {
-        throw new Error('Clipboard API unavailable')
-      }
-
-      setCopyButtonLabel('Copied')
-    } catch (error) {
-      console.error('Invite code copy failed:', error)
-      setCopyButtonLabel('Copy code')
-    }
-
-    resetCopyButtonLabel()
-  }
-
   async function handleSubmit(e) {
     e.preventDefault()
     setIsSubmitting(true)
@@ -215,205 +182,136 @@ export default function Landing() {
     }
   }
 
+  function handleCarouselScroll(e) {
+    const { scrollLeft, clientWidth } = e.currentTarget
+    const nextSlide = Math.round(scrollLeft / clientWidth)
+
+    if (nextSlide !== activeSlide) {
+      setActiveSlide(nextSlide)
+    }
+  }
+
+  function goToSlide(index) {
+    const carousel = carouselRef.current
+
+    if (!carousel) {
+      return
+    }
+
+    carousel.scrollTo({
+      left: carousel.clientWidth * index,
+      behavior: 'smooth',
+    })
+    setActiveSlide(index)
+  }
+
   return (
     <div className={styles.page}>
-      <div className={styles.bubblesLayer}>
-          <div className={styles.bubblesDesktop}>
-            {DESKTOP_BUBBLES.map((pos, i) => (
-              <div
-                key={`desktop-${i}`}
-                className={styles.bubble}
-                style={{ top: pos.top, left: pos.left }}
-              >
-                #iykyk
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.bubblesMobile}>
-            {MOBILE_BUBBLES.map((pos, i) => (
-              <div
-                key={`mobile-${i}`}
-                className={styles.bubble}
-                style={{ top: pos.top, left: pos.left }}
-              >
-                #iykyk
-              </div>
-            ))}
-          </div>
-      </div>
+      {staticMapUrl && (
+        <img
+          className={styles.mapBackdrop}
+          src={staticMapUrl}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+        />
+      )}
 
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
-          <span className={styles.navBrand}>YouKnow</span>
-          <Link to="/privacy" className={styles.navPrivacy}>Privacy</Link>
+          <a className={styles.brand} href="/" aria-label="YouKnow home">
+            <img
+              className={styles.brandLogo}
+              src="/oyster_logo.jpeg"
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+            />
+            <span>YouKnow</span>
+          </a>
+
+          <a className={styles.navCta} href="#waitlist">
+            Join waitlist
+          </a>
         </div>
       </nav>
 
       <section className={styles.hero}>
         <div className="container">
-          <div className={styles.heroTextBlock}>
-            <p className={styles.heroLogo}>YouKnow</p>
-            <h1 className={styles.youKnow}>A map curated by people who know.</h1>
-
-            <div className={styles.heroContent}>
-              <p className={styles.eyebrow}>iPhone on the App Store, Android beta available</p>
-
-              <p className={styles.sub}>
-                Save the places you love, see where your friends actually go,
-                and search the city by vibe. YouKnow turns trusted
-                recommendations into a living map of bars, restaurants, clubs,
-                and plans worth remembering.
+          <div className={styles.heroInner}>
+            <div className={styles.copy}>
+              <p className={styles.kicker}>YouKnow</p>
+              <h1>A Map Curated by People Who Know.</h1>
+              <p className={styles.subhead}>
+                Discover restaurants, bars, cafes, and experiences through people you trust.
               </p>
 
-              <div className={styles.stats}>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{formatCount(stats.curatedPlaces)}</span>
-                  <span className={styles.statLabel}>curated places</span>
-                </div>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>
-                    {stats.users === null
-                      ? '-'
-                      : formatCount(stats.users)}
-                  </span>
-                  <span className={styles.statLabel}>users</span>
-                </div>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{formatCount(stats.cities)}</span>
-                  <span className={styles.statLabel}>cities</span>
-                </div>
-              </div>
-
-              <div className={styles.downloadPanel}>
-                <div className={styles.downloadDetails}>
-                  <p className={styles.downloadLabel}>Download the app</p>
-                  <p className={styles.downloadMeta}>Use the invite code below after installing.</p>
-
-                  <div className={styles.inviteCodeBlock}>
-                    <label className={styles.inviteCodeLabel} htmlFor="invite-code">
-                      Invite code
-                    </label>
-
-                    <div className={styles.inviteCodeRow}>
-                      <input
-                        id="invite-code"
-                        className={styles.inviteCodeInput}
-                        type="text"
-                        value={INVITE_CODE}
-                        readOnly
-                        aria-label="Invite code"
-                      />
-
-                      <button
-                        type="button"
-                        className={styles.inviteCodeButton}
-                        onClick={handleInviteCodeCopy}
-                      >
-                        {copyButtonLabel}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.downloadActions}>
-                  <a
-                    className={styles.secondaryDownloadButton}
-                    href={APP_STORE_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View on App Store
-                  </a>
-
-                  <a
-                    className={styles.downloadButton}
-                    href={ANDROID_DOWNLOAD_PATH}
-                  >
-                    Download APK
-                  </a>
-                </div>
-              </div>
-
-              <p className={styles.downloadNote}>
-                iPhone users can install from the App Store. On Android, if your
-                phone asks, allow installs from your browser first.
-              </p>
-
-              <form
-                name="waitlist"
-                netlify
-                method="POST"
-                data-netlify="true"
-                onSubmit={handleSubmit}
-                className={styles.form}
-              >
-                <input type="hidden" name="form-name" value="waitlist" />
-
-                <input
-                  className={styles.input}
-                  type="email"
-                  name="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-
-                <button
-                  className={styles.btn}
-                  type="submit"
-                  disabled={isSubmitting}
+              <div className={styles.actions}>
+                <a
+                  className={styles.primaryButton}
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  {isSubmitting ? 'Joining...' : 'Join mailing list'}
-                </button>
-              </form>
+                  Get the app
+                </a>
+                <a className={styles.secondaryLink} href={ANDROID_DOWNLOAD_PATH}>
+                  Android beta
+                </a>
+              </div>
 
-              {toast && (
-                <p className={styles.successMessage}>
-                  {toast}
-                </p>
-              )}
-
-              <p className={styles.formNote}>
-                Join the mailing list for launch updates, Android news, and new city drops.
+              <p className={styles.proof}>
+                {formatCount(stats.curatedPlaces)}+ places across {formatCount(stats.cities)} cities.
+                <span>Invite code {INVITE_CODE}</span>
               </p>
+            </div>
 
-              <div className={styles.sphMark} aria-label="ETH Student Project House">
-                <span className={styles.sphLabel}>Built with support from</span>
-                <img
-                  className={styles.sphLogo}
-                  src="/sph_logo.png"
-                  alt="ETH Student Project House"
-                  loading="lazy"
-                  decoding="async"
-                />
+            <div className={styles.visualWrap} aria-label="YouKnow app preview">
+              {FLOATING_TAGS.map((tag) => (
+                <span
+                  className={`${styles.floatingTag} ${tag.className}`}
+                  key={tag.text}
+                  aria-hidden="true"
+                >
+                  {tag.text}
+                </span>
+              ))}
+
+              <div className={styles.phoneShell}>
+                <div
+                  className={styles.screenCarousel}
+                  ref={carouselRef}
+                  onScroll={handleCarouselScroll}
+                  aria-label="YouKnow app screenshots"
+                >
+                  {HERO_SCREENSHOTS.map((screenshot, index) => (
+                    <img
+                      className={styles.phoneScreen}
+                      src={screenshot.src}
+                      alt={screenshot.alt}
+                      decoding="async"
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      key={screenshot.src}
+                    />
+                  ))}
+                </div>
+
+                <div className={styles.carouselDots} aria-label="Choose screenshot">
+                  {HERO_SCREENSHOTS.map((screenshot, index) => (
+                    <button
+                      className={`${styles.carouselDot} ${
+                        activeSlide === index ? styles.carouselDotActive : ''
+                      }`}
+                      type="button"
+                      onClick={() => goToSlide(index)}
+                      aria-label={`Show screenshot ${index + 1}`}
+                      aria-pressed={activeSlide === index}
+                      key={screenshot.src}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.screenshotsSection} aria-label="App screens">
-        <div className="container">
-          <div className={styles.screenshotsRail}>
-            {APP_SCREENSHOTS.map((screenshot) => (
-              <figure className={styles.screenshotCard} key={screenshot.src}>
-                <div className={styles.phoneFrame}>
-                  <img
-                    className={styles.phoneScreen}
-                    src={screenshot.src}
-                    alt={screenshot.alt}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-
-                <figcaption className={styles.screenshotLabel}>
-                  {screenshot.label}
-                </figcaption>
-              </figure>
-            ))}
           </div>
         </div>
       </section>
@@ -423,33 +321,75 @@ export default function Landing() {
         <input type="email" name="email" />
       </form>
 
-      <section className={styles.features}>
+      <section className={styles.info} id="waitlist">
         <div className="container">
-          <div className={styles.grid}>
-            <div className={styles.card}>
-              <div className={styles.cardIcon}>🔍</div>
-              <h3>Search by vibe</h3>
-              <p>Ask for a feeling, a plan, or a kind of night. Get places that fit the mood.</p>
-            </div>
-            <div className={styles.card}>
-              <div className={styles.cardIcon}>👥</div>
-              <h3>Friends as guides</h3>
-              <p>Build a map from places your friends saved, visited, and would actually recommend.</p>
-            </div>
-            <div className={styles.card}>
-              <div className={styles.cardIcon}>✨</div>
-              <h3>Your taste, learned</h3>
-              <p>The more you save, search, and share, the sharper your recommendations become.</p>
-            </div>
+          <div className={styles.infoGrid}>
+            {QUIET_POINTS.map((point) => (
+              <div className={styles.infoPoint} key={point.text}>
+                <p>{point.text}</p>
+
+                {point.tutorialLink && (
+                  <Link className={styles.infoButton} to="/tutorials">
+                    How?
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.waitlistPanel}>
+            <p>Get launch updates and new city drops.</p>
+
+            <form
+              name="waitlist"
+              method="POST"
+              data-netlify="true"
+              onSubmit={handleSubmit}
+              className={styles.form}
+            >
+              <input type="hidden" name="form-name" value="waitlist" />
+
+              <input
+                className={styles.input}
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+
+              <button
+                className={styles.formButton}
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Joining...' : 'Join waitlist'}
+              </button>
+            </form>
+
+            {toast && <p className={styles.toast}>{toast}</p>}
+          </div>
+
+          <div className={styles.supportMark}>
+            <span>Built with the support of SPH</span>
+            <img
+              src="/sph_logo.jpeg"
+              alt="ETH Student Project House"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </div>
       </section>
 
       <footer className={styles.footer}>
         <div className={`container ${styles.footerInner}`}>
-          <span className={styles.logo}>YouKnow</span>
+          <span className={styles.footerBrand}>YouKnow</span>
           <p className={styles.footerCopy}>© 2026 YouKnow</p>
-          <Link to="/privacy" className={styles.navLink}>Privacy Policy</Link>
+          <div className={styles.footerLinks}>
+            <Link to="/privacy">Privacy</Link>
+          </div>
         </div>
       </footer>
     </div>
