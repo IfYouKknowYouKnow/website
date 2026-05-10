@@ -302,7 +302,7 @@
   height: 7px;
   margin-right: 8px;
   border-radius: 50%;
-  background: #e01c1c;
+  background: var(--tag-dot, #e01c1c);
   opacity: 0.82;
 }
 
@@ -652,11 +652,6 @@
     padding-top: 12px;
   }
 
-  .floatThree,
-  .floatFive {
-    display: none;
-  }
-
   .waitlistPanel {
     flex-direction: column;
     align-items: stretch;
@@ -706,11 +701,11 @@
   }
 
   .visualWrap {
-    min-height: 440px;
+    min-height: 500px;
   }
 
   .phoneShell {
-    width: min(310px, 82vw);
+    width: min(300px, 78vw);
     border-radius: 44px;
   }
 
@@ -729,26 +724,37 @@
   .floatingTag {
     min-height: 32px;
     padding: 0 11px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .floatOne {
-    left: 0;
-    top: 8%;
+    left: 1%;
+    top: 7%;
   }
 
   .floatTwo {
-    right: -3%;
-    top: 20%;
+    right: -1%;
+    top: 17%;
+  }
+
+  .floatThree {
+    left: -2%;
+    top: 35%;
   }
 
   .floatFour {
-    right: -4%;
-    bottom: 19%;
+    right: -2%;
+    bottom: 28%;
+  }
+
+  .floatFive {
+    left: 4%;
+    bottom: 13%;
   }
 
   .floatSix {
-    display: none;
+    right: 14%;
+    top: 0;
   }
 
   .info {

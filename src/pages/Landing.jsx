@@ -21,12 +21,12 @@ const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
 const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
 
 const FLOATING_TAGS = [
-  { text: 'Cute brunch spot', className: styles.floatOne },
-  { text: 'Natural Wine in Zurich', className: styles.floatTwo },
-  { text: 'Saved by friends', className: styles.floatThree },
-  { text: 'Date night', className: styles.floatFour },
-  { text: 'Karaoke night with the girls', className: styles.floatFive },
-  { text: 'IYKYK', className: styles.floatSix },
+  { text: 'Cute brunch spot', className: styles.floatOne, dotColor: '#e01c1c' },
+  { text: 'Natural Wine in Zurich', className: styles.floatTwo, dotColor: '#16834a' },
+  { text: 'Saved by friends', className: styles.floatThree, dotColor: '#2f6eea' },
+  { text: 'Date night', className: styles.floatFour, dotColor: '#d36b17' },
+  { text: 'Karaoke night with the girls', className: styles.floatFive, dotColor: '#9b4de3' },
+  { text: 'IYKYK', className: styles.floatSix, dotColor: '#00a6a6' },
 ]
 
 const HERO_SCREENSHOTS = [
@@ -261,7 +261,7 @@ export default function Landing() {
               </div>
 
               <p className={styles.proof}>
-                {formatCount(stats.curatedPlaces)}+ places across {formatCount(stats.cities)} cities.
+                {formatCount(stats.curatedPlaces)} places across {formatCount(stats.cities)} cities.
                 <span>Invite code {INVITE_CODE}</span>
               </p>
             </div>
@@ -270,6 +270,7 @@ export default function Landing() {
               {FLOATING_TAGS.map((tag) => (
                 <span
                   className={`${styles.floatingTag} ${tag.className}`}
+                  style={{ '--tag-dot': tag.dotColor }}
                   key={tag.text}
                   aria-hidden="true"
                 >
