@@ -1,0 +1,252 @@
+:root {
+  color-scheme: light;
+  --ink: #171717;
+  --muted: #6f706b;
+  --paper: #fbfaf6;
+  --card: rgba(255, 255, 255, 0.84);
+  --line: rgba(23, 23, 23, 0.09);
+  --shadow: 0 24px 80px rgba(28, 28, 24, 0.14);
+  --accent: #c13a96;
+  --accent-2: #95d8f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Monaco,
+    Consolas, "Liberation Mono", monospace;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(149, 216, 246, 0.32), transparent 34rem),
+    radial-gradient(circle at bottom right, rgba(193, 58, 150, 0.18), transparent 30rem),
+    var(--paper);
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 480px);
+  align-items: center;
+  gap: clamp(28px, 6vw, 80px);
+  width: min(1120px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 42px 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  width: 132px;
+  height: auto;
+  display: block;
+  margin-bottom: 34px;
+}
+
+.brand-logo {
+  width: 154px;
+  max-height: 86px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  color: #474842;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+h1 {
+  max-width: 660px;
+  margin: 0;
+  font-size: clamp(46px, 7vw, 86px);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.lead {
+  max-width: 570px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  min-height: 52px;
+  padding: 0 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #fff;
+  background: #111;
+  box-shadow: 0 14px 30px rgba(17, 17, 17, 0.18);
+  text-decoration: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.button.secondary {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.code {
+  display: none;
+  width: fit-content;
+  margin-top: 18px;
+  padding: 10px 13px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--line);
+  color: #4b4c47;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.code strong {
+  color: var(--ink);
+}
+
+.hero {
+  position: relative;
+  min-height: 650px;
+}
+
+.phone {
+  position: absolute;
+  right: 6%;
+  top: 4%;
+  width: min(58vw, 320px);
+  aspect-ratio: 1200 / 1920;
+  overflow: hidden;
+  border: 10px solid #111;
+  border-radius: 42px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  transform: rotate(3deg);
+}
+
+.phone.back {
+  right: 34%;
+  top: 19%;
+  transform: rotate(-7deg) scale(0.92);
+  opacity: 0.92;
+}
+
+.phone img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.floating-card {
+  position: absolute;
+  left: 2%;
+  bottom: 9%;
+  width: min(82%, 310px);
+  padding: 18px;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  box-shadow: 0 18px 54px rgba(28, 28, 24, 0.16);
+  backdrop-filter: blur(20px);
+}
+
+.floating-card .title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.floating-card .text {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.status {
+  margin-top: 18px;
+  min-height: 20px;
+  color: #7b7c75;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 820px) {
+  .page {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 28px 0 0;
+  }
+
+  .logo {
+    width: 108px;
+    margin-bottom: 24px;
+  }
+
+  .brand-logo {
+    width: 126px;
+    max-height: 72px;
+  }
+
+  .hero {
+    min-height: 410px;
+    margin-top: -8px;
+    overflow: hidden;
+  }
+
+  .phone {
+    right: 5%;
+    width: min(52vw, 220px);
+    border-width: 7px;
+    border-radius: 30px;
+  }
+
+  .phone.back {
+    right: 43%;
+  }
+
+  .floating-card {
+    left: 0;
+    bottom: 26px;
+  }
+}

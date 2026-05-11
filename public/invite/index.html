@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf6">
+  <meta name="description" content="Join your friend on YouKnow.">
+  <meta property="og:title" content="Join me on YouKnow">
+  <meta property="og:description" content="Accept your invite and become friends automatically.">
+  <meta property="og:image" content="/images/enter.png">
+  <title>Invite | YouKnow</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/icons/Icon-192.png">
+  <link rel="stylesheet" href="/shared-link.css">
+</head>
+<body>
+  <main class="page">
+    <section class="content">
+      <img class="logo brand-logo" src="/images/logo.png" alt="YouKnow">
+      <p class="eyebrow">✨ Personal invite</p>
+      <h1><span id="inviter-name">Someone</span> saved you a seat.</h1>
+      <p class="lead">
+        Join YouKnow from this link and you will be connected automatically, so their map can start becoming yours too.
+      </p>
+      <div class="actions">
+        <a class="button" id="open-app" href="#">Accept invite</a>
+        <a class="button secondary" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+      </div>
+      <p class="code" id="code-wrap">Invite code: <strong id="code"></strong></p>
+      <p class="status" id="status">Trying to open YouKnow…</p>
+    </section>
+
+    <section class="hero" aria-hidden="true">
+      <div class="phone back">
+        <img src="/images/shot_1.png" alt="" onerror="this.onerror=null;this.src='/images/place_7.png';">
+      </div>
+      <div class="phone">
+        <img src="/images/shot_2.png" alt="" onerror="this.onerror=null;this.src='/images/7_login.png';">
+      </div>
+      <div class="floating-card">
+        <p class="title">Start with someone you trust.</p>
+        <p class="text">The invite connects you as friends, then YouKnow opens around places your people saved.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var segments = window.location.pathname.split('/').filter(Boolean);
+      var code = (params.get('code') || segments[1] || '').trim().replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+      var openButton = document.getElementById('open-app');
+      var status = document.getElementById('status');
+      var codeWrap = document.getElementById('code-wrap');
+      var codeText = document.getElementById('code');
+      var inviterName = document.getElementById('inviter-name');
+      var rawName = (params.get('from') || params.get('name') || '').trim();
+      var name = rawName.replace(/\s+/g, ' ').slice(0, 42);
+
+      if (name) {
+        inviterName.textContent = name;
+        document.title = name + ' invited you | YouKnow';
+      }
+
+      if (!code) {
+        status.textContent = 'This invite link is missing its invite code.';
+        openButton.setAttribute('href', '/');
+        return;
+      }
+
+      codeText.textContent = code;
+      codeWrap.style.display = 'block';
+
+      var deepLink = 'youknow://invite/' + encodeURIComponent(code);
+      openButton.setAttribute('href', deepLink);
+      window.setTimeout(function () {
+        window.location.href = deepLink;
+      }, 450);
+      window.setTimeout(function () {
+        status.textContent = 'If the app did not open, install YouKnow and enter the invite code above.';
+      }, 1600);
+    })();
+  </script>
+</body>
+</html>
