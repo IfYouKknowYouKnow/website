@@ -162,6 +162,14 @@
   font-weight: 800;
 }
 
+.panel a {
+  color: #171513;
+  font-weight: 760;
+  text-decoration: underline;
+  text-decoration-color: rgba(224, 28, 28, 0.4);
+  text-underline-offset: 3px;
+}
+
 .mediaGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -179,6 +187,15 @@
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 14px 34px rgba(42, 35, 28, 0.08);
+}
+
+.takeoutMedia {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.takeoutMedia img {
+  aspect-ratio: 1 / 1.02;
+  object-fit: contain;
 }
 
 @media (max-width: 680px) {
@@ -204,5 +221,9 @@
   .mediaGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 0 18px 20px;
+  }
+
+  .takeoutMedia {
+    grid-template-columns: 1fr;
   }
 }

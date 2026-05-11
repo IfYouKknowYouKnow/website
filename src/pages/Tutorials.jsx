@@ -52,6 +52,45 @@ const TUTORIALS = [
     ],
   },
   {
+    title: 'Google Saved Places',
+    steps: [
+      <>
+        Go to{' '}
+        <a href="https://takeout.google.com/" target="_blank" rel="noreferrer">
+          Google Takeout
+        </a>{' '}
+        and sign in with the Google account that has your saved places.
+      </>,
+      'Click Deselect all so you only export the place data you need.',
+      'Scroll to Saved and select Saved places.',
+      'Choose CSV as the export format, then create the export and download it when Google has prepared the file.',
+      <>
+        Send the CSV to{' '}
+        <a href="mailto:ifyouknowyouknowrecs@gmail.com">ifyouknowyouknowrecs@gmail.com</a>{' '}
+        and we will import it to your user.
+      </>,
+    ],
+    screenshots: [
+      {
+        src: '/takeout_1.png',
+        alt: 'Google Takeout tutorial step 1.',
+      },
+      {
+        src: '/takeout_2.png',
+        alt: 'Google Takeout tutorial step 2.',
+      },
+      {
+        src: '/takeout_3.png',
+        alt: 'Google Takeout tutorial step 3.',
+      },
+      {
+        src: '/takeout_4.png',
+        alt: 'Google Takeout tutorial step 4.',
+      },
+    ],
+    mediaVariant: 'takeoutMedia',
+  },
+  {
     title: 'Manually',
     steps: [
       'Open YouKnow and tap the add button.',
@@ -88,7 +127,7 @@ export default function Tutorials() {
           <p className={styles.kicker}>Tutorials</p>
           <h1>How to save places you like.</h1>
           <p className={styles.subhead}>
-            Three quick ways to turn a place you find into something you can actually remember.
+            Four quick ways to turn a place you find into something you can actually remember.
           </p>
 
           <div className={styles.accordion}>
@@ -100,13 +139,17 @@ export default function Tutorials() {
                 </summary>
 
                 <ol>
-                  {tutorial.steps.map((step) => (
-                    <li key={step}>{step}</li>
+                  {tutorial.steps.map((step, stepIndex) => (
+                    <li key={stepIndex}>{step}</li>
                   ))}
                 </ol>
 
                 {tutorial.screenshots && (
-                  <div className={styles.mediaGrid}>
+                  <div
+                    className={`${styles.mediaGrid} ${
+                      tutorial.mediaVariant ? styles[tutorial.mediaVariant] : ''
+                    }`}
+                  >
                     {tutorial.screenshots.map((screenshot) => (
                       <img
                         src={screenshot.src}
