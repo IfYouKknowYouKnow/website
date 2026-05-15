@@ -8,8 +8,8 @@ const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const INVITE_CODE = 'QNU9JKFX'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 const FALLBACK_STATS = {
-  curatedPlaces: 3200,
-  cities: 87,
+  curatedPlaces: 4814,
+  cities: 331,
 }
 const COUNT_REFRESH_INTERVAL_MS = 60000
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -76,6 +76,10 @@ function formatCount(count) {
   return new Intl.NumberFormat('en-US').format(count)
 }
 
+function positiveCountOrFallback(count, fallback) {
+  return typeof count === 'number' && count > 0 ? count : fallback
+}
+
 async function fetchLandingStats(signal) {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     return null
@@ -128,8 +132,11 @@ export default function Landing() {
 
         if (nextStats) {
           setStats({
-            curatedPlaces: nextStats.curatedPlaces ?? FALLBACK_STATS.curatedPlaces,
-            cities: nextStats.cities ?? FALLBACK_STATS.cities,
+            curatedPlaces: positiveCountOrFallback(
+              nextStats.curatedPlaces,
+              FALLBACK_STATS.curatedPlaces,
+            ),
+            cities: positiveCountOrFallback(nextStats.cities, FALLBACK_STATS.cities),
           })
         }
       } catch (error) {
