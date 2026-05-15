@@ -210,6 +210,13 @@
   line-height: 1;
 }
 
+.proofJoin {
+  color: #5b554f;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .proofMeta {
   display: inline-flex;
   align-items: center;
