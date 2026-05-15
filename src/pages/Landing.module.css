@@ -183,15 +183,45 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 12px;
-  margin-top: 18px;
-  color: #8b857e;
-  font-size: 13px;
-  font-weight: 650;
+  gap: 14px 18px;
+  margin-top: 26px;
 }
 
-.proof span {
-  color: #4f4943;
+.proofStat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  color: #171513;
+}
+
+.proofStat strong {
+  display: block;
+  color: #0f0d0b;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 850;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.proofStat span {
+  color: #24211e;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.proofMeta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  color: #5b554f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.proofMeta span {
+  color: #3c3732;
 }
 
 .visualWrap {

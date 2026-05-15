@@ -19,6 +19,11 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
 const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
+const LIVE_COUNT_TABLES = {
+  curatedPlaces: 'places',
+  users: 'profiles',
+  cities: 'active_cities',
+}
 
 const FLOATING_TAGS = [
   { text: 'Cute brunch spot', className: styles.floatOne, dotColor: '#e01c1c' },
@@ -79,6 +84,38 @@ function formatCount(count) {
   return new Intl.NumberFormat('en-US').format(count)
 }
 
+function parseContentRangeCount(contentRange) {
+  if (!contentRange) {
+    return null
+  }
+
+  const match = contentRange.match(/\/(\d+)$/)
+  return match ? Number(match[1]) : null
+}
+
+async function fetchTableCount(tableName, signal) {
+  const url = new URL(`/rest/v1/${tableName}`, SUPABASE_URL)
+  url.searchParams.set('select', '*')
+  url.searchParams.set('limit', '1')
+
+  const response = await fetch(url, {
+    signal,
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      Prefer: 'count=exact',
+      Range: '0-0',
+      'Range-Unit': 'items',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Unable to fetch ${tableName} count`)
+  }
+
+  return parseContentRangeCount(response.headers.get('content-range'))
+}
+
 async function fetchLandingStats(signal) {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     return null
@@ -114,6 +151,25 @@ async function fetchLandingStats(signal) {
   }
 }
 
+async function fetchLiveLandingStats(signal) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return null
+  }
+
+  const [stats, curatedPlaces, users, cities] = await Promise.all([
+    fetchLandingStats(signal).catch(() => null),
+    fetchTableCount(LIVE_COUNT_TABLES.curatedPlaces, signal).catch(() => null),
+    fetchTableCount(LIVE_COUNT_TABLES.users, signal).catch(() => null),
+    fetchTableCount(LIVE_COUNT_TABLES.cities, signal).catch(() => null),
+  ])
+
+  return {
+    curatedPlaces: curatedPlaces ?? stats?.curatedPlaces ?? FALLBACK_STATS.curatedPlaces,
+    users: users ?? stats?.users ?? FALLBACK_STATS.users,
+    cities: cities ?? stats?.cities ?? FALLBACK_STATS.cities,
+  }
+}
+
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -128,14 +184,10 @@ export default function Landing() {
 
     async function refreshCounts() {
       try {
-        const nextStats = await fetchLandingStats(abortController.signal)
+        const nextStats = await fetchLiveLandingStats(abortController.signal)
 
         if (nextStats) {
-          setStats({
-            curatedPlaces: nextStats.curatedPlaces ?? FALLBACK_STATS.curatedPlaces,
-            users: nextStats.users ?? FALLBACK_STATS.users,
-            cities: nextStats.cities ?? FALLBACK_STATS.cities,
-          })
+          setStats(nextStats)
         }
       } catch (error) {
         if (error.name !== 'AbortError') {
@@ -260,10 +312,22 @@ export default function Landing() {
                 </a>
               </div>
 
-              <p className={styles.proof}>
-                {formatCount(stats.curatedPlaces)} places across {formatCount(stats.cities)} cities.
-                <span>Invite code {INVITE_CODE}</span>
-              </p>
+              <div className={styles.proof} aria-label="Live YouKnow community stats">
+                <div className={styles.proofStat}>
+                  <strong>{formatCount(stats.curatedPlaces)}</strong>
+                  <span>places</span>
+                </div>
+                {stats.users !== null && (
+                  <div className={styles.proofStat}>
+                    <strong>{formatCount(stats.users)}</strong>
+                    <span>users</span>
+                  </div>
+                )}
+                <p className={styles.proofMeta}>
+                  Across {formatCount(stats.cities)} cities.
+                  <span>Invite code {INVITE_CODE}</span>
+                </p>
+              </div>
             </div>
 
             <div className={styles.visualWrap} aria-label="YouKnow app preview">
