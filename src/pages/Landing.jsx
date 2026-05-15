@@ -233,7 +233,7 @@ export default function Landing() {
           </a>
 
           <a className={styles.navCta} href="#waitlist">
-            Join waitlist
+            Join mailing list
           </a>
         </div>
       </nav>
@@ -351,7 +351,7 @@ export default function Landing() {
           </div>
 
           <div className={styles.waitlistPanel}>
-            <p>Get launch updates and new city drops.</p>
+            <p>Get app updates and new city drops.</p>
 
             <form
               name="waitlist"
@@ -377,7 +377,7 @@ export default function Landing() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Joining...' : 'Join waitlist'}
+                {isSubmitting ? 'Joining...' : 'Join mailing list'}
               </button>
             </form>
 
