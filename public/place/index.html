@@ -24,7 +24,7 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Open in app</a>
-        <a class="button secondary" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
       </div>
       <p class="status" id="status">Trying to open YouKnow…</p>
     </section>
@@ -49,6 +49,7 @@
       var segments = window.location.pathname.split('/').filter(Boolean);
       var placeId = (params.get('id') || segments[1] || '').trim();
       var openButton = document.getElementById('open-app');
+      var getAppButton = document.getElementById('get-app');
       var status = document.getElementById('status');
 
       if (!placeId) {
@@ -57,11 +58,26 @@
         return;
       }
 
-      var deepLink = 'youknow://place/' + encodeURIComponent(placeId);
+      var encodedPlaceId = encodeURIComponent(placeId);
+      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
+      var deepLink = 'youknow://place/' + encodedPlaceId;
+      var userAgent = window.navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+        (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+
+      if (isIOS) {
+        openButton.textContent = 'Get the app';
+        openButton.setAttribute('href', appStoreUrl);
+        getAppButton.style.display = 'none';
+        status.textContent = 'Install YouKnow to open shared places from friends.';
+        return;
+      }
+
       openButton.setAttribute('href', deepLink);
       window.setTimeout(function () {
         window.location.href = deepLink;
       }, 450);
+
       window.setTimeout(function () {
         status.textContent = 'If the app did not open, use the button above or install YouKnow.';
       }, 1600);

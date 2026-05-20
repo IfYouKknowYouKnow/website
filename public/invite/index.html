@@ -24,7 +24,7 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Accept invite</a>
-        <a class="button secondary" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
       </div>
       <p class="code" id="code-wrap">Invite code: <strong id="code"></strong></p>
       <p class="status" id="status">Trying to open YouKnow…</p>
@@ -54,6 +54,7 @@
       var codeWrap = document.getElementById('code-wrap');
       var codeText = document.getElementById('code');
       var inviterName = document.getElementById('inviter-name');
+      var getAppButton = document.getElementById('get-app');
       var rawName = (params.get('from') || params.get('name') || '').trim();
       var name = rawName.replace(/\s+/g, ' ').slice(0, 42);
 
@@ -71,11 +72,26 @@
       codeText.textContent = code;
       codeWrap.style.display = 'block';
 
-      var deepLink = 'youknow://invite/' + encodeURIComponent(code);
+      var encodedCode = encodeURIComponent(code);
+      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
+      var deepLink = 'youknow://invite/' + encodedCode;
+      var userAgent = window.navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+        (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+
+      if (isIOS) {
+        openButton.textContent = 'Get the app';
+        openButton.setAttribute('href', appStoreUrl);
+        getAppButton.style.display = 'none';
+        status.textContent = 'Install YouKnow, then enter the invite code above.';
+        return;
+      }
+
       openButton.setAttribute('href', deepLink);
       window.setTimeout(function () {
         window.location.href = deepLink;
       }, 450);
+
       window.setTimeout(function () {
         status.textContent = 'If the app did not open, install YouKnow and enter the invite code above.';
       }, 1600);
