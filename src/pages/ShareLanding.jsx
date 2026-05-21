@@ -3,8 +3,8 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import styles from './ShareLanding.module.css'
 
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
-const ANDROID_DOWNLOAD_PATH =
-  'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
+const ANDROID_PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.youknow.mobile'
 
 function cleanInviteCode(value) {
   return (value || '').trim().replace(/[^A-Za-z0-9]/g, '').toUpperCase()
@@ -101,7 +101,12 @@ export default function ShareLanding({ type }) {
                 Go to YouKnow
               </Link>
             )}
-            <a className={styles.textLink} href={ANDROID_DOWNLOAD_PATH}>
+            <a
+              className={styles.textLink}
+              href={ANDROID_PLAY_STORE_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
               Android beta
             </a>
           </div>

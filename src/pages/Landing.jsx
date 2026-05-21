@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Landing.module.css'
 
-const ANDROID_DOWNLOAD_PATH =
-  'https://github.com/IfYouKknowYouKnow/website/releases/latest/download/app-release.apk'
+const ANDROID_PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.youknow.mobile'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const INVITE_CODE = 'QNU9JKFX'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
@@ -257,7 +257,12 @@ export default function Landing() {
                 >
                   Get the app
                 </a>
-                <a className={styles.secondaryLink} href={ANDROID_DOWNLOAD_PATH}>
+                <a
+                  className={styles.secondaryLink}
+                  href={ANDROID_PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Android beta
                 </a>
               </div>
