@@ -107,7 +107,7 @@ export default function ShareLanding({ type }) {
               target="_blank"
               rel="noreferrer"
             >
-              Android beta
+              Get it on Android
             </a>
           </div>
 

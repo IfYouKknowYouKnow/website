@@ -245,7 +245,8 @@ export default function Landing() {
               <p className={styles.kicker}>YouKnow</p>
               <h1>A Map Curated by People Who Know.</h1>
               <p className={styles.subhead}>
-                Discover restaurants, bars, cafes, and experiences through people you trust.
+                The YouKnow app helps you discover restaurants, bars, cafes, and
+                experiences through people you trust.
               </p>
 
               <div className={styles.actions}>
@@ -263,7 +264,7 @@ export default function Landing() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Android beta
+                  Get it on Android
                 </a>
               </div>
 
