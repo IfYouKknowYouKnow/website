@@ -198,6 +198,24 @@
   object-fit: contain;
 }
 
+.videoMedia {
+  display: flex;
+  justify-content: center;
+  padding: 0 22px 24px;
+}
+
+.tutorialVideo {
+  display: block;
+  width: min(100%, 300px);
+  max-height: 62vh;
+  aspect-ratio: 9 / 19.5;
+  object-fit: contain;
+  border: 1px solid rgba(23, 21, 19, 0.08);
+  border-radius: 18px;
+  background: #171513;
+  box-shadow: 0 14px 34px rgba(42, 35, 28, 0.08);
+}
+
 @media (max-width: 680px) {
   .main {
     padding: 48px 0 72px;
@@ -225,5 +243,14 @@
 
   .takeoutMedia {
     grid-template-columns: 1fr;
+  }
+
+  .videoMedia {
+    padding: 0 18px 20px;
+  }
+
+  .tutorialVideo {
+    width: min(100%, 260px);
+    max-height: 58vh;
   }
 }

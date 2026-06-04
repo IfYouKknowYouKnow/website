@@ -6,27 +6,14 @@ const TUTORIALS = [
     title: 'Instagram / TikTok',
     steps: [
       'When you see a restaurant, bar, cafe, or place on Instagram or TikTok, share it with the app!',
-      'YouKnow will open automatically and indentify the likeliest matching places.',
+      'YouKnow will open automatically and identify the likeliest matching places.',
       'Review the detected place and save it once it looks right.',
     ],
-    screenshots: [
-      {
-        src: '/tuto_1.png',
-        alt: 'Instagram or TikTok tutorial step 1.',
-      },
-      {
-        src: '/tuto_2.png',
-        alt: 'Instagram or TikTok tutorial step 2.',
-      },
-      {
-        src: '/tuto_3.png',
-        alt: 'Instagram or TikTok tutorial step 3.',
-      },
-      {
-        src: '/tuto_4.PNG',
-        alt: 'Instagram or TikTok tutorial step 4.',
-      },
-    ],
+    video: {
+      src: '/video_insta.mp4',
+      type: 'video/mp4',
+      label: 'Instagram or TikTok place sharing tutorial video.',
+    },
   },
   {
     title: 'Pictures',
@@ -36,20 +23,11 @@ const TUTORIALS = [
       'You can also share a picture from your gallery straight into YouKnow.',
       'Confirm the matched place, then save it for later.',
     ],
-    screenshots: [
-      {
-        src: '/gallery_1.png',
-        alt: 'Gallery import tutorial step 1.',
-      },
-      {
-        src: '/gallery_2.png',
-        alt: 'Gallery import tutorial step 2.',
-      },
-      {
-        src: '/gallery_3.png',
-        alt: 'Gallery import tutorial step 3.',
-      },
-    ],
+    video: {
+      src: '/gallery_video.MP4',
+      type: 'video/mp4',
+      label: 'Gallery place sharing tutorial video.',
+    },
   },
   {
     title: 'Google Saved Places',
@@ -159,6 +137,21 @@ export default function Tutorials() {
                         key={screenshot.src}
                       />
                     ))}
+                  </div>
+                )}
+
+                {tutorial.video && (
+                  <div className={styles.videoMedia}>
+                    <video
+                      className={styles.tutorialVideo}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      aria-label={tutorial.video.label}
+                    >
+                      <source src={tutorial.video.src} type={tutorial.video.type} />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 )}
               </details>
