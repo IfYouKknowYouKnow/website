@@ -126,6 +126,38 @@ h1 {
   box-shadow: none;
 }
 
+.store-badge-link {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  line-height: 0;
+  text-decoration: none;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.store-badge-link:hover,
+.store-badge-link:focus-visible {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 14px 24px rgba(23, 21, 19, 0.18));
+}
+
+.store-badge {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.app-store-badge {
+  width: 150px;
+}
+
+.google-play-badge {
+  width: 176px;
+}
+
 .code {
   display: none;
   width: fit-content;
@@ -226,6 +258,14 @@ h1 {
   .brand-logo {
     width: 126px;
     max-height: 72px;
+  }
+
+  .app-store-badge {
+    width: 142px;
+  }
+
+  .google-play-badge {
+    width: 166px;
   }
 
   .hero {

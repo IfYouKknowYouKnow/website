@@ -85,12 +85,18 @@ export default function ShareLanding({ type }) {
 
           <div className={styles.actions}>
             <a
-              className={styles.primaryButton}
+              className={styles.storeBadgeLink}
               href={APP_STORE_URL}
               target="_blank"
               rel="noreferrer"
+              aria-label="Download on the App Store"
             >
-              Get the app
+              <img
+                className={`${styles.storeBadge} ${styles.appStoreBadge}`}
+                src="/badges/app-store-badge.svg"
+                alt="Download on the App Store"
+                decoding="async"
+              />
             </a>
             {targetId ? (
               <a className={styles.secondaryButton} href={deepLink}>
@@ -102,12 +108,18 @@ export default function ShareLanding({ type }) {
               </Link>
             )}
             <a
-              className={styles.textLink}
+              className={styles.storeBadgeLink}
               href={ANDROID_PLAY_STORE_URL}
               target="_blank"
               rel="noreferrer"
+              aria-label="Get it on Google Play"
             >
-              Get it on Android
+              <img
+                className={`${styles.storeBadge} ${styles.googlePlayBadge}`}
+                src="/badges/google-play-badge.png"
+                alt="Get it on Google Play"
+                decoding="async"
+              />
             </a>
           </div>
 

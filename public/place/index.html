@@ -24,7 +24,12 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Open in app</a>
-        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="store-badge-link" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614" aria-label="Download on the App Store">
+          <img class="store-badge app-store-badge" src="/badges/app-store-badge.svg" alt="Download on the App Store">
+        </a>
+        <a class="store-badge-link" id="get-android" href="https://play.google.com/store/apps/details?id=com.youknow.mobile" aria-label="Get it on Google Play">
+          <img class="store-badge google-play-badge" src="/badges/google-play-badge.png" alt="Get it on Google Play">
+        </a>
       </div>
       <p class="status" id="status">Trying to open YouKnow…</p>
     </section>
@@ -50,6 +55,7 @@
       var placeId = (params.get('id') || segments[1] || '').trim();
       var openButton = document.getElementById('open-app');
       var getAppButton = document.getElementById('get-app');
+      var getAndroidButton = document.getElementById('get-android');
       var status = document.getElementById('status');
 
       if (!placeId) {
@@ -66,9 +72,9 @@
         (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
 
       if (isIOS) {
-        openButton.textContent = 'Get the app';
-        openButton.setAttribute('href', appStoreUrl);
-        getAppButton.style.display = 'none';
+        openButton.style.display = 'none';
+        getAppButton.setAttribute('href', appStoreUrl);
+        getAndroidButton.style.display = 'none';
         status.textContent = 'Install YouKnow to open shared places from friends.';
         return;
       }

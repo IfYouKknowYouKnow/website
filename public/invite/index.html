@@ -24,7 +24,12 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Accept invite</a>
-        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="store-badge-link" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614" aria-label="Download on the App Store">
+          <img class="store-badge app-store-badge" src="/badges/app-store-badge.svg" alt="Download on the App Store">
+        </a>
+        <a class="store-badge-link" id="get-android" href="https://play.google.com/store/apps/details?id=com.youknow.mobile" aria-label="Get it on Google Play">
+          <img class="store-badge google-play-badge" src="/badges/google-play-badge.png" alt="Get it on Google Play">
+        </a>
       </div>
       <p class="code" id="code-wrap">Invite code: <strong id="code"></strong></p>
       <p class="status" id="status">Trying to open YouKnow…</p>
@@ -55,6 +60,7 @@
       var codeText = document.getElementById('code');
       var inviterName = document.getElementById('inviter-name');
       var getAppButton = document.getElementById('get-app');
+      var getAndroidButton = document.getElementById('get-android');
       var rawName = (params.get('from') || params.get('name') || '').trim();
       var name = rawName.replace(/\s+/g, ' ').slice(0, 42);
 
@@ -80,9 +86,9 @@
         (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
 
       if (isIOS) {
-        openButton.textContent = 'Get the app';
-        openButton.setAttribute('href', appStoreUrl);
-        getAppButton.style.display = 'none';
+        openButton.style.display = 'none';
+        getAppButton.setAttribute('href', appStoreUrl);
+        getAndroidButton.style.display = 'none';
         status.textContent = 'Install YouKnow, then enter the invite code above.';
         return;
       }
