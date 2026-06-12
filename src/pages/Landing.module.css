@@ -51,19 +51,17 @@
 .footerBrand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: #171513;
-  font-size: 14px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
 }
 
 .brandLogo {
   display: block;
-  width: 34px;
-  height: 28px;
+  width: 264px;
+  height: auto;
+  max-height: 78px;
   object-fit: contain;
-  mix-blend-mode: multiply;
+  object-position: left center;
+  border-radius: 12px;
+  transform: translateY(28px);
 }
 
 .navCta {
@@ -120,10 +118,10 @@
   max-width: 640px;
   margin: 0;
   color: #141210;
-  font-size: clamp(44px, 7vw, 78px);
-  font-weight: 820;
+  font-size: clamp(40px, 6.2vw, 68px);
+  font-weight: 720;
   letter-spacing: 0;
-  line-height: 0.96;
+  line-height: 1;
 }
 
 .subhead {
@@ -551,7 +549,17 @@
 }
 
 .footerBrand {
-  color: #171513;
+  flex-shrink: 0;
+}
+
+.footerLogo {
+  display: block;
+  width: 118px;
+  height: auto;
+  max-height: 35px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 8px;
 }
 
 .footerCopy,
@@ -689,8 +697,10 @@
   }
 
   .brandLogo {
-    width: 32px;
-    height: 26px;
+    width: min(50vw, 192px);
+    height: auto;
+    max-height: none;
+    transform: translateY(16px);
   }
 
   .navCta {

@@ -224,12 +224,10 @@ export default function Landing() {
           <a className={styles.brand} href="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/oyster_logo.jpeg"
-              alt=""
-              aria-hidden="true"
+              src="/long_logo.png"
+              alt="YouKnow"
               decoding="async"
             />
-            <span>YouKnow</span>
           </a>
 
           <a className={styles.navCta} href="#waitlist">
@@ -242,7 +240,6 @@ export default function Landing() {
         <div className="container">
           <div className={styles.heroInner}>
             <div className={styles.copy}>
-              <p className={styles.kicker}>YouKnow</p>
               <h1>A Map Curated by People Who Know.</h1>
               <p className={styles.subhead}>
                 The YouKnow app helps you discover restaurants, bars, cafes, and
@@ -416,7 +413,15 @@ export default function Landing() {
 
       <footer className={styles.footer}>
         <div className={`container ${styles.footerInner}`}>
-          <span className={styles.footerBrand}>YouKnow</span>
+          <span className={styles.footerBrand}>
+            <img
+              className={styles.footerLogo}
+              src="/long_logo.png"
+              alt="YouKnow"
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
           <p className={styles.footerCopy}>© 2026 YouKnow</p>
           <div className={styles.footerLinks}>
             <Link to="/privacy">Privacy</Link>

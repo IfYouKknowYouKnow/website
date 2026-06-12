@@ -86,12 +86,10 @@ export default function Tutorials() {
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/oyster_logo.jpeg"
-              alt=""
-              aria-hidden="true"
+              src="/long_logo.png"
+              alt="YouKnow"
               decoding="async"
             />
-            <span>YouKnow</span>
           </Link>
 
           <Link className={styles.navLink} to="/">

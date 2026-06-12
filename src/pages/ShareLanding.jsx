@@ -64,8 +64,7 @@ export default function ShareLanding({ type }) {
     <main className={styles.page}>
       <nav className={styles.nav}>
         <Link className={styles.brand} to="/" aria-label="YouKnow home">
-          <img src="/share/oyster_logo.png" alt="" aria-hidden="true" />
-          <span>YouKnow</span>
+          <img src="/long_logo.png" alt="YouKnow" decoding="async" />
         </Link>
       </nav>
 

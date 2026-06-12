@@ -54,10 +54,11 @@ body {
 }
 
 .brand-logo {
-  width: 154px;
-  max-height: 86px;
+  width: 172px;
+  max-height: 52px;
   object-fit: contain;
   object-position: left center;
+  border-radius: 10px;
 }
 
 .eyebrow {
@@ -256,8 +257,8 @@ h1 {
   }
 
   .brand-logo {
-    width: 126px;
-    max-height: 72px;
+    width: 146px;
+    max-height: 44px;
   }
 
   .app-store-badge {

@@ -8,7 +8,14 @@ export default function Privacy() {
     <div className={styles.page}>
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
-          <Link to="/" className={styles.logo}>YouKnow</Link>
+          <Link to="/" className={styles.logo} aria-label="YouKnow home">
+            <img
+              className={styles.logoImage}
+              src="/long_logo.png"
+              alt="YouKnow"
+              decoding="async"
+            />
+          </Link>
         </div>
       </nav>
 

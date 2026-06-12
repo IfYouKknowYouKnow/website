@@ -29,18 +29,16 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: #171513;
-  font-size: 14px;
-  font-weight: 750;
 }
 
 .brand img {
   display: block;
-  width: 42px;
-  height: 32px;
+  width: 132px;
+  height: auto;
+  max-height: 39px;
   object-fit: contain;
-  mix-blend-mode: multiply;
+  object-position: left center;
+  border-radius: 8px;
 }
 
 .hero {
