@@ -422,7 +422,7 @@ export default function Landing() {
               decoding="async"
             />
           </span>
-          <p className={styles.footerCopy}>© 2026 YouKnow</p>
+          <p className={styles.footerCopy}>© 2026 YouKnow by Marie-Louise Dugua & Fabio Baldini</p>
           <div className={styles.footerLinks}>
             <Link to="/privacy">Privacy</Link>
           </div>
