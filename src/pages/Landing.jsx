@@ -5,10 +5,9 @@ import styles from './Landing.module.css'
 const ANDROID_PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.youknow.mobile'
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
-const INVITE_CODE = 'QNU9JKFX'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 const FALLBACK_STATS = {
-  curatedPlaces: 4814,
+  curatedPlaces: 10000,
   cities: 331,
 }
 const COUNT_REFRESH_INTERVAL_MS = 60000
@@ -19,39 +18,133 @@ const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
 
 const FLOATING_TAGS = [
   { text: 'Cute brunch spot', className: styles.floatOne, dotColor: '#e01c1c' },
-  { text: 'Natural Wine in Zurich', className: styles.floatTwo, dotColor: '#16834a' },
+  { text: 'Natural wine in Zurich', className: styles.floatTwo, dotColor: '#16834a' },
   { text: 'Saved by friends', className: styles.floatThree, dotColor: '#2f6eea' },
   { text: 'Date night', className: styles.floatFour, dotColor: '#d36b17' },
-  { text: 'Karaoke night with the girls', className: styles.floatFive, dotColor: '#9b4de3' },
-  { text: 'IYKYK', className: styles.floatSix, dotColor: '#00a6a6' },
+  { text: 'Hidden terrace', className: styles.floatFive, dotColor: '#9b4de3' },
+  { text: 'Friend-approved', className: styles.floatSix, dotColor: '#00a6a6' },
 ]
+
+const SCREEN_FEATURES = [
+  {
+    src: '/images/IMG_3385.PNG',
+    title: 'Start with the living map',
+    body: 'Open a map of the right things: places saved by friends, connoisseurs and people whose taste you trust.',
+  },
+  {
+    src: '/images/IMG_3387.PNG',
+    title: 'Filter by people you trust',
+    body: 'Switch from the community to one friend, and see exactly which places they would send you to.',
+  },
+  {
+    src: '/images/IMG_3386.PNG',
+    title: 'Filter by category, open now and trending',
+    body: 'Cut through the noise with filters for food, bars, coffee, dance, open now and what is trending nearby.',
+  },
+  {
+    src: '/images/IMG_3388.PNG',
+    title: 'Explore any city',
+    body: 'Drop into Milan, Zurich, Paris or wherever you are headed, and see the places the community actually recommends.',
+  },
+  {
+    src: '/images/IMG_3389.PNG',
+    title: 'See what friends post',
+    body: 'Follow the feed for photos, new finds and the nights your friends thought were worth sharing.',
+  },
+  {
+    src: '/images/IMG_3390.PNG',
+    title: 'Organize your own recommendations',
+    body: 'Keep your recommendations and want-to-try places organized by distance, city or lists.',
+  },
+  {
+    src: '/images/IMG_3391.PNG',
+    title: 'Search by vibe with AI',
+    body: 'Use natural language. Artificial Intelligence helps match the places on your map to the exact vibe you want.',
+  },
+].map((feature, index) => ({
+  ...feature,
+  alt: `YouKnow app screenshot showing ${feature.title.toLowerCase()}.`,
+  number: String(index + 1).padStart(2, '0'),
+}))
 
 const HERO_SCREENSHOTS = [
-  {
-    src: '/new_screen_iphon.PNG',
-    alt: 'YouKnow app screen showing the latest place recommendation view.',
-  },
-  {
-    src: '/feed_new.png',
-    alt: 'YouKnow feed screen showing friend activity and trending places.',
-  },
-  {
-    src: '/profile_new.png',
-    alt: 'YouKnow profile screen showing saved places and personal recommendations.',
-  },
+  SCREEN_FEATURES[1],
+  SCREEN_FEATURES[3],
+  SCREEN_FEATURES[4],
 ]
 
-const QUIET_POINTS = [
-  {
-    text: 'Save places you like',
-    tutorialLink: true,
-  },
-  {
-    text: 'Get recommendations from people you trust',
-  },
-  {
-    text: 'Plan nights out without endless searching',
-  },
+const QUERY_PILLS = [
+  'cozy bar for a first date',
+  'casual dinner',
+  'quiet cafe to work from',
+  'places my friends saved in Paris',
+]
+
+function StoreButtons({ compact = false }) {
+  return (
+    <div className={`${styles.actions} ${compact ? styles.actionsCompact : ''}`}>
+      <a
+        className={styles.storeBadgeLink}
+        href={APP_STORE_URL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Download on the App Store"
+      >
+        <img
+          className={`${styles.storeBadge} ${styles.appStoreBadge}`}
+          src="/badges/app-store-badge.svg"
+          alt="Download on the App Store"
+          decoding="async"
+        />
+      </a>
+      <a
+        className={styles.storeBadgeLink}
+        href={ANDROID_PLAY_STORE_URL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Get it on Google Play"
+      >
+        <img
+          className={`${styles.storeBadge} ${styles.googlePlayBadge}`}
+          src="/badges/google-play-badge.png"
+          alt="Get it on Google Play"
+          decoding="async"
+        />
+      </a>
+    </div>
+  )
+}
+
+function StatStrip({ stats }) {
+  const curatedPlaces = positiveCountOrFallback(
+    stats.curatedPlaces,
+    FALLBACK_STATS.curatedPlaces,
+  )
+  const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
+
+  return (
+    <section className={styles.statsStrip} aria-label="YouKnow community stats">
+      <div className={`container ${styles.statsInner}`}>
+        <div className={styles.statItem}>
+          <strong>{formatCount(curatedPlaces)}+ places</strong>
+          <span>Saved by people with taste</span>
+        </div>
+        <div className={styles.statItem}>
+          <strong>{formatCount(cityCount)} cities</strong>
+          <span>Zero-noise layers for places worth knowing</span>
+        </div>
+        <div className={styles.statItem}>
+          <strong>No stars. No noise.</strong>
+          <span>Just people whose taste you trust</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const FOOTER_LINKS = [
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'For curators', href: '#curators' },
 ]
 
 function getStaticMapUrl() {
@@ -118,10 +211,21 @@ export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
+  const [isCuratorFormOpen, setIsCuratorFormOpen] = useState(false)
+  const [curatorForm, setCuratorForm] = useState({
+    name: '',
+    email: '',
+    taste: '',
+  })
+  const [isCuratorSubmitting, setIsCuratorSubmitting] = useState(false)
+  const [curatorToast, setCuratorToast] = useState('')
   const [stats, setStats] = useState(FALLBACK_STATS)
   const [activeSlide, setActiveSlide] = useState(0)
+  const [activeFeatureStart, setActiveFeatureStart] = useState(0)
   const carouselRef = useRef(null)
+  const featureRailRef = useRef(null)
   const staticMapUrl = getStaticMapUrl()
+  const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -184,12 +288,81 @@ export default function Landing() {
     }
   }
 
+  async function handleCuratorSubmit(e) {
+    e.preventDefault()
+    setIsCuratorSubmitting(true)
+    setCuratorToast('')
+
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({
+          'form-name': 'curator-application',
+          ...curatorForm,
+        }),
+      })
+
+      setCuratorForm({
+        name: '',
+        email: '',
+        taste: '',
+      })
+      setIsCuratorFormOpen(false)
+      setCuratorToast('Application sent.')
+
+      setTimeout(() => {
+        setCuratorToast('')
+      }, 3000)
+    } catch (error) {
+      console.error('Curator application submission failed:', error)
+      setCuratorToast('Something went wrong. Please try again.')
+    } finally {
+      setIsCuratorSubmitting(false)
+    }
+  }
+
+  function handleCuratorChange(e) {
+    const { name, value } = e.target
+
+    setCuratorForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }))
+  }
+
   function handleCarouselScroll(e) {
     const { scrollLeft, clientWidth } = e.currentTarget
     const nextSlide = Math.round(scrollLeft / clientWidth)
 
     if (nextSlide !== activeSlide) {
       setActiveSlide(nextSlide)
+    }
+  }
+
+  function handleFeatureScroll(e) {
+    const rail = e.currentTarget
+    const cards = Array.from(rail.children)
+
+    if (!cards.length) {
+      return
+    }
+
+    const railRect = rail.getBoundingClientRect()
+    const railCenter = railRect.left + railRect.width / 2
+    const nextStart = cards.reduce((closestIndex, card, index) => {
+      const cardRect = card.getBoundingClientRect()
+      const cardCenter = cardRect.left + cardRect.width / 2
+      const closestRect = cards[closestIndex].getBoundingClientRect()
+      const closestCenter = closestRect.left + closestRect.width / 2
+
+      return Math.abs(cardCenter - railCenter) < Math.abs(closestCenter - railCenter)
+        ? index
+        : closestIndex
+    }, 0)
+
+    if (nextStart !== activeFeatureStart) {
+      setActiveFeatureStart(nextStart)
     }
   }
 
@@ -230,9 +403,13 @@ export default function Landing() {
             />
           </a>
 
-          <a className={styles.navCta} href="#waitlist">
-            Join mailing list
-          </a>
+          <div className={styles.navLinks} aria-label="Primary">
+            <a href="#how-it-works">How it works</a>
+            <a href="#curators">For curators</a>
+            <a className={styles.navCta} href="#download">
+              Download
+            </a>
+          </div>
         </div>
       </nav>
 
@@ -242,54 +419,21 @@ export default function Landing() {
             <div className={styles.copy}>
               <h1>A Map Curated by People Who Know.</h1>
               <p className={styles.subhead}>
-                The YouKnow app helps you discover restaurants, bars, cafes, and
-                experiences through people you trust.
+                Skip the endless searching. Find restaurants, bars, cafes and nights
+                out through friends and connoisseurs who share your taste.
               </p>
 
-              <div className={styles.actions}>
-                <a
-                  className={styles.storeBadgeLink}
-                  href={APP_STORE_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Download on the App Store"
-                >
-                  <img
-                    className={`${styles.storeBadge} ${styles.appStoreBadge}`}
-                    src="/badges/app-store-badge.svg"
-                    alt="Download on the App Store"
-                    decoding="async"
-                  />
-                </a>
-                <a
-                  className={styles.storeBadgeLink}
-                  href={ANDROID_PLAY_STORE_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Get it on Google Play"
-                >
-                  <img
-                    className={`${styles.storeBadge} ${styles.googlePlayBadge}`}
-                    src="/badges/google-play-badge.png"
-                    alt="Get it on Google Play"
-                    decoding="async"
-                  />
+              <div className={styles.heroActions}>
+                <span className={styles.heroFreeNote}>Completely Free</span>
+                <StoreButtons />
+                <a className={styles.secondaryCta} href="#waitlist">
+                  Join mailing list
                 </a>
               </div>
 
               <div className={styles.proof} aria-label="Live YouKnow community stats">
-                <div className={styles.proofStat}>
-                  <strong>{formatCount(stats.curatedPlaces)}</strong>
-                  <span>places</span>
-                </div>
-                <span className={styles.proofJoin}>in</span>
-                <div className={styles.proofStat}>
-                  <strong>{formatCount(stats.cities)}</strong>
-                  <span>cities</span>
-                </div>
-                <p className={styles.proofMeta}>
-                  <span>Invite code {INVITE_CODE}</span>
-                </p>
+                <span>Live in {formatCount(cityCount)} cities</span>
+                <span>Available in English, German, French and Italian</span>
               </div>
             </div>
 
@@ -349,22 +493,187 @@ export default function Landing() {
         <input type="email" name="email" />
       </form>
 
+      <form name="curator-application" method="POST" data-netlify="true" hidden>
+        <input type="hidden" name="form-name" value="curator-application" />
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <textarea name="taste" />
+      </form>
+
+      <StatStrip stats={stats} />
+
+      <main className={styles.editorial}>
+        <section className={styles.featureSection} id="how-it-works">
+          <div className="container">
+            <div className={styles.featureIntro}>
+              <span className={styles.sectionEyebrow}>How it works</span>
+              <h2>No stars. No noise. Just the right places.</h2>
+              <p>
+                YouKnow turns recommendations from friends and local connoisseurs
+                into a living map: clear, personal and built for actual plans.
+              </p>
+            </div>
+
+            <div
+              className={styles.featureRail}
+              ref={featureRailRef}
+              onScroll={handleFeatureScroll}
+              aria-label="YouKnow app features"
+            >
+              {SCREEN_FEATURES.map((feature, index) => (
+                <article
+                  className={`${styles.featureCard} ${
+                    index === activeFeatureStart
+                      ? styles.featureCardActive
+                      : index === activeFeatureStart - 1 ||
+                          index === activeFeatureStart + 1
+                        ? styles.featureCardPreview
+                        : styles.featureCardHidden
+                  }`}
+                  key={feature.src}
+                >
+                  <div className={styles.featurePhone}>
+                    <img
+                      src={feature.src}
+                      alt={feature.alt}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  </div>
+                  <div className={styles.featureText}>
+                    <span>{feature.number}</span>
+                    <h3>{feature.title}</h3>
+                    <p>{feature.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <Link className={styles.textLink} to="/tutorials">
+              See how saving works
+            </Link>
+          </div>
+        </section>
+
+        <section className={`${styles.storySection} ${styles.searchSection}`}>
+          <div className={`container ${styles.searchInner}`}>
+            <div className={styles.queryPanel}>
+              <span className={styles.queryLabel}>Ask YouKnow</span>
+              <div className={styles.queryLine}>Find a place for...</div>
+              <div className={styles.queryPills}>
+                {QUERY_PILLS.map((query) => (
+                  <span key={query}>{query}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.storyCopy}>
+              <span className={styles.sectionEyebrow}>Search by vibe</span>
+              <h2 className={styles.searchHeadline}>Ask for a vibe, not a rating.</h2>
+              <p>
+                Describe the night you want, from a quiet coffee to a second-date
+                wine bar, and find places that match your people and your mood.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.storySection} id="curators">
+          <div className={`container ${styles.curatorBand}`}>
+            <div className={styles.storyCopy}>
+              <span className={styles.sectionEyebrow}>For curators</span>
+              <h2>Built by people with taste.</h2>
+              <p>
+                For friends, communities, creators and tastemakers who know the
+                places that do not need giant neon signs to stay full.
+              </p>
+            </div>
+            <div className={styles.curatorAction}>
+              <button
+                className={styles.primaryCta}
+                type="button"
+                onClick={() => setIsCuratorFormOpen((isOpen) => !isOpen)}
+                aria-expanded={isCuratorFormOpen}
+              >
+                Become a curator
+              </button>
+
+              {isCuratorFormOpen && (
+                <form
+                  name="curator-application"
+                  method="POST"
+                  data-netlify="true"
+                  onSubmit={handleCuratorSubmit}
+                  className={styles.curatorForm}
+                >
+                  <input type="hidden" name="form-name" value="curator-application" />
+
+                  <input
+                    className={styles.input}
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={curatorForm.name}
+                    onChange={handleCuratorChange}
+                    required
+                  />
+
+                  <input
+                    className={styles.input}
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={curatorForm.email}
+                    onChange={handleCuratorChange}
+                    required
+                  />
+
+                  <textarea
+                    className={styles.textarea}
+                    name="taste"
+                    placeholder="Why should people trust your taste?"
+                    value={curatorForm.taste}
+                    onChange={handleCuratorChange}
+                    required
+                  />
+
+                  <button
+                    className={styles.formButton}
+                    type="submit"
+                    disabled={isCuratorSubmitting}
+                  >
+                    {isCuratorSubmitting ? 'Sending...' : 'Send application'}
+                  </button>
+
+                  {curatorToast && curatorToast !== 'Application sent.' && (
+                    <p className={styles.toast}>{curatorToast}</p>
+                  )}
+                </form>
+              )}
+
+              {curatorToast === 'Application sent.' && (
+                <p className={styles.curatorSuccess} aria-live="polite">
+                  <span aria-hidden="true" />
+                  {curatorToast}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <section className={styles.finalCta} id="download">
+        <div className="container">
+          <div className={styles.finalCtaInner}>
+            <h2>Start with a place you already love.</h2>
+            <StoreButtons compact />
+            <p className={styles.freeNote}>Free to download.</p>
+          </div>
+        </div>
+      </section>
+
       <section className={styles.info} id="waitlist">
         <div className="container">
-          <div className={styles.infoGrid}>
-            {QUIET_POINTS.map((point) => (
-              <div className={styles.infoPoint} key={point.text}>
-                <p>{point.text}</p>
-
-                {point.tutorialLink && (
-                  <Link className={styles.infoButton} to="/tutorials">
-                    How?
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-
           <div className={styles.waitlistPanel}>
             <p>Get app updates and new city drops.</p>
 
@@ -400,13 +709,22 @@ export default function Landing() {
           </div>
 
           <div className={styles.supportMark}>
-            <span>Built with the support of SPH</span>
-            <img
-              src="/sph_logo.jpeg"
-              alt="ETH Student Project House"
-              loading="lazy"
-              decoding="async"
-            />
+            <span>Built with support from</span>
+            <div className={styles.supportLogos}>
+              <img
+                src="/sph_logo.jpeg"
+                alt="ETH Student Project House"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                className={styles.agenticLogo}
+                src="/asl-logo-white.svg"
+                alt="Agentic Systems Lab"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -424,6 +742,11 @@ export default function Landing() {
           </span>
           <p className={styles.footerCopy}>© 2026 YouKnow by Marie-Louise Dugua & Fabio Baldini</p>
           <div className={styles.footerLinks}>
+            {FOOTER_LINKS.map((link) => (
+              <a href={link.href} key={link.href}>
+                {link.label}
+              </a>
+            ))}
             <Link to="/privacy">Privacy</Link>
           </div>
         </div>
