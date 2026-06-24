@@ -526,7 +526,7 @@
   scroll-padding-inline: calc(50vw - var(--feature-track) / 2);
   scroll-behavior: smooth;
   scrollbar-width: none;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
 }
 
 .featureRail::-webkit-scrollbar {
@@ -549,10 +549,17 @@
     opacity 0.24s ease,
     filter 0.24s ease,
     transform 0.24s ease;
+  cursor: pointer;
+}
+
+.featureCard:focus-visible {
+  outline: 2px solid rgba(22, 125, 196, 0.72);
+  outline-offset: 8px;
 }
 
 .featureCardActive {
   opacity: 1;
+  cursor: default;
   filter: none;
   transform: scale(1);
   z-index: 3;
