@@ -126,7 +126,7 @@ function StatStrip({ stats }) {
     <section className={styles.statsStrip} aria-label="YouKnow community stats">
       <div className={`container ${styles.statsInner}`}>
         <div className={styles.statItem}>
-          <strong>{formatCount(curatedPlaces)}+ places</strong>
+          <strong>{formatCount(curatedPlaces)} places</strong>
           <span>Saved by people with taste</span>
         </div>
         <div className={styles.statItem}>
@@ -224,8 +224,17 @@ export default function Landing() {
   const [activeFeatureStart, setActiveFeatureStart] = useState(0)
   const carouselRef = useRef(null)
   const featureRailRef = useRef(null)
+  const featureSnapTimeoutRef = useRef(null)
+  const featureScrollUnlockTimeoutRef = useRef(null)
+  const activeFeatureStartRef = useRef(0)
+  const featureScrollLockRef = useRef(false)
+  const featureTouchStartRef = useRef({ x: 0, y: 0 })
   const staticMapUrl = getStaticMapUrl()
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
+
+  useEffect(() => {
+    activeFeatureStartRef.current = activeFeatureStart
+  }, [activeFeatureStart])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -340,6 +349,81 @@ export default function Landing() {
     }
   }
 
+  function scrollFeatureTo(index) {
+    const rail = featureRailRef.current
+    const nextIndex = Math.min(SCREEN_FEATURES.length - 1, Math.max(0, index))
+    const targetCard = rail?.children[nextIndex]
+
+    if (!rail || !targetCard) {
+      return
+    }
+
+    featureScrollLockRef.current = true
+    window.clearTimeout(featureSnapTimeoutRef.current)
+    window.clearTimeout(featureScrollUnlockTimeoutRef.current)
+    setActiveFeatureStart(nextIndex)
+
+    rail.scrollTo({
+      left: targetCard.offsetLeft + targetCard.offsetWidth / 2 - rail.clientWidth / 2,
+      behavior: 'smooth',
+    })
+
+    featureScrollUnlockTimeoutRef.current = window.setTimeout(() => {
+      featureScrollLockRef.current = false
+    }, 420)
+  }
+
+  function stepFeature(direction) {
+    if (featureScrollLockRef.current) {
+      return
+    }
+
+    scrollFeatureTo(activeFeatureStartRef.current + direction)
+  }
+
+  function handleFeatureWheel(e) {
+    e.preventDefault()
+
+    const direction = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+
+    if (Math.abs(direction) < 8) {
+      return
+    }
+
+    stepFeature(direction > 0 ? 1 : -1)
+  }
+
+  function handleFeatureTouchStart(e) {
+    const [touch] = e.touches
+
+    if (!touch) {
+      return
+    }
+
+    featureTouchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    }
+  }
+
+  function handleFeatureTouchEnd(e) {
+    const [touch] = e.changedTouches
+
+    if (!touch) {
+      return
+    }
+
+    const deltaX = touch.clientX - featureTouchStartRef.current.x
+    const deltaY = touch.clientY - featureTouchStartRef.current.y
+
+    if (Math.abs(deltaX) < 28 || Math.abs(deltaX) < Math.abs(deltaY)) {
+      scrollFeatureTo(activeFeatureStartRef.current)
+      return
+    }
+
+    stepFeature(deltaX < 0 ? 1 : -1)
+  }
+
   function handleFeatureScroll(e) {
     const rail = e.currentTarget
     const cards = Array.from(rail.children)
@@ -364,6 +448,20 @@ export default function Landing() {
     if (nextStart !== activeFeatureStart) {
       setActiveFeatureStart(nextStart)
     }
+
+    window.clearTimeout(featureSnapTimeoutRef.current)
+    featureSnapTimeoutRef.current = window.setTimeout(() => {
+      const targetCard = cards[nextStart]
+
+      if (!targetCard) {
+        return
+      }
+
+      rail.scrollTo({
+        left: targetCard.offsetLeft + targetCard.offsetWidth / 2 - rail.clientWidth / 2,
+        behavior: 'smooth',
+      })
+    }, 120)
   }
 
   function goToSlide(index) {
@@ -518,6 +616,9 @@ export default function Landing() {
               className={styles.featureRail}
               ref={featureRailRef}
               onScroll={handleFeatureScroll}
+              onWheel={handleFeatureWheel}
+              onTouchStart={handleFeatureTouchStart}
+              onTouchEnd={handleFeatureTouchEnd}
               aria-label="YouKnow app features"
             >
               {SCREEN_FEATURES.map((feature, index) => (
