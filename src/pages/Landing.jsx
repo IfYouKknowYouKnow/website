@@ -126,7 +126,7 @@ function StatStrip({ stats }) {
     <section className={styles.statsStrip} aria-label="YouKnow community stats">
       <div className={`container ${styles.statsInner}`}>
         <div className={styles.statItem}>
-          <strong>{formatCount(curatedPlaces)} places</strong>
+          <strong>{formatCount(curatedPlaces)} curated places</strong>
           <span>Saved by people with taste</span>
         </div>
         <div className={styles.statItem}>
