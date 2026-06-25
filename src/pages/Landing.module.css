@@ -1064,15 +1064,15 @@
     order: 1;
   }
 
-  .visualWrap {
+  .subhead {
     order: 2;
   }
 
-  .subhead {
+  .heroActions {
     order: 3;
   }
 
-  .heroActions {
+  .visualWrap {
     order: 4;
   }
 
