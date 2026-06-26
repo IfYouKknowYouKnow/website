@@ -220,6 +220,15 @@
   transform: translateY(-1px);
 }
 
+.visualCta {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+}
+
 .proof {
   display: flex;
   align-items: center;
@@ -1208,6 +1217,10 @@
   .secondaryCta {
     width: 100%;
     max-width: 326px;
+  }
+
+  .visualCta {
+    margin-top: 14px;
   }
 
   .visualWrap {

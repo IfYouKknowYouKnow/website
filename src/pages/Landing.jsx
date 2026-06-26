@@ -444,9 +444,6 @@ export default function Landing() {
               <div className={styles.heroActions}>
                 <span className={styles.heroFreeNote}>Completely Free</span>
                 <StoreButtons />
-                <a className={styles.secondaryCta} href="#waitlist">
-                  Join mailing list
-                </a>
               </div>
 
               <div className={styles.proof} aria-label="Live YouKnow community stats">
@@ -501,6 +498,10 @@ export default function Landing() {
                   ))}
                 </div>
               </div>
+
+              <a className={`${styles.secondaryCta} ${styles.visualCta}`} href="#waitlist">
+                Join mailing list
+              </a>
             </div>
           </div>
         </div>
