@@ -19,9 +19,25 @@ function useQuery() {
   return useMemo(() => new URLSearchParams(location.search), [location.search])
 }
 
+function useDevicePlatform() {
+  return useMemo(() => {
+    const userAgent = window.navigator.userAgent || ''
+    const isIOS =
+      /iPad|iPhone|iPod/.test(userAgent) ||
+      (window.navigator.platform === 'MacIntel' &&
+        window.navigator.maxTouchPoints > 1)
+    const isAndroid = /Android/i.test(userAgent)
+
+    if (isIOS) return 'ios'
+    if (isAndroid) return 'android'
+    return 'desktop'
+  }, [])
+}
+
 export default function ShareLanding({ type }) {
   const params = useParams()
   const query = useQuery()
+  const devicePlatform = useDevicePlatform()
   const isInvite = type === 'invite'
   const inviteCode = cleanInviteCode(query.get('code') || params.code)
   const placeId = (query.get('id') || params.placeId || '').trim()
@@ -57,8 +73,16 @@ export default function ShareLanding({ type }) {
     ? 'This invite link is missing its invite code.'
     : 'This place link is missing its place id.'
   const fallbackMessage = isInvite
-    ? 'If the app did not open, install YouKnow and enter the invite code above.'
+    ? devicePlatform === 'android'
+      ? 'If the app did not open, get YouKnow on Google Play and enter the invite code above.'
+      : 'If the app did not open, install YouKnow and enter the invite code above.'
     : 'If the app did not open, use the button above or install YouKnow.'
+  const storeButtons =
+    devicePlatform === 'android'
+      ? ['android', 'ios']
+      : devicePlatform === 'ios'
+      ? ['ios', 'android']
+      : ['ios', 'android']
 
   return (
     <main className={styles.page}>
@@ -83,20 +107,6 @@ export default function ShareLanding({ type }) {
           )}
 
           <div className={styles.actions}>
-            <a
-              className={styles.storeBadgeLink}
-              href={APP_STORE_URL}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Download on the App Store"
-            >
-              <img
-                className={`${styles.storeBadge} ${styles.appStoreBadge}`}
-                src="/badges/app-store-badge.svg"
-                alt="Download on the App Store"
-                decoding="async"
-              />
-            </a>
             {targetId ? (
               <a className={styles.secondaryButton} href={deepLink}>
                 {isInvite ? 'Accept invite' : 'Open in app'}
@@ -106,20 +116,41 @@ export default function ShareLanding({ type }) {
                 Go to YouKnow
               </Link>
             )}
-            <a
-              className={styles.storeBadgeLink}
-              href={ANDROID_PLAY_STORE_URL}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Get it on Google Play"
-            >
-              <img
-                className={`${styles.storeBadge} ${styles.googlePlayBadge}`}
-                src="/badges/google-play-badge.png"
-                alt="Get it on Google Play"
-                decoding="async"
-              />
-            </a>
+            {storeButtons.map((store) =>
+              store === 'android' ? (
+                <a
+                  key="android"
+                  className={styles.storeBadgeLink}
+                  href={ANDROID_PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Get it on Google Play"
+                >
+                  <img
+                    className={`${styles.storeBadge} ${styles.googlePlayBadge}`}
+                    src="/badges/google-play-badge.png"
+                    alt="Get it on Google Play"
+                    decoding="async"
+                  />
+                </a>
+              ) : (
+                <a
+                  key="ios"
+                  className={styles.storeBadgeLink}
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Download on the App Store"
+                >
+                  <img
+                    className={`${styles.storeBadge} ${styles.appStoreBadge}`}
+                    src="/badges/app-store-badge.svg"
+                    alt="Download on the App Store"
+                    decoding="async"
+                  />
+                </a>
+              ),
+            )}
           </div>
 
           <p className={styles.status}>
