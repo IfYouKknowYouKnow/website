@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Privacy from './pages/Privacy'
 import ShareLanding from './pages/ShareLanding'
+import Team from './pages/Team'
 import Tutorials from './pages/Tutorials'
 
 function ScrollToTop() {
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/invite/:code" element={<ShareLanding type="invite" />} />
         <Route path="/place" element={<ShareLanding type="place" />} />
         <Route path="/place/:placeId" element={<ShareLanding type="place" />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/tutorials" element={<Tutorials />} />
         <Route path="/privacy" element={<Privacy />} />
       </Routes>

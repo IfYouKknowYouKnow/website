@@ -424,6 +424,8 @@ export default function Landing() {
           <div className={styles.navLinks} aria-label="Primary">
             <a href="#how-it-works">How it works</a>
             <a href="#curators">For curators</a>
+            <Link to="/tutorials">Tutorials</Link>
+            <Link to="/team">Team</Link>
             <a className={styles.navCta} href="#download">
               Download
             </a>
@@ -775,6 +777,7 @@ export default function Landing() {
                 {link.label}
               </a>
             ))}
+            <Link to="/team">Team</Link>
             <Link to="/privacy">Privacy</Link>
           </div>
         </div>
