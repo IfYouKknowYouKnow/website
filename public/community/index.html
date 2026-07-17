@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf6">
+  <meta name="description" content="Open a community map in YouKnow.">
+  <meta property="og:title" content="Open this community in YouKnow">
+  <meta property="og:description" content="See the places from this shared community on a map.">
+  <meta property="og:image" content="/images/map_10.png">
+  <title>Open community | YouKnow</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/icons/Icon-192.png">
+  <link rel="stylesheet" href="/shared-link.css">
+</head>
+<body>
+  <main class="page">
+    <section class="content">
+      <img class="logo brand-logo" src="/images/logo.png" alt="YouKnow">
+      <p class="eyebrow">Shared community</p>
+      <h1>Open this community map in YouKnow.</h1>
+      <p class="lead">
+        Follow the community and see its places directly on your map.
+      </p>
+      <div class="actions">
+        <a class="button" id="open-app" href="#">Open in app</a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+      </div>
+      <p class="status" id="status">Trying to open YouKnow...</p>
+    </section>
+
+    <section class="hero" aria-hidden="true">
+      <div class="phone back">
+        <img src="/images/map_7.png" alt="">
+      </div>
+      <div class="phone">
+        <img src="/images/place_7.png" alt="">
+      </div>
+      <div class="floating-card">
+        <p class="title">Community places, on the map.</p>
+        <p class="text">Open the shared places and keep exploring from there.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var segments = window.location.pathname.split('/').filter(Boolean);
+      var planId = (params.get('id') || segments[1] || '').trim();
+      var openButton = document.getElementById('open-app');
+      var getAppButton = document.getElementById('get-app');
+      var status = document.getElementById('status');
+
+      if (!planId) {
+        status.textContent = 'This community link is missing its id.';
+        openButton.setAttribute('href', '/');
+        return;
+      }
+
+      var encodedPlanId = encodeURIComponent(planId);
+      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
+      var deepLink = 'youknow://community/' + encodedPlanId;
+      var userAgent = window.navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+        (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+
+      openButton.setAttribute('href', deepLink);
+
+      if (isIOS) {
+        status.textContent = 'Opening YouKnow. If nothing happens, use the buttons above.';
+      } else {
+        status.textContent = 'Opening YouKnow...';
+      }
+
+      window.setTimeout(function () {
+        window.location.href = deepLink;
+      }, 450);
+
+      window.setTimeout(function () {
+        status.textContent = 'If the app did not open, use the button above or install YouKnow.';
+      }, 1600);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open list | YouKnow</title>
+</head>
+<body>
+  <script>
+    var segments = window.location.pathname.split('/').filter(Boolean);
+    var id = segments.length >= 2 ? '/' + encodeURIComponent(segments[1]) : '';
+    window.location.replace('/community' + id + window.location.search);
+  </script>
+  <p>Opening YouKnow...</p>
+</body>
+</html>
