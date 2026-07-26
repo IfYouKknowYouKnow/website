@@ -9,14 +9,14 @@
   <meta property="og:description" content="See the place your friend shared with you.">
   <meta property="og:image" content="/images/map_10.png">
   <title>Open place | YouKnow</title>
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="icon" type="image/png" href="/youknow-favicon.png">
+  <link rel="apple-touch-icon" href="/icons/youknow-icon-192.png">
   <link rel="stylesheet" href="/shared-link.css">
 </head>
 <body>
   <main class="page">
     <section class="content">
-      <img class="logo brand-logo" src="/long_logo.png" alt="YouKnow">
+      <img class="logo brand-logo" src="/images/youknow-wordmark.png" alt="YouKnow">
       <p class="eyebrow">📍 Shared place</p>
       <h1>Open this place in YouKnow.</h1>
       <p class="lead">
@@ -24,12 +24,7 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Open in app</a>
-        <a class="store-badge-link" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614" aria-label="Download on the App Store">
-          <img class="store-badge app-store-badge" src="/badges/app-store-badge.svg" alt="Download on the App Store">
-        </a>
-        <a class="store-badge-link" id="get-android" href="https://play.google.com/store/apps/details?id=com.youknow.mobile" aria-label="Get it on Google Play">
-          <img class="store-badge google-play-badge" src="/badges/google-play-badge.png" alt="Get it on Google Play">
-        </a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
       </div>
       <p class="status" id="status">Trying to open YouKnow…</p>
     </section>
@@ -55,7 +50,6 @@
       var placeId = (params.get('id') || segments[1] || '').trim();
       var openButton = document.getElementById('open-app');
       var getAppButton = document.getElementById('get-app');
-      var getAndroidButton = document.getElementById('get-android');
       var status = document.getElementById('status');
 
       if (!placeId) {
@@ -72,9 +66,9 @@
         (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
 
       if (isIOS) {
-        openButton.style.display = 'none';
-        getAppButton.setAttribute('href', appStoreUrl);
-        getAndroidButton.style.display = 'none';
+        openButton.textContent = 'Get the app';
+        openButton.setAttribute('href', appStoreUrl);
+        getAppButton.style.display = 'none';
         status.textContent = 'Install YouKnow to open shared places from friends.';
         return;
       }

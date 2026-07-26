@@ -3,14 +3,361 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Open list | YouKnow</title>
+  <meta name="theme-color" content="#ffffff">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="description" content="Preview and follow a shared list of recommended places on YouKnow.">
+  <meta property="og:title" content="A list of places on YouKnow">
+  <meta property="og:description" content="Preview recommended places and follow the full list in YouKnow.">
+  <meta property="og:image" content="/images/map_10.png">
+  <title>Shared places | YouKnow</title>
+  <link rel="icon" type="image/png" href="/youknow-favicon.png">
+  <link rel="apple-touch-icon" href="/icons/youknow-icon-192.png">
+  <link rel="stylesheet" href="/shared-link.css">
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 182, 224, .26), transparent 26rem),
+        radial-gradient(circle at 88% 92%, rgba(149, 216, 246, .22), transparent 28rem),
+        #fff;
+    }
+
+    .list-page {
+      width: min(940px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 50px;
+    }
+
+    .list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .list-header .brand-logo {
+      margin: 0;
+    }
+
+    .list-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+      align-items: start;
+      gap: clamp(28px, 6vw, 72px);
+    }
+
+    .list-copy {
+      padding-top: 18px;
+    }
+
+    .owner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: #52534e;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .owner-avatar {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 50%;
+      background: #f0f1ee;
+      border: 1px solid rgba(23, 23, 23, .08);
+    }
+
+    .owner-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .list-copy h1 {
+      max-width: 560px;
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: .98;
+    }
+
+    .list-meta {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .list-card {
+      padding: 14px;
+      border: 1px solid rgba(23, 23, 23, .08);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 22px 70px rgba(28, 28, 24, .12);
+    }
+
+    .place {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+      padding: 10px;
+      border-radius: 19px;
+      background: #f7f7f5;
+    }
+
+    .place + .place {
+      margin-top: 9px;
+    }
+
+    .place-image {
+      width: 82px;
+      height: 82px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 15px;
+      background: #e9eae6;
+      font-size: 32px;
+    }
+
+    .place-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .place-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.2;
+    }
+
+    .place-city {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .list-cta {
+      margin-top: 13px;
+      padding: 18px 12px 5px;
+      text-align: center;
+    }
+
+    .list-cta p {
+      margin: 0 0 13px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .list-cta .button {
+      width: 100%;
+    }
+
+    .error-card,
+    .loading-card {
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .loading-dot {
+      width: 34px;
+      height: 34px;
+      border: 3px solid #ecece8;
+      border-top-color: #111;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 720px) {
+      .list-page {
+        padding-top: 22px;
+      }
+
+      .list-header {
+        margin-bottom: 12px;
+      }
+
+      .list-shell {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .list-copy {
+        padding-top: 6px;
+      }
+
+      .list-copy h1 {
+        font-size: clamp(38px, 12vw, 58px);
+      }
+
+      .list-card {
+        border-radius: 23px;
+      }
+
+      .place {
+        grid-template-columns: 70px minmax(0, 1fr);
+      }
+
+      .place-image {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main class="list-page">
+    <header class="list-header">
+      <img class="brand-logo" src="/images/youknow-wordmark.png" alt="YouKnow">
+      <a class="button secondary" id="open-app-top" href="#">Open in app</a>
+    </header>
+
+    <section class="list-shell">
+      <div class="list-copy">
+        <p class="eyebrow">Shared list</p>
+        <div class="owner" id="owner" hidden>
+          <span class="owner-avatar" id="owner-avatar">YK</span>
+          <span id="owner-name"></span>
+        </div>
+        <h1 id="list-name">Places worth knowing.</h1>
+        <p class="list-meta" id="list-meta">Loading this list…</p>
+        <div class="actions">
+          <a class="button" id="open-app" href="#">Open and follow in YouKnow</a>
+        </div>
+      </div>
+
+      <div class="list-card" id="list-card">
+        <div class="loading-card" id="loading">
+          <span class="loading-dot" aria-label="Loading"></span>
+        </div>
+        <div id="places"></div>
+        <div class="list-cta" id="list-cta" hidden>
+          <p>To see all: Download YouKnow</p>
+          <a class="button" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Download YouKnow</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <script>
-    var segments = window.location.pathname.split('/').filter(Boolean);
-    var id = segments.length >= 2 ? '/' + encodeURIComponent(segments[1]) : '';
-    window.location.replace('/community' + id + window.location.search);
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var segments = window.location.pathname.split('/').filter(Boolean);
+      var planId = (params.get('id') || segments[1] || '').trim();
+      var listName = document.getElementById('list-name');
+      var listMeta = document.getElementById('list-meta');
+      var owner = document.getElementById('owner');
+      var ownerAvatar = document.getElementById('owner-avatar');
+      var ownerName = document.getElementById('owner-name');
+      var placesNode = document.getElementById('places');
+      var loading = document.getElementById('loading');
+      var listCta = document.getElementById('list-cta');
+      var getApp = document.getElementById('get-app');
+      var openButtons = [
+        document.getElementById('open-app'),
+        document.getElementById('open-app-top')
+      ];
+      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
+      var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.youknow.mobile';
+      var isAndroid = /Android/i.test(window.navigator.userAgent || '');
+
+      getApp.href = isAndroid ? playStoreUrl : appStoreUrl;
+
+      function showError(message) {
+        loading.remove();
+        placesNode.className = 'error-card';
+        placesNode.textContent = message;
+        listMeta.textContent = '';
+      }
+
+      if (!planId) {
+        showError('This list link is missing its id.');
+        openButtons.forEach(function (button) { button.href = '/'; });
+        return;
+      }
+
+      var encodedPlanId = encodeURIComponent(planId);
+      var deepLink = 'youknow://list/' + encodedPlanId;
+      openButtons.forEach(function (button) { button.href = deepLink; });
+
+      fetch('https://nsgrmfhjkabjipcxtmvc.supabase.co/functions/v1/public-list-preview?id=' + encodedPlanId)
+        .then(function (response) {
+          if (!response.ok) throw new Error('not-found');
+          return response.json();
+        })
+        .then(function (data) {
+          loading.remove();
+          document.title = data.name + ' | YouKnow';
+          listName.textContent = data.name || 'Shared places';
+          listMeta.textContent = data.placeCount + (data.placeCount === 1 ? ' place' : ' places');
+
+          if (data.owner) {
+            owner.hidden = false;
+            ownerName.textContent = 'Shared by ' + data.owner.name;
+            if (data.owner.avatarUrl) {
+              var avatarImage = document.createElement('img');
+              avatarImage.src = data.owner.avatarUrl;
+              avatarImage.alt = '';
+              ownerAvatar.textContent = '';
+              ownerAvatar.appendChild(avatarImage);
+            }
+          }
+
+          (data.places || []).forEach(function (place) {
+            var row = document.createElement('article');
+            row.className = 'place';
+
+            var image = document.createElement('div');
+            image.className = 'place-image';
+            if (place.photoUrl) {
+              var photo = document.createElement('img');
+              photo.src = place.photoUrl;
+              photo.alt = '';
+              image.appendChild(photo);
+            } else {
+              image.textContent = place.emoji || '📍';
+            }
+
+            var copy = document.createElement('div');
+            var name = document.createElement('p');
+            name.className = 'place-name';
+            name.textContent = place.name || 'A saved place';
+            var city = document.createElement('p');
+            city.className = 'place-city';
+            city.textContent = place.city || 'Saved on YouKnow';
+            copy.appendChild(name);
+            copy.appendChild(city);
+            row.appendChild(image);
+            row.appendChild(copy);
+            placesNode.appendChild(row);
+          });
+
+          if (!data.places || data.places.length === 0) {
+            placesNode.className = 'error-card';
+            placesNode.textContent = 'This list does not have any places yet.';
+          } else {
+            listCta.hidden = false;
+          }
+        })
+        .catch(function () {
+          showError('This list could not be loaded. It may no longer be public.');
+        });
+    })();
   </script>
-  <p>Opening YouKnow...</p>
 </body>
 </html>
