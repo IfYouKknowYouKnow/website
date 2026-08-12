@@ -10,5 +10,17 @@
         "1C:2B:CE:E2:5D:EE:06:88:B1:8B:D3:EF:BE:01:83:D3:D7:23:B3:B5:6B:77:0F:F0:4F:25:4C:97:BF:48:BC:CD"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.youknow.mobile",
+      "sha256_cert_fingerprints": [
+        "1C:2B:CE:E2:5D:EE:06:88:B1:8B:D3:EF:BE:01:83:D3:D7:23:B3:B5:6B:77:0F:F0:4F:25:4C:97:BF:48:BC:CD"
+      ]
+    }
   }
 ]

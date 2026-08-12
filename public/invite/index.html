@@ -76,58 +76,44 @@
       var encodedCode = encodeURIComponent(code);
       var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
       var deepLink = 'youknow://invite/' + encodedCode + (openInviterMap ? '?map=1' : '');
-      var clipboardText = window.location.href;
       var userAgent = window.navigator.userAgent || '';
-      var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
-        (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+      var isAndroid = /Android/i.test(userAgent);
+      var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.youknow.mobile';
+      var storeUrl = isAndroid ? playStoreUrl : appStoreUrl;
+      var fallbackTimer = null;
 
-      function copyInviteToClipboard() {
-        if (window.navigator.clipboard && window.navigator.clipboard.writeText) {
-          return window.navigator.clipboard.writeText(clipboardText).catch(function () {});
-        }
-
-        try {
-          var textarea = document.createElement('textarea');
-          textarea.value = clipboardText;
-          textarea.setAttribute('readonly', '');
-          textarea.style.position = 'absolute';
-          textarea.style.left = '-9999px';
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-        } catch (e) {}
-
-        return Promise.resolve();
+      function cancelStoreFallback() {
+        if (fallbackTimer === null) return;
+        window.clearTimeout(fallbackTimer);
+        fallbackTimer = null;
       }
 
-      function installApp() {
-        status.textContent = 'Opening the App Store…';
-        copyInviteToClipboard();
+      function openAppWithStoreFallback() {
+        cancelStoreFallback();
+        status.textContent = 'Opening YouKnow…';
+        fallbackTimer = window.setTimeout(function () {
+          fallbackTimer = null;
+          if (document.hidden) return;
+          status.textContent = isAndroid
+            ? 'YouKnow is not installed. Opening Google Play…'
+            : 'YouKnow is not installed. Opening the App Store…';
+          window.location.assign(storeUrl);
+        }, 3000);
       }
 
-      getAppButton.addEventListener('click', installApp);
-
-      if (isIOS) {
-        openButton.textContent = 'Get app & keep invite';
-        openButton.setAttribute('href', appStoreUrl);
-        openButton.addEventListener('click', installApp);
-        getAppButton.style.display = 'none';
-        status.textContent = 'We will copy this invite before opening the App Store so YouKnow can recover it after install.';
-        return;
-      }
-
-      openButton.setAttribute('href', deepLink);
-      openButton.addEventListener('click', function () {
-        copyInviteToClipboard();
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) cancelStoreFallback();
       });
-      window.setTimeout(function () {
-        window.location.href = deepLink;
-      }, 450);
+      window.addEventListener('pagehide', cancelStoreFallback);
 
-      window.setTimeout(function () {
-        status.textContent = 'If the app did not open, use Get the app below. We will save your invite for the app before installing.';
-      }, 1600);
+      openButton.textContent = 'Open in YouKnow';
+      openButton.setAttribute('href', deepLink);
+      openButton.addEventListener('click', openAppWithStoreFallback);
+      getAppButton.textContent = isAndroid ? 'Get it on Google Play' : 'Get the app';
+      getAppButton.setAttribute('href', storeUrl);
+      status.textContent = openInviterMap
+        ? 'Open YouKnow to become friends and see the map they shared.'
+        : 'Open YouKnow to accept this friend invite.';
     })();
   </script>
 </body>

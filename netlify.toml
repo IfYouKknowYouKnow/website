@@ -15,3 +15,8 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "VITE_MAPBOX_TOKEN"
+
+[[headers]]
+  for = "/.well-known/apple-app-site-association"
+  [headers.values]
+    Content-Type = "application/json"
