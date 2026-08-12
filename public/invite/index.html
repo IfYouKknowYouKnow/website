@@ -7,7 +7,15 @@
   <meta name="description" content="Join your friend on YouKnow.">
   <meta property="og:title" content="Join me on YouKnow">
   <meta property="og:description" content="Accept your invite and become friends automatically.">
-  <meta property="og:image" content="/images/enter.png">
+  <meta property="og:image" content="https://ifykyk.app/images/invite-preview-20260812.png">
+  <meta property="og:image:secure_url" content="https://ifykyk.app/images/invite-preview-20260812.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="YouKnow — Your friend saved you a seat.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ifykyk.app/images/invite-preview-20260812.png">
+  <meta name="apple-itunes-app" content="app-id=6759484614">
   <title>Invite | YouKnow</title>
   <link rel="icon" type="image/png" href="/youknow-favicon.png">
   <link rel="apple-touch-icon" href="/icons/youknow-icon-192.png">
@@ -24,7 +32,7 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Accept invite</a>
-        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/app/id6759484614">Get the app</a>
       </div>
       <div class="code" id="code-wrap">
         <span>Invite code: <strong id="code"></strong></span>
@@ -122,18 +130,31 @@
       copyCodeButton.addEventListener('click', copyInviteCode);
 
       var encodedCode = encodeURIComponent(code);
-      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
+      var appStoreUrl = 'https://apps.apple.com/app/id6759484614';
       var deepLink = 'youknow://invite/' + encodedCode + '?code=' + encodedCode + (openInviterMap ? '&map=1' : '');
       var userAgent = window.navigator.userAgent || '';
+      var isIOS = /iPhone|iPad|iPod/i.test(userAgent);
       var isAndroid = /Android/i.test(userAgent);
       var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.youknow.mobile';
       var storeUrl = isAndroid ? playStoreUrl : appStoreUrl;
+      var nativeStoreUrl = isAndroid
+        ? 'intent://details?id=com.youknow.mobile#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end'
+        : isIOS
+          ? 'itms-apps://apps.apple.com/app/id6759484614'
+          : storeUrl;
       var fallbackTimer = null;
+      var storeFallbackTimer = null;
 
       function cancelStoreFallback() {
         if (fallbackTimer === null) return;
         window.clearTimeout(fallbackTimer);
         fallbackTimer = null;
+      }
+
+      function cancelStoreNavigationFallback() {
+        if (storeFallbackTimer === null) return;
+        window.clearTimeout(storeFallbackTimer);
+        storeFallbackTimer = null;
       }
 
       function openAppWithStoreFallback() {
@@ -149,16 +170,34 @@
         }, 3000);
       }
 
+      function openStoreWithFallback() {
+        cancelStoreNavigationFallback();
+        status.textContent = isAndroid
+          ? 'Opening Google Play…'
+          : 'Opening the App Store…';
+        storeFallbackTimer = window.setTimeout(function () {
+          storeFallbackTimer = null;
+          if (document.hidden) return;
+          window.location.assign(storeUrl);
+        }, 1400);
+      }
+
       document.addEventListener('visibilitychange', function () {
-        if (document.hidden) cancelStoreFallback();
+        if (!document.hidden) return;
+        cancelStoreFallback();
+        cancelStoreNavigationFallback();
       });
-      window.addEventListener('pagehide', cancelStoreFallback);
+      window.addEventListener('pagehide', function () {
+        cancelStoreFallback();
+        cancelStoreNavigationFallback();
+      });
 
       openButton.textContent = 'Open in YouKnow';
       openButton.setAttribute('href', deepLink);
       openButton.addEventListener('click', openAppWithStoreFallback);
-      getAppButton.textContent = isAndroid ? 'Get it on Google Play' : 'Get the app';
-      getAppButton.setAttribute('href', storeUrl);
+      getAppButton.textContent = isAndroid ? 'Open Google Play' : isIOS ? 'Open App Store' : 'Get the app';
+      getAppButton.setAttribute('href', nativeStoreUrl);
+      getAppButton.addEventListener('click', openStoreWithFallback);
       status.textContent = openInviterMap
         ? 'Open YouKnow to become friends and see the map they shared.'
         : 'Open YouKnow to accept this friend invite.';
