@@ -160,10 +160,23 @@ export default function ShareLanding({ type }) {
 
         <div className={styles.visual} aria-hidden="true">
           <div className={`${styles.phone} ${styles.phoneBack}`}>
-            <img src={isInvite ? '/images/IMG_3388.PNG' : '/placesheet_screen.PNG'} alt="" />
+            <img
+              src={isInvite ? '/images/IMG_3388.PNG' : '/placesheet_screen.PNG'}
+              alt=""
+              width={isInvite ? 1290 : undefined}
+              height={isInvite ? 2796 : undefined}
+              decoding="sync"
+            />
           </div>
           <div className={styles.phone}>
-            <img src={isInvite ? '/images/IMG_3387.PNG' : '/new_screen_iphon.PNG'} alt="" />
+            <img
+              src={isInvite ? '/images/IMG_3387.PNG' : '/new_screen_iphon.PNG'}
+              alt=""
+              width={isInvite ? 1290 : undefined}
+              height={isInvite ? 2796 : undefined}
+              decoding="sync"
+              fetchPriority={isInvite ? 'high' : undefined}
+            />
           </div>
           <div className={styles.floatCard}>
             <p>{isInvite ? 'Start with someone you trust.' : 'Places, not lists.'}</p>
