@@ -135,11 +135,15 @@
       var userAgent = window.navigator.userAgent || '';
       var isIOS = /iPhone|iPad|iPod/i.test(userAgent);
       var isAndroid = /Android/i.test(userAgent);
+      var isInstagramIOS = isIOS && /Instagram/i.test(userAgent);
       var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.youknow.mobile';
       var storeUrl = isAndroid ? playStoreUrl : appStoreUrl;
+      var instagramStoreUrl = 'instagram://extbrowser/?url=' + encodeURIComponent(appStoreUrl);
       var nativeStoreUrl = isAndroid
         ? 'intent://details?id=com.youknow.mobile#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end'
-        : isIOS
+        : isInstagramIOS
+          ? instagramStoreUrl
+          : isIOS
           ? 'itms-apps://itunes.apple.com/app/id6759484614'
           : storeUrl;
       var fallbackTimer = null;
@@ -163,6 +167,10 @@
         fallbackTimer = window.setTimeout(function () {
           fallbackTimer = null;
           if (document.hidden) return;
+          if (isInstagramIOS) {
+            status.textContent = 'YouKnow is not installed. Tap “Open App Store in Safari” below.';
+            return;
+          }
           status.textContent = isAndroid
             ? 'YouKnow is not installed. Opening Google Play…'
             : 'YouKnow is not installed. Opening the App Store…';
@@ -172,12 +180,18 @@
 
       function openStoreWithFallback() {
         cancelStoreNavigationFallback();
-        status.textContent = isAndroid
+        status.textContent = isInstagramIOS
+          ? 'Opening Safari, then the App Store…'
+          : isAndroid
           ? 'Opening Google Play…'
           : 'Opening the App Store…';
         storeFallbackTimer = window.setTimeout(function () {
           storeFallbackTimer = null;
           if (document.hidden) return;
+          if (isInstagramIOS) {
+            status.textContent = 'If Safari did not open, tap the three dots above and choose “Open in external browser”.';
+            return;
+          }
           window.location.assign(storeUrl);
         }, 1400);
       }
@@ -195,10 +209,12 @@
       openButton.textContent = 'Open in YouKnow';
       openButton.setAttribute('href', deepLink);
       openButton.addEventListener('click', openAppWithStoreFallback);
-      getAppButton.textContent = isAndroid ? 'Open Google Play' : isIOS ? 'Open App Store' : 'Get the app';
+      getAppButton.textContent = isAndroid ? 'Open Google Play' : isInstagramIOS ? 'Open App Store in Safari' : isIOS ? 'Open App Store' : 'Get the app';
       getAppButton.setAttribute('href', nativeStoreUrl);
       getAppButton.addEventListener('click', openStoreWithFallback);
-      status.textContent = openInviterMap
+      status.textContent = isInstagramIOS
+        ? 'On iPhone, Instagram must hand the App Store link to Safari first.'
+        : openInviterMap
         ? 'Open YouKnow to become friends and see the map they shared.'
         : 'Open YouKnow to accept this friend invite.';
     })();
