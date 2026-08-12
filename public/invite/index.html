@@ -57,6 +57,7 @@
       var getAppButton = document.getElementById('get-app');
       var rawName = (params.get('from') || params.get('name') || '').trim();
       var name = rawName.replace(/\s+/g, ' ').slice(0, 42);
+      var openInviterMap = ['1', 'true', 'friends'].indexOf((params.get('map') || '').toLowerCase()) !== -1;
 
       if (name) {
         inviterName.textContent = name;
@@ -74,8 +75,8 @@
 
       var encodedCode = encodeURIComponent(code);
       var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
-      var deepLink = 'youknow://invite/' + encodedCode;
-      var clipboardText = 'YouKnow invite code: ' + code + '\n' + window.location.href;
+      var deepLink = 'youknow://invite/' + encodedCode + (openInviterMap ? '?map=1' : '');
+      var clipboardText = window.location.href;
       var userAgent = window.navigator.userAgent || '';
       var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
         (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
@@ -100,22 +101,19 @@
         return Promise.resolve();
       }
 
-      function installApp(event) {
-        event.preventDefault();
-        status.textContent = 'Saving your invite, then opening the App Store…';
-        copyInviteToClipboard().finally(function () {
-          window.location.href = appStoreUrl;
-        });
+      function installApp() {
+        status.textContent = 'Opening the App Store…';
+        copyInviteToClipboard();
       }
 
       getAppButton.addEventListener('click', installApp);
 
       if (isIOS) {
-        openButton.textContent = 'Get the app';
+        openButton.textContent = 'Get app & keep invite';
         openButton.setAttribute('href', appStoreUrl);
         openButton.addEventListener('click', installApp);
         getAppButton.style.display = 'none';
-        status.textContent = 'Install YouKnow from here and your invite should be picked up automatically.';
+        status.textContent = 'We will copy this invite before opening the App Store so YouKnow can recover it after install.';
         return;
       }
 
