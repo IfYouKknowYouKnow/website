@@ -168,7 +168,7 @@
           fallbackTimer = null;
           if (document.hidden) return;
           if (isInstagramIOS) {
-            status.textContent = 'YouKnow is not installed. Tap “Open App Store in Safari” below.';
+            status.textContent = 'YouKnow is not installed. Tap “Open App Store” below.';
             return;
           }
           status.textContent = isAndroid
@@ -181,7 +181,7 @@
       function openStoreWithFallback() {
         cancelStoreNavigationFallback();
         status.textContent = isInstagramIOS
-          ? 'Opening Safari, then the App Store…'
+          ? 'Opening the App Store…'
           : isAndroid
           ? 'Opening Google Play…'
           : 'Opening the App Store…';
@@ -209,12 +209,10 @@
       openButton.textContent = 'Open in YouKnow';
       openButton.setAttribute('href', deepLink);
       openButton.addEventListener('click', openAppWithStoreFallback);
-      getAppButton.textContent = isAndroid ? 'Open Google Play' : isInstagramIOS ? 'Open App Store in Safari' : isIOS ? 'Open App Store' : 'Get the app';
+      getAppButton.textContent = isAndroid ? 'Open Google Play' : isIOS ? 'Open App Store' : 'Get the app';
       getAppButton.setAttribute('href', nativeStoreUrl);
       getAppButton.addEventListener('click', openStoreWithFallback);
-      status.textContent = isInstagramIOS
-        ? 'On iPhone, Instagram must hand the App Store link to Safari first.'
-        : openInviterMap
+      status.textContent = openInviterMap
         ? 'Open YouKnow to become friends and see the map they shared.'
         : 'Open YouKnow to accept this friend invite.';
     })();
