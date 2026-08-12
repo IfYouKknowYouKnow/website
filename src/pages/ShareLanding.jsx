@@ -160,10 +160,10 @@ export default function ShareLanding({ type }) {
 
         <div className={styles.visual} aria-hidden="true">
           <div className={`${styles.phone} ${styles.phoneBack}`}>
-            <img src={isInvite ? '/share/shot_1.png' : '/placesheet_screen.PNG'} alt="" />
+            <img src={isInvite ? '/images/IMG_3388.PNG' : '/placesheet_screen.PNG'} alt="" />
           </div>
           <div className={styles.phone}>
-            <img src={isInvite ? '/share/shot_2.png' : '/new_screen_iphon.PNG'} alt="" />
+            <img src={isInvite ? '/images/IMG_3387.PNG' : '/new_screen_iphon.PNG'} alt="" />
           </div>
           <div className={styles.floatCard}>
             <p>{isInvite ? 'Start with someone you trust.' : 'Places, not lists.'}</p>
