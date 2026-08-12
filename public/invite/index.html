@@ -26,7 +26,10 @@
         <a class="button" id="open-app" href="#">Accept invite</a>
         <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
       </div>
-      <p class="code" id="code-wrap">Invite code: <strong id="code"></strong></p>
+      <div class="code" id="code-wrap">
+        <span>Invite code: <strong id="code"></strong></span>
+        <button class="copy-code" id="copy-code" type="button">Copy the code</button>
+      </div>
       <p class="status" id="status">Trying to open YouKnow…</p>
     </section>
 
@@ -53,6 +56,7 @@
       var status = document.getElementById('status');
       var codeWrap = document.getElementById('code-wrap');
       var codeText = document.getElementById('code');
+      var copyCodeButton = document.getElementById('copy-code');
       var inviterName = document.getElementById('inviter-name');
       var getAppButton = document.getElementById('get-app');
       var rawName = (params.get('from') || params.get('name') || '').trim();
@@ -71,7 +75,51 @@
       }
 
       codeText.textContent = code;
-      codeWrap.style.display = 'block';
+      codeWrap.style.display = 'flex';
+      copyCodeButton.setAttribute('aria-label', 'Copy invite code ' + code);
+
+      function showCopyResult(label) {
+        copyCodeButton.textContent = label;
+        window.setTimeout(function () {
+          copyCodeButton.textContent = 'Copy the code';
+        }, 1800);
+      }
+
+      function copyCodeWithSelection() {
+        try {
+          var textarea = document.createElement('textarea');
+          textarea.value = code;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          textarea.setSelectionRange(0, code.length);
+          var copied = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          return copied;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function copyInviteCode() {
+        if (copyCodeWithSelection()) {
+          showCopyResult('Code copied!');
+          return;
+        }
+        if (window.navigator.clipboard && window.navigator.clipboard.writeText) {
+          window.navigator.clipboard.writeText(code).then(function () {
+            showCopyResult('Code copied!');
+          }).catch(function () {
+            showCopyResult('Press and hold the code');
+          });
+          return;
+        }
+        showCopyResult('Press and hold the code');
+      }
+
+      copyCodeButton.addEventListener('click', copyInviteCode);
 
       var encodedCode = encodeURIComponent(code);
       var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
