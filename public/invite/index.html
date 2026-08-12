@@ -75,7 +75,7 @@
 
       var encodedCode = encodeURIComponent(code);
       var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
-      var deepLink = 'youknow://invite/' + encodedCode + (openInviterMap ? '?map=1' : '');
+      var deepLink = 'youknow://invite/' + encodedCode + '?code=' + encodedCode + (openInviterMap ? '&map=1' : '');
       var userAgent = window.navigator.userAgent || '';
       var isAndroid = /Android/i.test(userAgent);
       var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.youknow.mobile';
