@@ -228,6 +228,18 @@ h1 {
   font-weight: 700;
 }
 
+/* Invite screenshots form one overlapping composition rather than two columns. */
+.invite-page .phone {
+  right: 2%;
+  transform: rotate(1.2deg);
+  transform-origin: 50% 100%;
+}
+
+.invite-page .phone.back {
+  right: 39%;
+  transform: rotate(-2.2deg);
+}
+
 @media (max-width: 820px) {
   .page {
     grid-template-columns: 1fr;
@@ -251,6 +263,13 @@ h1 {
     overflow: hidden;
   }
 
+  .invite-page .hero {
+    min-height: clamp(460px, 102vw, 630px);
+    margin-top: -8px;
+    margin-bottom: 24px;
+    overflow: visible;
+  }
+
   .phone {
     right: 4%;
     width: min(43vw, 205px);
@@ -262,8 +281,23 @@ h1 {
     right: 53%;
   }
 
+  .invite-page .phone {
+    top: 8px;
+    right: 3%;
+    width: min(43vw, 260px);
+  }
+
+  .invite-page .phone.back {
+    top: clamp(34px, 6vw, 54px);
+    right: 34%;
+  }
+
   .floating-card {
     left: 0;
     bottom: 26px;
+  }
+
+  .invite-page .floating-card {
+    bottom: 18px;
   }
 }
