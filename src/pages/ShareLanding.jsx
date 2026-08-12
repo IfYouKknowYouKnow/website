@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
+import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import styles from './ShareLanding.module.css'
 
-const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const ANDROID_PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.youknow.mobile'
 
@@ -137,9 +137,8 @@ export default function ShareLanding({ type }) {
                 <a
                   key="ios"
                   className={styles.storeBadgeLink}
-                  href={APP_STORE_URL}
-                  target="_blank"
-                  rel="noreferrer"
+                  href={appStoreHref()}
+                  onClick={openIOSAppStore}
                   aria-label="Download on the App Store"
                 >
                   <img

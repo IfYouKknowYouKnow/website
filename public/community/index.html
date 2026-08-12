@@ -24,7 +24,7 @@
       </p>
       <div class="actions">
         <a class="button" id="open-app" href="#">Open in app</a>
-        <a class="button secondary" id="get-app" href="https://apps.apple.com/us/app/yk-youknow/id6759484614">Get the app</a>
+        <a class="button secondary" id="get-app" href="https://apps.apple.com/app/id6759484614">Get the app</a>
       </div>
       <p class="status" id="status">Trying to open YouKnow...</p>
     </section>
@@ -43,6 +43,7 @@
     </section>
   </main>
 
+  <script src="/app-store-link.js?v=20260812"></script>
   <script>
     (function () {
       var params = new URLSearchParams(window.location.search);
@@ -51,6 +52,7 @@
       var openButton = document.getElementById('open-app');
       var getAppButton = document.getElementById('get-app');
       var status = document.getElementById('status');
+      window.prepareAppStoreLink(getAppButton);
 
       if (!planId) {
         status.textContent = 'This community link is missing its id.';
@@ -59,7 +61,6 @@
       }
 
       var encodedPlanId = encodeURIComponent(planId);
-      var appStoreUrl = 'https://apps.apple.com/us/app/yk-youknow/id6759484614';
       var deepLink = 'youknow://community/' + encodedPlanId;
       var userAgent = window.navigator.userAgent || '';
       var isIOS = /iPad|iPhone|iPod/.test(userAgent) ||

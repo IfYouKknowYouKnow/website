@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.youknow.mobile'
-const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 const FALLBACK_STATS = {
   curatedPlaces: 10000,
@@ -85,9 +85,8 @@ function StoreButtons({ compact = false }) {
     <div className={`${styles.actions} ${compact ? styles.actionsCompact : ''}`}>
       <a
         className={styles.storeBadgeLink}
-        href={APP_STORE_URL}
-        target="_blank"
-        rel="noreferrer"
+        href={appStoreHref()}
+        onClick={openIOSAppStore}
         aria-label="Download on the App Store"
       >
         <img
