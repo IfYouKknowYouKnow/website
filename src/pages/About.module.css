@@ -1,0 +1,669 @@
+.page {
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #141210;
+  background: #fbfaf7;
+  --blue: #167dc4;
+  --red: #e01c1c;
+  --muted: #6e6a64;
+}
+
+.nav {
+  position: relative;
+  z-index: 5;
+  padding: 18px 0;
+  background: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid rgba(20, 18, 16, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.navInner,
+.footerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+}
+
+.brandLogo {
+  display: block;
+  width: 190px;
+  max-height: 58px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 12px;
+}
+
+.navLinks,
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  color: #57514a;
+  font-size: 14px;
+  font-weight: 560;
+}
+
+.navLinks a,
+.footerLinks a,
+.textLink,
+.personCard a,
+.inlineButton {
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.navLinks a:hover,
+.footerLinks a:hover,
+.textLink:hover,
+.personCard a:hover {
+  color: var(--blue);
+}
+
+.navCta,
+.inlineButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 19px;
+  border: 1px solid rgba(20, 18, 16, 0.1);
+  border-radius: 999px;
+  background: #fff;
+  color: #141210;
+  box-shadow: 0 14px 36px rgba(29, 36, 43, 0.07);
+}
+
+.hero {
+  position: relative;
+  padding: clamp(64px, 8vw, 112px) 0 clamp(86px, 11vw, 150px);
+  background:
+    radial-gradient(circle at 78% 26%, rgba(126, 198, 255, 0.34), transparent 29rem),
+    linear-gradient(180deg, #fff 0%, #f8fbfc 100%);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.85fr);
+  align-items: center;
+  gap: clamp(46px, 8vw, 110px);
+}
+
+.heroCopy {
+  max-width: 680px;
+}
+
+.kicker {
+  margin: 0 0 17px;
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.page h2,
+.page h3 {
+  margin: 0;
+  color: #0b0a09;
+  letter-spacing: -0.035em;
+}
+
+.hero h1 {
+  max-width: 680px;
+  font-size: clamp(46px, 6.6vw, 86px);
+  font-weight: 540;
+  line-height: 0.96;
+}
+
+.lead {
+  max-width: 620px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.55;
+}
+
+.textLink {
+  display: inline-flex;
+  gap: 9px;
+  margin-top: 30px;
+  color: #141210;
+  font-size: 14px;
+  font-weight: 720;
+  text-decoration: underline;
+  text-decoration-color: rgba(22, 125, 196, 0.38);
+  text-underline-offset: 5px;
+}
+
+.heroVisual {
+  position: relative;
+  min-height: 590px;
+}
+
+.phone {
+  position: absolute;
+  top: 30px;
+  right: 6%;
+  width: min(65%, 286px);
+  padding: 8px;
+  border: 1px solid rgba(20, 18, 16, 0.12);
+  border-radius: 42px;
+  background: #171717;
+  box-shadow: 0 42px 95px rgba(17, 31, 43, 0.22);
+  transform: rotate(3deg);
+}
+
+.phoneBack {
+  top: 112px;
+  right: auto;
+  left: 0;
+  z-index: 0;
+  transform: rotate(-7deg);
+}
+
+.phone:not(.phoneBack) {
+  z-index: 1;
+}
+
+.phone img {
+  display: block;
+  width: 100%;
+  border-radius: 34px;
+}
+
+.vibeTag {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 15px;
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 720;
+  box-shadow: 0 18px 50px rgba(25, 38, 49, 0.14);
+}
+
+.vibeTag::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.tagOne {
+  top: 4px;
+  left: 4%;
+}
+
+.tagTwo {
+  right: 0;
+  bottom: 50px;
+}
+
+.tagTwo::before {
+  background: #16834a;
+}
+
+.problemSection,
+.principlesSection,
+.howSection,
+.teamSection,
+.finalCta {
+  padding: clamp(82px, 10vw, 138px) 0;
+}
+
+.problemSection {
+  background: #151412;
+  color: #f6f4ef;
+}
+
+.problemSection .kicker,
+.finalCta .kicker {
+  color: #8acbff;
+}
+
+.splitSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(340px, 0.85fr);
+  gap: clamp(48px, 9vw, 120px);
+}
+
+.page h2 {
+  font-size: clamp(38px, 5.6vw, 68px);
+  font-weight: 500;
+  line-height: 1.02;
+}
+
+.problemSection h2 {
+  color: #fff;
+}
+
+.longCopy {
+  display: grid;
+  gap: 24px;
+  align-content: end;
+  color: #c7c2ba;
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.68;
+}
+
+.principlesSection {
+  background: #fff;
+}
+
+.sectionIntro {
+  max-width: 770px;
+}
+
+.introBody {
+  max-width: 650px;
+  margin-top: 23px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.principlesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 54px;
+}
+
+.principleCard {
+  min-height: 310px;
+  padding: 28px;
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  border-radius: 26px;
+  background: #fbfaf7;
+}
+
+.principleCard > span {
+  display: block;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.principleCard h3 {
+  margin-top: 76px;
+  font-size: clamp(25px, 2.7vw, 34px);
+  font-weight: 560;
+  line-height: 1.05;
+}
+
+.principleCard p {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.howSection {
+  background:
+    radial-gradient(circle at 90% 5%, rgba(135, 205, 255, 0.22), transparent 26rem),
+    #edf7ff;
+}
+
+.howInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 0.55fr);
+  align-items: start;
+  gap: clamp(50px, 10vw, 140px);
+}
+
+.howCopy > p:not(.kicker) {
+  max-width: 670px;
+  margin-top: 24px;
+  color: #5e625f;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.inlineButton {
+  margin-top: 30px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.inlineButton:hover {
+  color: #fff;
+  background: #141210;
+  transform: translateY(-2px);
+}
+
+.factPanel {
+  padding: clamp(28px, 4vw, 42px);
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 28px 70px rgba(30, 74, 108, 0.1);
+}
+
+.factBig {
+  margin: 0;
+  color: #141210;
+  font-size: clamp(40px, 5vw, 62px);
+  font-weight: 620;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.factLabel {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.factRule {
+  height: 1px;
+  margin: 28px 0;
+  background: rgba(20, 18, 16, 0.09);
+}
+
+.factStatement {
+  color: #141210;
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.18;
+}
+
+.teamSection {
+  background: #fff;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 52px;
+}
+
+.personCard {
+  padding: 26px;
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  border-radius: 25px;
+  background: #fbfaf7;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  aspect-ratio: 1;
+  border-radius: 23px;
+  background: color-mix(in srgb, var(--accent), #fff 78%);
+  color: #141210;
+  font-size: 21px;
+  font-weight: 760;
+}
+
+.personRole {
+  margin-top: 30px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.personCard h3 {
+  margin-top: 8px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.personCard > p:last-of-type {
+  min-height: 48px;
+  margin-top: 11px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.personCard a {
+  display: inline-flex;
+  margin-top: 22px;
+  color: #141210;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(22, 125, 196, 0.38);
+  text-underline-offset: 4px;
+}
+
+.supportBand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 22px;
+  padding: 24px 28px;
+  border-radius: 24px;
+  background: #171717;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.supportBand > div {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.supportBand img {
+  display: block;
+  width: auto;
+  height: 42px;
+  max-width: 155px;
+  object-fit: contain;
+  border-radius: 7px;
+}
+
+.finalCta {
+  color: #fff;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(22, 125, 196, 0.36), transparent 28rem),
+    #141210;
+}
+
+.finalCta h2 {
+  max-width: 760px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.finalCta h2 + p {
+  margin-top: 20px;
+  color: #bdb8b0;
+}
+
+.storeButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.storeButtons a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 54px;
+  transition: transform 0.18s ease;
+}
+
+.storeButtons a:hover {
+  transform: translateY(-2px);
+}
+
+.storeButtons img {
+  display: block;
+  width: auto;
+  height: 52px;
+}
+
+.footer {
+  padding: 28px 0 36px;
+  background: #fff;
+}
+
+.footerInner {
+  color: #8b857e;
+  font-size: 13px;
+}
+
+.footerInner img {
+  display: block;
+  width: 118px;
+  max-height: 35px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLinks a,
+  .footerLinks a,
+  .textLink,
+  .personCard a,
+  .inlineButton,
+  .storeButtons a {
+    transition: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroInner,
+  .splitSection,
+  .howInner {
+    grid-template-columns: 1fr;
+  }
+
+  .heroCopy,
+  .sectionIntro,
+  .howCopy {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .heroVisual {
+    width: min(100%, 590px);
+    margin: 0 auto;
+  }
+
+  .splitSection {
+    text-align: center;
+  }
+
+  .principlesGrid,
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .principleCard {
+    min-height: 0;
+    text-align: left;
+  }
+
+  .principleCard h3 {
+    margin-top: 42px;
+  }
+
+  .factPanel {
+    width: min(100%, 520px);
+    margin: 0 auto;
+    text-align: center;
+  }
+}
+
+@media (max-width: 660px) {
+  .nav {
+    padding: 14px 0;
+  }
+
+  .brandLogo {
+    width: min(48vw, 158px);
+  }
+
+  .navLinks a:not(.navCta) {
+    display: none;
+  }
+
+  .navCta {
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .hero {
+    padding-top: 52px;
+  }
+
+  .hero h1 {
+    font-size: clamp(43px, 13vw, 62px);
+  }
+
+  .heroVisual {
+    min-height: 460px;
+  }
+
+  .phone {
+    width: min(62%, 220px);
+    border-radius: 34px;
+  }
+
+  .phone img {
+    border-radius: 27px;
+  }
+
+  .phoneBack {
+    top: 90px;
+  }
+
+  .tagTwo {
+    bottom: 22px;
+  }
+
+  .problemSection,
+  .principlesSection,
+  .howSection,
+  .teamSection,
+  .finalCta {
+    padding: 72px 0;
+  }
+
+  .page h2 {
+    font-size: clamp(36px, 10vw, 50px);
+  }
+
+  .supportBand,
+  .footerInner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .supportBand > div {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footerLinks {
+    justify-content: center;
+  }
+}

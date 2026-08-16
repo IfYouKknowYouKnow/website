@@ -80,6 +80,45 @@ const QUERY_PILLS = [
   'places my friends saved in Paris',
 ]
 
+function getFaqItems(cityCount) {
+  return [
+    {
+      question: 'Is YouKnow free?',
+      answer:
+        'Yes. YouKnow is completely free to download and use on iOS and Android. You can save places, build your map, follow recommendations and search by vibe without paying for the app.',
+    },
+    {
+      question: 'Which cities is YouKnow available in?',
+      answer: `The YouKnow community currently has curated places across ${formatCount(cityCount)} cities. You can explore recommendations in cities including Zurich, Milan and Paris, and coverage keeps growing as friends and curators add places around the world.`,
+    },
+    {
+      question: 'What kinds of places can I discover?',
+      answer:
+        'YouKnow helps you find restaurants, bars, cafes, clubs and experiences. Filter the map by category, distance, what is open now, what is trending or the people whose taste you want to follow.',
+    },
+    {
+      question: 'Where do the recommendations come from?',
+      answer:
+        'Recommendations come from friends, local communities, creators and connoisseurs—not anonymous star ratings. You can explore the wider community or filter the map to see exactly what a particular person has saved.',
+    },
+    {
+      question: 'How can I save a place?',
+      answer:
+        'Save places directly in YouKnow, share a restaurant or bar from Instagram or TikTok, add one from a photo, or import your Google Saved Places. YouKnow helps identify the matching location before adding it to your map.',
+    },
+    {
+      question: 'How does search by vibe work?',
+      answer:
+        'Describe the kind of place or plan you want in natural language—such as a cozy first-date bar or a quiet cafe to work from. YouKnow uses AI to match that request with relevant places on your map.',
+    },
+    {
+      question: 'Which devices and languages are supported?',
+      answer:
+        'YouKnow is available for iPhone and Android. The app supports English, German, French and Italian.',
+    },
+  ]
+}
+
 function StoreButtons({ compact = false }) {
   return (
     <div className={`${styles.actions} ${compact ? styles.actionsCompact : ''}`}>
@@ -142,8 +181,10 @@ function StatStrip({ stats }) {
 }
 
 const FOOTER_LINKS = [
+  { label: 'About', href: '/about' },
   { label: 'How it works', href: '#how-it-works' },
   { label: 'For curators', href: '#curators' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 function getStaticMapUrl() {
@@ -179,14 +220,16 @@ async function fetchLandingStats(signal) {
 
   const url = new URL(`/rest/v1/${STATS_TABLE}`, SUPABASE_URL)
   url.searchParams.set('id', `eq.${STATS_ROW_ID}`)
-  url.searchParams.set('select', 'curated_places_count,city_count')
+  url.searchParams.set('select', 'curated_places_count,city_count,updated_at')
   url.searchParams.set('limit', '1')
 
   const response = await fetch(url, {
     signal,
+    cache: 'no-store',
     headers: {
       apikey: SUPABASE_ANON_KEY,
       Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      'Cache-Control': 'no-cache',
     },
   })
 
@@ -203,6 +246,7 @@ async function fetchLandingStats(signal) {
   return {
     curatedPlaces: stats.curated_places_count,
     cities: stats.city_count,
+    updatedAt: stats.updated_at,
   }
 }
 
@@ -225,6 +269,28 @@ export default function Landing() {
   const featureRailRef = useRef(null)
   const staticMapUrl = getStaticMapUrl()
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
+  const faqItems = getFaqItems(cityCount)
+
+  useEffect(() => {
+    const structuredData = document.createElement('script')
+    structuredData.id = 'landing-faq-structured-data'
+    structuredData.type = 'application/ld+json'
+    structuredData.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    })
+    document.head.appendChild(structuredData)
+
+    return () => structuredData.remove()
+  }, [cityCount])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -421,6 +487,7 @@ export default function Landing() {
           </a>
 
           <div className={styles.navLinks} aria-label="Primary">
+            <Link to="/about">About</Link>
             <a href="#how-it-works">How it works</a>
             <a href="#curators">For curators</a>
             <Link to="/tutorials">Tutorials</Link>
@@ -499,9 +566,14 @@ export default function Landing() {
                 </div>
               </div>
 
-              <a className={`${styles.secondaryCta} ${styles.visualCta}`} href="#waitlist">
-                Join mailing list
-              </a>
+              <div className={styles.visualActions}>
+                <a className={`${styles.secondaryCta} ${styles.visualCta}`} href="#waitlist">
+                  Join mailing list
+                </a>
+                <Link className={`${styles.secondaryCta} ${styles.visualCta}`} to="/about">
+                  Why YouKnow
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -685,6 +757,31 @@ export default function Landing() {
                   {curatorToast}
                 </p>
               )}
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.faqSection} id="faq" aria-labelledby="faq-heading">
+          <div className={`container ${styles.faqInner}`}>
+            <div className={styles.faqIntro}>
+              <span className={styles.sectionEyebrow}>Good to know</span>
+              <h2 id="faq-heading">Questions, answered.</h2>
+              <p>
+                Everything you need to know before beginning your map with a place
+                you already love.
+              </p>
+            </div>
+
+            <div className={styles.faqList}>
+              {faqItems.map((item, index) => (
+                <details className={styles.faqItem} key={item.question} open={index === 0}>
+                  <summary>
+                    <span>{item.question}</span>
+                    <span className={styles.faqIcon} aria-hidden="true" />
+                  </summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>
