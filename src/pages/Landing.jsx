@@ -250,6 +250,30 @@ async function fetchLandingStats(signal) {
   }
 }
 
+async function recomputeLandingStats(signal) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return
+  }
+
+  const url = new URL('/rest/v1/rpc/refresh_website_stats', SUPABASE_URL)
+  const response = await fetch(url, {
+    method: 'POST',
+    signal,
+    cache: 'no-store',
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    },
+    body: '{}',
+  })
+
+  if (!response.ok) {
+    throw new Error('Unable to recompute website stats')
+  }
+}
+
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -295,8 +319,18 @@ export default function Landing() {
   useEffect(() => {
     const abortController = new AbortController()
 
-    async function refreshCounts() {
+    async function refreshCounts({ recompute = false } = {}) {
       try {
+        if (recompute) {
+          try {
+            await recomputeLandingStats(abortController.signal)
+          } catch (error) {
+            if (error.name !== 'AbortError') {
+              console.warn('Stats recompute failed; reading the latest cached values.', error)
+            }
+          }
+        }
+
         const nextStats = await fetchLandingStats(abortController.signal)
 
         if (nextStats) {
@@ -315,7 +349,7 @@ export default function Landing() {
       }
     }
 
-    refreshCounts()
+    refreshCounts({ recompute: true })
     const intervalId = window.setInterval(refreshCounts, COUNT_REFRESH_INTERVAL_MS)
 
     return () => {
