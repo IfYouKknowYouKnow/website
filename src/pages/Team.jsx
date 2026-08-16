@@ -20,17 +20,6 @@ const COFOUNDERS = [
   },
 ]
 
-const TEAM_MEMBERS = [
-  {
-    name: 'Jinisha Chamate',
-    role: 'Team',
-    initials: 'JC',
-    accent: '#16834a',
-    linkedin: 'https://www.linkedin.com/in/jinisha-chamate-a833371ba/',
-    bio: 'Marketing & Social Media.',
-  },
-]
-
 function PersonCard({ person, featured = false }) {
   return (
     <article className={`${styles.personCard} ${featured ? styles.featuredCard : ''}`}>
@@ -97,20 +86,6 @@ export default function Team() {
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.teamSection}`} aria-labelledby="team-heading">
-          <div className="container">
-            <div className={styles.sectionHeader}>
-              <p className={styles.kicker}>Team</p>
-              <h2 id="team-heading">Team</h2>
-            </div>
-
-            <div className={styles.teamGrid}>
-              {TEAM_MEMBERS.map((person) => (
-                <PersonCard person={person} key={person.name} />
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer className={styles.footer}>

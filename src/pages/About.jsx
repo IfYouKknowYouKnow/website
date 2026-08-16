@@ -23,14 +23,6 @@ const TEAM = [
     accent: '#167dc4',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',
   },
-  {
-    name: 'Jinisha Chamate',
-    role: 'Team',
-    focus: 'Marketing & Social Media',
-    initials: 'JC',
-    accent: '#16834a',
-    linkedin: 'https://www.linkedin.com/in/jinisha-chamate-a833371ba/',
-  },
 ]
 
 const PRINCIPLES = [
