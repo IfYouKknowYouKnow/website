@@ -18,7 +18,7 @@ const TEAM = [
   {
     name: 'Fabio Baldini',
     role: 'Co-founder',
-    focus: 'Business Development & Partnerships',
+    focus: 'Vision, Concept & Business Development',
     initials: 'FB',
     accent: '#167dc4',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',

@@ -16,7 +16,7 @@ const COFOUNDERS = [
     initials: 'FB',
     accent: '#167dc4',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',
-    bio: 'Buisiness Development & Partnerships.',
+    bio: 'Vision, Concept & Business Development.',
   },
 ]
 
