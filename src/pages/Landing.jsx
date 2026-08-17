@@ -393,7 +393,7 @@ export default function Landing() {
     setCuratorToast('')
 
     try {
-      await fetch('/', {
+      const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encode({
@@ -401,6 +401,10 @@ export default function Landing() {
           ...curatorForm,
         }),
       })
+
+      if (!response.ok) {
+        throw new Error(`Curator application failed with status ${response.status}`)
+      }
 
       setCuratorForm({
         name: '',
@@ -716,7 +720,7 @@ export default function Landing() {
           <div className={`container ${styles.curatorBand}`}>
             <div className={styles.storyCopy}>
               <span className={styles.sectionEyebrow}>For curators</span>
-              <h2>Built by people who you know.</h2>
+              <h2>Built by people who know you.</h2>
               <p>
                 For friends, communities, creators and tastemakers who know the
                 places that do not need giant neon signs to stay full.
