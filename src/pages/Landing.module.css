@@ -1298,6 +1298,7 @@
 
   .curatorAction {
     justify-items: center;
+    margin-inline: auto;
   }
 
   .curatorForm {
