@@ -319,7 +319,7 @@ export default function About() {
         <section className={styles.finalCta} id="download">
           <div className="container">
             <p className={styles.kicker}>Start your map</p>
-            <h2>Begin with a place you already love.</h2>
+            <h2>Find places you love from people you love.</h2>
             <p>Available free on iOS and Android.</p>
             <StoreButtons />
           </div>

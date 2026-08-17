@@ -716,7 +716,7 @@ export default function Landing() {
           <div className={`container ${styles.curatorBand}`}>
             <div className={styles.storyCopy}>
               <span className={styles.sectionEyebrow}>For curators</span>
-              <h2>Built by people with taste.</h2>
+              <h2>Built by people who you know.</h2>
               <p>
                 For friends, communities, creators and tastemakers who know the
                 places that do not need giant neon signs to stay full.
