@@ -21,8 +21,7 @@ body {
 
 body {
   margin: 0;
-  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Monaco,
-    Consolas, "Liberation Mono", monospace;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background:
     radial-gradient(circle at top left, rgba(149, 216, 246, 0.32), transparent 34rem),
