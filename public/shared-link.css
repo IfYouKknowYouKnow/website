@@ -60,6 +60,10 @@ body {
   object-position: left center;
 }
 
+.invite-page .brand-logo {
+  border-radius: 14px;
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
