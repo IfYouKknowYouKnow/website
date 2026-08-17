@@ -721,6 +721,14 @@ export default function Landing() {
                 For friends, communities, creators and tastemakers who know the
                 places that do not need giant neon signs to stay full.
               </p>
+              <p>
+                Put your map wherever people already follow you. In your profile,
+                open Saved and tap <strong>Share list</strong>, choose all your
+                recommendations or filter them by city or category, then tap{' '}
+                <strong>Share Link</strong>. Add the link to Instagram, TikTok or
+                any other social profile so people can open and follow your places
+                in YouKnow.
+              </p>
             </div>
             <div className={styles.curatorAction}>
               <button
