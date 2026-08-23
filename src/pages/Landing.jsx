@@ -182,9 +182,18 @@ function StatStrip({ stats }) {
 
 const FOOTER_LINKS = [
   { label: 'About', href: '/about' },
+  { label: 'Guides', href: '#guides' },
   { label: 'How it works', href: '#how-it-works' },
   { label: 'For curators', href: '#curators' },
   { label: 'FAQ', href: '#faq' },
+]
+
+const CITY_GUIDE_LINKS = [
+  { label: 'Cosy restaurants', href: '/zurich/cosy-restaurants', icon: '🕯️' },
+  { label: 'Cafés', href: '/zurich/cafes', icon: '☕' },
+  { label: 'Bars', href: '/zurich/bars', icon: '🍷' },
+  { label: 'Date night', href: '/zurich/date-night', icon: '🌙' },
+  { label: 'Hidden gems', href: '/zurich/hidden-gems', icon: '✦' },
 ]
 
 function getStaticMapUrl() {
@@ -526,6 +535,7 @@ export default function Landing() {
 
           <div className={styles.navLinks} aria-label="Primary">
             <Link to="/about">About</Link>
+            <a href="#guides">Guides</a>
             <a href="#how-it-works">How it works</a>
             <a href="#curators">For curators</a>
             <Link to="/tutorials">Tutorials</Link>
@@ -632,6 +642,47 @@ export default function Landing() {
       <StatStrip stats={stats} />
 
       <main className={styles.editorial}>
+        <section className={styles.cityGuideSection} id="guides">
+          <div className="container">
+            <div className={styles.cityGuideHeader}>
+              <div>
+                <span className={styles.sectionEyebrow}>Explore guides</span>
+                <h2>Start with Zurich.</h2>
+              </div>
+              <p>
+                Get a taste of the real places saved in YouKnow. Each guide shares
+                three community picks, then lets you continue on the full map.
+              </p>
+            </div>
+
+            <div className={styles.cityGuideGrid}>
+              <Link className={styles.cityGuideFeatured} to="/zurich">
+                <span className={styles.cityGuideFeaturedLabel}>YouKnow city guide</span>
+                <div className={styles.cityGuideFeaturedPins} aria-hidden="true">
+                  <span>☕</span><span>🍽️</span><span>🍷</span>
+                </div>
+                <div>
+                  <h3>Discover Zurich like a local</h3>
+                  <p>Restaurants, cafés, bars and local favourites from the community.</p>
+                  <span className={styles.cityGuideArrow}>Explore Zurich →</span>
+                </div>
+              </Link>
+
+              <div className={styles.cityGuideTopics} aria-label="Zurich guides by vibe">
+                {CITY_GUIDE_LINKS.map((guide) => (
+                  <Link to={guide.href} key={guide.href}>
+                    <span className={styles.cityGuideTopicIcon} aria-hidden="true">
+                      {guide.icon}
+                    </span>
+                    <span>{guide.label}</span>
+                    <span className={styles.cityGuideTopicArrow} aria-hidden="true">→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className={styles.featureSection} id="how-it-works">
           <div className="container">
             <div className={styles.featureIntro}>

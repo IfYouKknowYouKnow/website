@@ -5,6 +5,7 @@ import Landing from './pages/Landing'
 import Privacy from './pages/Privacy'
 import ShareLanding from './pages/ShareLanding'
 import Tutorials from './pages/Tutorials'
+import CityGuide from './pages/CityGuide'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -30,6 +31,8 @@ export default function App() {
         <Route path="/team" element={<Navigate to="/about" replace />} />
         <Route path="/tutorials" element={<Tutorials />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/:citySlug/:topicSlug" element={<CityGuide />} />
+        <Route path="/:citySlug" element={<CityGuide />} />
       </Routes>
     </BrowserRouter>
   )

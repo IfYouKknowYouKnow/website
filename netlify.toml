@@ -9,6 +9,16 @@
   force = true
 
 [[redirects]]
+  from = "/zurich"
+  to = "/zurich/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/zurich/*"
+  to = "/zurich/:splat/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
