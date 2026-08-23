@@ -188,12 +188,10 @@ const FOOTER_LINKS = [
   { label: 'FAQ', href: '#faq' },
 ]
 
-const CITY_GUIDE_LINKS = [
-  { label: 'Cosy restaurants', href: '/zurich/cosy-restaurants', icon: '🕯️' },
-  { label: 'Cafés', href: '/zurich/cafes', icon: '☕' },
-  { label: 'Bars', href: '/zurich/bars', icon: '🍷' },
-  { label: 'Date night', href: '/zurich/date-night', icon: '🌙' },
-  { label: 'Hidden gems', href: '/zurich/hidden-gems', icon: '✦' },
+const CITY_GUIDES = [
+  { city: 'Zurich', href: '/zurich', icon: '🏔️', description: 'Local favourites across Switzerland’s largest city' },
+  { city: 'Geneva', href: '/geneva', icon: '⛲', description: 'Lakefront cafés, dinners and local finds' },
+  { city: 'Berlin', href: '/berlin', icon: '🌃', description: 'Kiez favourites, coffee and nights out' },
 ]
 
 function getStaticMapUrl() {
@@ -642,47 +640,6 @@ export default function Landing() {
       <StatStrip stats={stats} />
 
       <main className={styles.editorial}>
-        <section className={styles.cityGuideSection} id="guides">
-          <div className="container">
-            <div className={styles.cityGuideHeader}>
-              <div>
-                <span className={styles.sectionEyebrow}>Explore guides</span>
-                <h2>Start with Zurich.</h2>
-              </div>
-              <p>
-                Get a taste of the real places saved in YouKnow. Each guide shares
-                three community picks, then lets you continue on the full map.
-              </p>
-            </div>
-
-            <div className={styles.cityGuideGrid}>
-              <Link className={styles.cityGuideFeatured} to="/zurich">
-                <span className={styles.cityGuideFeaturedLabel}>YouKnow city guide</span>
-                <div className={styles.cityGuideFeaturedPins} aria-hidden="true">
-                  <span>☕</span><span>🍽️</span><span>🍷</span>
-                </div>
-                <div>
-                  <h3>Discover Zurich like a local</h3>
-                  <p>Restaurants, cafés, bars and local favourites from the community.</p>
-                  <span className={styles.cityGuideArrow}>Explore Zurich →</span>
-                </div>
-              </Link>
-
-              <div className={styles.cityGuideTopics} aria-label="Zurich guides by vibe">
-                {CITY_GUIDE_LINKS.map((guide) => (
-                  <Link to={guide.href} key={guide.href}>
-                    <span className={styles.cityGuideTopicIcon} aria-hidden="true">
-                      {guide.icon}
-                    </span>
-                    <span>{guide.label}</span>
-                    <span className={styles.cityGuideTopicArrow} aria-hidden="true">→</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className={styles.featureSection} id="how-it-works">
           <div className="container">
             <div className={styles.featureIntro}>
@@ -763,6 +720,37 @@ export default function Landing() {
                 Describe the night you want, from a quiet coffee to a second-date
                 wine bar, and find places that match your people and your mood.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.cityGuideSection} id="guides">
+          <div className="container">
+            <div className={styles.cityGuideHeader}>
+              <div>
+                <span className={styles.sectionEyebrow}>Explore guides</span>
+                <h2>Guides for your next city.</h2>
+              </div>
+              <p>
+                Choose a city to open its guide. Each one starts with five real
+                community recommendations, then lets you continue on the full map.
+              </p>
+            </div>
+
+            <div className={styles.cityGuideCities} aria-label="Available city guides">
+              {CITY_GUIDES.map((guide) => (
+                <Link className={styles.cityGuideCityCard} to={guide.href} key={guide.href}>
+                  <div className={styles.cityGuideCityTop}>
+                    <span>YouKnow city guide</span>
+                    <span aria-hidden="true">{guide.icon}</span>
+                  </div>
+                  <div>
+                    <h3>{guide.city}</h3>
+                    <p>{guide.description}</p>
+                    <span className={styles.cityGuideCityLink}>Explore {guide.city} →</span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

@@ -299,6 +299,14 @@ input, button {
   background: linear-gradient(145deg, #dce8cf, #e7d9f8);
 }
 
+.city-place-card:nth-child(4) .city-place-visual {
+  background: linear-gradient(145deg, #f3e2ba, #d8edf0);
+}
+
+.city-place-card:nth-child(5) .city-place-visual {
+  background: linear-gradient(145deg, #e8d9cc, #dce7fb);
+}
+
 .city-place-visual span {
   display: grid;
   width: 104px;

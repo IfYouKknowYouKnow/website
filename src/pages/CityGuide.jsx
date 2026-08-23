@@ -217,7 +217,7 @@ export default function CityGuide() {
         <section className="city-hero">
           <div className="container city-hero-inner">
             <div>
-              {topicSlug && <Link className="city-back-link" to={`/${guide.slug}`}>← All Zurich places</Link>}
+              {topicSlug && <Link className="city-back-link" to={`/${guide.slug}`}>← All {guide.city} places</Link>}
               <p className="city-eyebrow">{guide.eyebrow}</p>
               <h1>{guide.title}</h1>
               <p className="city-lead">{guide.intro}</p>
@@ -260,25 +260,27 @@ export default function CityGuide() {
           </section>
         ))}
 
-        <section className="city-related">
-          <div className="container">
-            <p className="city-eyebrow">Find places for your vibe</p>
-            <h2>Explore Zurich your way</h2>
-            <div className="city-related-links">
-              {relatedTopics.map((topic) => (
-                <Link to={`/${guide.slug}/${topic.slug}`} key={topic.slug}>
-                  {topic.title.replace(' in Zurich', '').replace(' Zurich', '')} <span>→</span>
-                </Link>
-              ))}
+        {relatedTopics.length > 0 && (
+          <section className="city-related">
+            <div className="container">
+              <p className="city-eyebrow">Find places for your vibe</p>
+              <h2>Explore {guide.city} your way</h2>
+              <div className="city-related-links">
+                {relatedTopics.map((topic) => (
+                  <Link to={`/${guide.slug}/${topic.slug}`} key={topic.slug}>
+                    {topic.title.replace(` in ${guide.city}`, '').replace(` ${guide.city}`, '')} <span>→</span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="city-faq" aria-labelledby="city-faq-heading">
           <div className="container city-faq-grid">
             <div>
               <p className="city-eyebrow">Good to know</p>
-              <h2 id="city-faq-heading">Zurich recommendations, explained.</h2>
+              <h2 id="city-faq-heading">{guide.city} recommendations, explained.</h2>
             </div>
             <div>
               {guide.faq.map((item, index) => (

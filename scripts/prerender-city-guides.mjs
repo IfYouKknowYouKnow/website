@@ -77,7 +77,7 @@ function staticMarkup(guide, places) {
     </div></header>
     <main>
       <section class="city-hero"><div class="container city-hero-inner"><div>
-        ${topicSlug ? `<a class="city-back-link" href="/${guide.slug}">← All Zurich places</a>` : ''}
+        ${topicSlug ? `<a class="city-back-link" href="/${guide.slug}">← All ${escapeHtml(guide.city)} places</a>` : ''}
         <p class="city-eyebrow">${escapeHtml(guide.eyebrow)}</p>
         <h1>${escapeHtml(guide.title)}</h1>
         <p class="city-lead">${escapeHtml(guide.intro)}</p>
@@ -89,8 +89,8 @@ function staticMarkup(guide, places) {
         <aside class="city-continue" aria-label="Continue in YouKnow"><div><p class="city-continue-count">${places.length} places to start</p><h2>${escapeHtml(guide.ctaTitle)}</h2><p>${escapeHtml(guide.ctaBody)}</p></div><a class="city-primary-button city-continue-button" href="/#download">${escapeHtml(guide.ctaLabel)} <span aria-hidden="true">→</span></a></aside>
       </div></section>
       ${guide.contentSections.map((section, index) => `<section class="city-editorial-section ${index % 2 ? 'city-editorial-tint' : ''}"><div class="container city-editorial-inner"><p class="city-section-number">0${index + 1}</p><div><h2>${escapeHtml(section.title)}</h2><p>${escapeHtml(section.body)}</p></div></div></section>`).join('')}
-      <section class="city-related"><div class="container"><p class="city-eyebrow">Find places for your vibe</p><h2>Explore Zurich your way</h2><div class="city-related-links">${related.map((topic) => `<a href="/${guide.slug}/${topic.slug}">${escapeHtml(topic.title.replace(' in Zurich', '').replace(' Zurich', ''))} <span>→</span></a>`).join('')}</div></div></section>
-      <section class="city-faq" aria-labelledby="city-faq-heading"><div class="container city-faq-grid"><div><p class="city-eyebrow">Good to know</p><h2 id="city-faq-heading">Zurich recommendations, explained.</h2></div><div>${guide.faq.map((item, index) => `<details${index === 0 ? ' open' : ''}><summary>${escapeHtml(item.question)}<span aria-hidden="true">+</span></summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}</div></div></section>
+      ${related.length ? `<section class="city-related"><div class="container"><p class="city-eyebrow">Find places for your vibe</p><h2>Explore ${escapeHtml(guide.city)} your way</h2><div class="city-related-links">${related.map((topic) => `<a href="/${guide.slug}/${topic.slug}">${escapeHtml(topic.title.replace(` in ${guide.city}`, '').replace(` ${guide.city}`, ''))} <span>→</span></a>`).join('')}</div></div></section>` : ''}
+      <section class="city-faq" aria-labelledby="city-faq-heading"><div class="container city-faq-grid"><div><p class="city-eyebrow">Good to know</p><h2 id="city-faq-heading">${escapeHtml(guide.city)} recommendations, explained.</h2></div><div>${guide.faq.map((item, index) => `<details${index === 0 ? ' open' : ''}><summary>${escapeHtml(item.question)}<span aria-hidden="true">+</span></summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}</div></div></section>
     </main>
     <footer class="city-footer"><div class="container city-footer-inner"><a href="/"><img src="/long_logo.png" alt="YouKnow"></a><p>Find places you love from people you trust.</p><div><a href="/about">About</a><a href="/privacy">Privacy</a></div></div></footer>
   </div>`
