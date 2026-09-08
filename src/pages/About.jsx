@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { usePageMetadata } from '../usePageMetadata'
 import { Link } from 'react-router-dom'
 import styles from './About.module.css'
 
@@ -43,99 +43,6 @@ const PRINCIPLES = [
   },
 ]
 
-function setMeta(selector, attribute, value) {
-  const element = document.head.querySelector(selector)
-  if (element) element.setAttribute(attribute, value)
-}
-
-function useAboutMetadata() {
-  useEffect(() => {
-    const title = 'About YouKnow | A Map Curated by People You Trust'
-    const description =
-      'Learn why YouKnow turns restaurant, bar, cafe and experience recommendations from friends and local curators into a personal map.'
-    const canonical = 'https://ifykyk.app/about'
-    const image = 'https://ifykyk.app/images/about-youknow-og.png'
-
-    document.title = title
-    setMeta('meta[name="description"]', 'content', description)
-    setMeta('link[rel="canonical"]', 'href', canonical)
-    setMeta('meta[property="og:type"]', 'content', 'website')
-    setMeta('meta[property="og:url"]', 'content', canonical)
-    setMeta('meta[property="og:title"]', 'content', title)
-    setMeta('meta[property="og:description"]', 'content', description)
-    setMeta('meta[property="og:image"]', 'content', image)
-    setMeta('meta[name="twitter:title"]', 'content', title)
-    setMeta('meta[name="twitter:description"]', 'content', description)
-    setMeta('meta[name="twitter:image"]', 'content', image)
-
-    const structuredData = document.createElement('script')
-    structuredData.id = 'about-page-structured-data'
-    structuredData.type = 'application/ld+json'
-    structuredData.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'AboutPage',
-      name: 'About YouKnow',
-      url: canonical,
-      description,
-      mainEntity: {
-        '@type': 'Organization',
-        name: 'YouKnow',
-        alternateName: 'YK YouKnow',
-        url: 'https://ifykyk.app/',
-        logo: 'https://ifykyk.app/logo.png',
-        founder: [
-          { '@type': 'Person', name: 'Marie-Louise Dugua' },
-          { '@type': 'Person', name: 'Fabio Baldini' },
-        ],
-        sameAs: [APP_STORE_URL, ANDROID_PLAY_STORE_URL],
-      },
-    })
-    document.head.appendChild(structuredData)
-
-    return () => {
-      structuredData.remove()
-      document.title = 'YouKnow App | Friend-Powered Restaurant and Bar Recommendations'
-      setMeta(
-        'meta[name="description"]',
-        'content',
-        'YouKnow is an app for discovering restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.',
-      )
-      setMeta('link[rel="canonical"]', 'href', 'https://ifykyk.app/')
-      setMeta('meta[property="og:url"]', 'content', 'https://ifykyk.app/')
-      setMeta(
-        'meta[property="og:title"]',
-        'content',
-        'YouKnow App | Friend-Powered Recommendations',
-      )
-      setMeta(
-        'meta[property="og:description"]',
-        'content',
-        'Discover restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.',
-      )
-      setMeta(
-        'meta[property="og:image"]',
-        'content',
-        'https://ifykyk.app/images/iykyk-app-preview.png',
-      )
-      setMeta(
-        'meta[name="twitter:title"]',
-        'content',
-        'YouKnow App | Friend-Powered Recommendations',
-      )
-      setMeta(
-        'meta[name="twitter:description"]',
-        'content',
-        'Discover restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.',
-      )
-      setMeta(
-        'meta[name="twitter:image"]',
-        'content',
-        'https://ifykyk.app/images/iykyk-app-preview.png',
-      )
-    }
-  }, [])
-}
-
 function StoreButtons() {
   return (
     <div className={styles.storeButtons}>
@@ -150,7 +57,7 @@ function StoreButtons() {
 }
 
 export default function About() {
-  useAboutMetadata()
+  usePageMetadata('about')
 
   return (
     <div className={styles.page}>

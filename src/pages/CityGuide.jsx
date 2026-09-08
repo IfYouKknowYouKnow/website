@@ -217,7 +217,7 @@ export default function CityGuide() {
         <section className="city-hero">
           <div className="container city-hero-inner">
             <div>
-              {topicSlug && <Link className="city-back-link" to={`/${guide.slug}`}>← All {guide.city} places</Link>}
+              {topicSlug && <Link className="city-back-link" to={`/${guide.slug}/`}>← All {guide.city} places</Link>}
               <p className="city-eyebrow">{guide.eyebrow}</p>
               <h1>{guide.title}</h1>
               <p className="city-lead">{guide.intro}</p>
@@ -267,7 +267,7 @@ export default function CityGuide() {
               <h2>Explore {guide.city} your way</h2>
               <div className="city-related-links">
                 {relatedTopics.map((topic) => (
-                  <Link to={`/${guide.slug}/${topic.slug}`} key={topic.slug}>
+                  <Link to={`/${guide.slug}/${topic.slug}/`} key={topic.slug}>
                     {topic.title.replace(` in ${guide.city}`, '').replace(` ${guide.city}`, '')} <span>→</span>
                   </Link>
                 ))}

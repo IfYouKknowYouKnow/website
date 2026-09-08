@@ -189,9 +189,9 @@ const FOOTER_LINKS = [
 ]
 
 const CITY_GUIDES = [
-  { city: 'Zurich', href: '/zurich', icon: '🏔️', description: 'Local favourites across Switzerland’s largest city' },
-  { city: 'Geneva', href: '/geneva', icon: '⛲', description: 'Lakefront cafés, dinners and local finds' },
-  { city: 'Berlin', href: '/berlin', icon: '🌃', description: 'Kiez favourites, coffee and nights out' },
+  { city: 'Zurich', href: '/zurich/', icon: '🏔️', description: 'Local favourites across Switzerland’s largest city' },
+  { city: 'Geneva', href: '/geneva/', icon: '⛲', description: 'Lakefront cafés, dinners and local finds' },
+  { city: 'Berlin', href: '/berlin/', icon: '🌃', description: 'Kiez favourites, coffee and nights out' },
 ]
 
 function getStaticMapUrl() {

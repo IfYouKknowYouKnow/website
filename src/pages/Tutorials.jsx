@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { usePageMetadata } from '../usePageMetadata'
 import styles from './Tutorials.module.css'
 
 const TUTORIALS = [
@@ -79,6 +80,8 @@ const TUTORIALS = [
 ]
 
 export default function Tutorials() {
+  usePageMetadata('tutorials')
+
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>

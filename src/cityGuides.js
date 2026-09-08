@@ -413,7 +413,7 @@ export const cityGuides = {
   zurich: {
     slug: 'zurich',
     city: 'Zurich',
-    path: '/zurich',
+    path: '/zurich/',
     title: 'Discover Zurich Like a Local',
     eyebrow: 'YouKnow city guide',
     intro:
@@ -442,7 +442,7 @@ export const cityGuides = {
   geneva: {
     slug: 'geneva',
     city: 'Geneva',
-    path: '/geneva',
+    path: '/geneva/',
     title: 'Discover Geneva Like a Local',
     eyebrow: 'YouKnow city guide',
     intro:
@@ -471,7 +471,7 @@ export const cityGuides = {
   berlin: {
     slug: 'berlin',
     city: 'Berlin',
-    path: '/berlin',
+    path: '/berlin/',
     title: 'Discover Berlin Like a Local',
     eyebrow: 'YouKnow city guide',
     intro:
@@ -512,7 +512,7 @@ export function resolveCityGuide(citySlug, topicSlug) {
     ...cityGuide,
     ...topic,
     slug: cityGuide.slug,
-    path: `/${cityGuide.slug}/${topic.slug}`,
+    path: `/${cityGuide.slug}/${topic.slug}/`,
     topicSlug: topic.slug,
     topics: cityGuide.topics,
     faq: cityGuide.faq,
