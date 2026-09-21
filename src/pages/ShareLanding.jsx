@@ -160,7 +160,7 @@ export default function ShareLanding({ type }) {
         <div className={styles.visual} aria-hidden="true">
           <div className={`${styles.phone} ${styles.phoneBack}`}>
             <img
-              src={isInvite ? '/images/IMG_3388.PNG' : '/placesheet_screen.PNG'}
+              src={isInvite ? '/images/IMG_6350.PNG' : '/images/IMG_6342.PNG'}
               alt=""
               width={isInvite ? 1290 : undefined}
               height={isInvite ? 2796 : undefined}
@@ -169,7 +169,7 @@ export default function ShareLanding({ type }) {
           </div>
           <div className={styles.phone}>
             <img
-              src={isInvite ? '/images/IMG_3387.PNG' : '/new_screen_iphon.PNG'}
+              src={isInvite ? '/images/IMG_6338.PNG' : '/images/IMG_6338.PNG'}
               alt=""
               width={isInvite ? 1290 : undefined}
               height={isInvite ? 2796 : undefined}

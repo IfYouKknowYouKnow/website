@@ -98,13 +98,13 @@ export default function About() {
               <span className={`${styles.vibeTag} ${styles.tagTwo}`}>Natural wine</span>
               <div className={`${styles.phone} ${styles.phoneBack}`}>
                 <img
-                  src="/images/IMG_3387.PNG"
-                  alt="YouKnow map filtered to recommendations from a trusted friend"
+                  src="/images/IMG_6338.PNG"
+                  alt="YouKnow map with category filters and friends’ recommendations"
                 />
               </div>
               <div className={styles.phone}>
                 <img
-                  src="/images/IMG_3391.PNG"
+                  src="/images/IMG_6327.PNG"
                   alt="YouKnow natural-language vibe search"
                 />
               </div>

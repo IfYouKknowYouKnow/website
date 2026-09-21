@@ -27,39 +27,34 @@ const FLOATING_TAGS = [
 
 const SCREEN_FEATURES = [
   {
-    src: '/images/IMG_3385.PNG',
+    src: '/images/IMG_6338.PNG',
     title: 'Start with the living map',
-    body: 'Open a map of the right things: places saved by friends, connoisseurs and people whose taste you trust.',
+    body: 'Explore places recommended by people you trust. Narrow your map by friends, food, drinks, coffee or what is open now.',
   },
   {
-    src: '/images/IMG_3387.PNG',
-    title: 'Filter by people you trust',
-    body: 'Switch from the community to one friend, and see exactly which places they would send you to.',
-  },
-  {
-    src: '/images/IMG_3386.PNG',
-    title: 'Filter by category, open now and trending',
-    body: 'Cut through the noise with filters for food, bars, coffee, dance, open now and what is trending nearby.',
-  },
-  {
-    src: '/images/IMG_3388.PNG',
+    src: '/images/IMG_6350.PNG',
     title: 'Explore any city',
-    body: 'Drop into Milan, Zurich, Paris or wherever you are headed, and see the places the community actually recommends.',
+    body: 'Drop into Zurich, Milan, Paris or wherever you are headed, and see the places the community actually recommends.',
   },
   {
-    src: '/images/IMG_3389.PNG',
-    title: 'See what friends post',
-    body: 'Follow the feed for photos, new finds and the nights your friends thought were worth sharing.',
+    src: '/images/IMG_6337.PNG',
+    title: 'See what friends recommend',
+    body: 'Explore your feed for friends’ recommendations, recent pictures and the community’s top curators.',
   },
   {
-    src: '/images/IMG_3390.PNG',
+    src: '/images/IMG_6339.PNG',
     title: 'Organize your own recommendations',
-    body: 'Keep your recommendations and want-to-try places organized by distance, city or lists.',
+    body: 'Keep your saved and want-to-go places together on your profile, and browse them by city, category or distance.',
   },
   {
-    src: '/images/IMG_3391.PNG',
+    src: '/images/IMG_6342.PNG',
+    title: 'Get to know a place',
+    body: 'See photos and who saved a place, check the details, then save it for later or get directions.',
+  },
+  {
+    src: '/images/IMG_6327.PNG',
     title: 'Search by vibe with AI',
-    body: 'Use natural language. Artificial Intelligence helps match the places on your map to the exact vibe you want.',
+    body: 'Describe what you have in mind. Get recommendations from your map and ask follow-up questions to find the right place.',
   },
 ].map((feature, index) => ({
   ...feature,
@@ -68,9 +63,9 @@ const SCREEN_FEATURES = [
 }))
 
 const HERO_SCREENSHOTS = [
+  SCREEN_FEATURES[0],
   SCREEN_FEATURES[1],
-  SCREEN_FEATURES[3],
-  SCREEN_FEATURES[4],
+  SCREEN_FEATURES[2],
 ]
 
 const QUERY_PILLS = [
