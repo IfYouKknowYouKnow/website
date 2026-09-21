@@ -2,7 +2,8 @@ export const homeMetadata = {
   title: 'YouKnow App | Friend-Powered Restaurant and Bar Recommendations',
   description: 'YouKnow is an app for discovering restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.',
   canonical: 'https://ifykyk.app/',
-  image: 'https://ifykyk.app/images/iykyk-app-preview.png',
+  image: 'https://ifykyk.app/logo.png',
+  card: 'summary',
 }
 
 export const pageMetadata = {
@@ -17,6 +18,7 @@ export const pageMetadata = {
     description: 'Learn how to save places in YouKnow from Instagram, TikTok, photos, Google Saved Places, or a manual search.',
     canonical: 'https://ifykyk.app/tutorials',
     image: homeMetadata.image,
+    card: homeMetadata.card,
   },
 }
 
@@ -29,6 +31,7 @@ export function metadataTags(page) {
     ['meta', 'property', 'og:title', 'content', page.title],
     ['meta', 'property', 'og:description', 'content', page.description],
     ['meta', 'property', 'og:image', 'content', page.image],
+    ['meta', 'name', 'twitter:card', 'content', page.card || 'summary_large_image'],
     ['meta', 'name', 'twitter:title', 'content', page.title],
     ['meta', 'name', 'twitter:description', 'content', page.description],
     ['meta', 'name', 'twitter:image', 'content', page.image],
