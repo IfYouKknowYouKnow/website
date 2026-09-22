@@ -23,7 +23,7 @@ export default function Privacy() {
         <div className={`container ${styles.content}`}>
           <div className={styles.header}>
             <p className={styles.eyebrow}>Legal</p>
-            <h1 className={styles.title}>Privacy Notice</h1>
+            <h1 className={styles.title}>YouKnow Map Privacy Policy</h1>
             <a
               className={styles.openLink}
               href={NOTICE_PATH}
@@ -38,7 +38,7 @@ export default function Privacy() {
             <iframe
               className={styles.noticeFrame}
               src={NOTICE_PATH}
-              title="YouKnow Privacy Notice"
+              title="YouKnow Map Privacy Policy"
             />
           </div>
         </div>
