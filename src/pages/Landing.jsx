@@ -75,6 +75,29 @@ const QUERY_PILLS = [
   'places my friends saved in Paris',
 ]
 
+function Sparkle() {
+  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" stroke="currentColor" strokeWidth="1.5" /></svg>
+}
+
+function MapArtwork() {
+  return <svg className={styles.mapArtwork} viewBox="0 0 640 740" fill="none" aria-hidden="true">
+    <defs><pattern id="map-grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" stroke="currentColor" strokeOpacity=".12" /></pattern></defs>
+    <rect width="640" height="740" fill="url(#map-grid)" />
+    <path d="M420-20c-120 140 70 240-80 370S390 610 250 760" stroke="white" strokeOpacity=".5" strokeWidth="76" />
+    <g stroke="currentColor" strokeOpacity=".18" strokeWidth="1.5"><path d="M-20 120 660 310M-20 400l680-80M110-20l160 780M500-20 410 760M-20 620l680-100" /><circle cx="320" cy="340" r="250" /><circle cx="320" cy="340" r="190" strokeDasharray="3 9" /></g>
+    <path d="m90 480 115-180 230 95 100-200" stroke="#167dc4" strokeWidth="2" strokeDasharray="6 8" />
+    {[ [90,480], [205,300], [435,395], [535,195] ].map(([x,y],i) => <g key={i}><circle cx={x} cy={y} r="16" fill="#167dc4" fillOpacity=".12" /><circle cx={x} cy={y} r="5" fill="#167dc4" /></g>)}
+  </svg>
+}
+
+function CityArtwork({ city }) {
+  return <svg className={styles.cityArtwork} viewBox="0 0 320 130" fill="none" aria-hidden="true">
+    <g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      {city === 'Zurich' ? <><path d="m0 85 46-47 33 25 42-52 52 60 30-25 45 39M25 102h270M77 102V72h27v30M80 72l10-14 11 14M182 102V51h16v51M190 51V29M181 29h18M135 102V76h30v26M250 102V82h29v20" /><path d="m110 112 40 5 43-5 55 8M37 124h40" /></> : city === 'Geneva' ? <><path d="M0 101h320M134 100c0-23 21-37 23-74M157 26c0 38 24 46 25 74M157 26V7M157 26l-9-13m9 13 10-15M16 100V76h47v24M27 76V58h24v18M240 100V68h44v32M250 68V49h24v19" /><path d="m0 118 45-5 51 7 62-7 53 6 55-6 54 6" /></> : <><path d="M0 110h320M51 110V65h14v45m34 0V65h14v45m33 0V65h14v45m34 0V65h14v45M43 64h175V50H43v14ZM43 50l88-25 87 25M130 25V14M254 110V59m0 0V31m0 28h-10m10 0h10" /><circle cx="254" cy="65" r="13" /><path d="M21 110V83h14v27M285 110V91h26v19" /></>}
+    </g>
+  </svg>
+}
+
 function getFaqItems(cityCount) {
   return [
     {
@@ -184,9 +207,9 @@ const FOOTER_LINKS = [
 ]
 
 const CITY_GUIDES = [
-  { city: 'Zurich', href: '/zurich/', icon: '🏔️', description: 'Local favourites across Switzerland’s largest city' },
-  { city: 'Geneva', href: '/geneva/', icon: '⛲', description: 'Lakefront cafés, dinners and local finds' },
-  { city: 'Berlin', href: '/berlin/', icon: '🌃', description: 'Kiez favourites, coffee and nights out' },
+  { city: 'Zurich', href: '/zurich/', description: 'Local favourites across Switzerland’s largest city' },
+  { city: 'Geneva', href: '/geneva/', description: 'Lakefront cafés, dinners and local finds' },
+  { city: 'Berlin', href: '/berlin/', description: 'Kiez favourites, coffee and nights out' },
 ]
 
 function getStaticMapUrl() {
@@ -291,8 +314,11 @@ export default function Landing() {
   const [stats, setStats] = useState(FALLBACK_STATS)
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeFeatureStart, setActiveFeatureStart] = useState(0)
+  const [activeQuery, setActiveQuery] = useState(0)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pageRef = useRef(null)
   const carouselRef = useRef(null)
-  const featureRailRef = useRef(null)
+  const featureStepsRef = useRef(null)
   const staticMapUrl = getStaticMapUrl()
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount)
@@ -360,13 +386,63 @@ export default function Landing() {
     }
   }, [])
 
+  useEffect(() => {
+    const page = pageRef.current
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktop = window.matchMedia('(min-width: 901px)')
+    const sections = page.querySelectorAll('[data-reveal]')
+    const steps = featureStepsRef.current.querySelectorAll('[data-feature-step]')
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.dataset.visible = 'true'
+          revealObserver.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.12 })
+    sections.forEach((section) => revealObserver.observe(section))
+    let frame = 0
+    function updateScroll() {
+      frame = 0
+      const scroll = window.scrollY
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      page.style.setProperty('--scroll-progress', total > 0 ? scroll / total : 0)
+      page.dataset.scrolled = scroll > 24
+      if (!media.matches) {
+        page.style.setProperty('--hero-shift', `${Math.min(scroll * 0.12, 85)}px`)
+      }
+      if (desktop.matches) {
+        let closest = 0
+        let distance = Infinity
+        steps.forEach((step, index) => {
+          const rect = step.getBoundingClientRect()
+          const next = Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2)
+          if (next < distance) { closest = index; distance = next }
+        })
+        setActiveFeatureStart(closest)
+      }
+    }
+    function scheduleUpdate() {
+      if (!frame) frame = window.requestAnimationFrame(updateScroll)
+    }
+    updateScroll()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+    return () => {
+      revealObserver.disconnect()
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', scheduleUpdate)
+      window.cancelAnimationFrame(frame)
+    }
+  }, [])
+
   async function handleSubmit(e) {
     e.preventDefault()
     setIsSubmitting(true)
     setToast('')
 
     try {
-      await fetch('/', {
+      const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encode({
@@ -375,6 +451,7 @@ export default function Landing() {
         }),
       })
 
+      if (!response.ok) throw new Error('Mailing list submission failed')
       setEmail('')
       setToast('You are on the list!')
 
@@ -446,46 +523,17 @@ export default function Landing() {
   }
 
   function scrollFeatureTo(index) {
-    const rail = featureRailRef.current
-    const nextIndex = Math.min(SCREEN_FEATURES.length - 1, Math.max(0, index))
-    const targetCard = rail?.children[nextIndex]
-
-    if (!rail || !targetCard) {
-      return
-    }
-
-    setActiveFeatureStart(nextIndex)
-
-    rail.scrollTo({
-      left: targetCard.offsetLeft + targetCard.offsetWidth / 2 - rail.clientWidth / 2,
-      behavior: 'smooth',
-    })
-
-  }
-
-  function handleFeatureScroll(e) {
-    const rail = e.currentTarget
-    const cards = Array.from(rail.children)
-
-    if (!cards.length) {
-      return
-    }
-
-    const railRect = rail.getBoundingClientRect()
-    const railCenter = railRect.left + railRect.width / 2
-    const nextStart = cards.reduce((closestIndex, card, index) => {
-      const cardRect = card.getBoundingClientRect()
-      const cardCenter = cardRect.left + cardRect.width / 2
-      const closestRect = cards[closestIndex].getBoundingClientRect()
-      const closestCenter = closestRect.left + closestRect.width / 2
-
-      return Math.abs(cardCenter - railCenter) < Math.abs(closestCenter - railCenter)
-        ? index
-        : closestIndex
-    }, 0)
-
-    if (nextStart !== activeFeatureStart) {
-      setActiveFeatureStart(nextStart)
+    setActiveFeatureStart(index)
+    if (window.matchMedia('(min-width: 901px)').matches) {
+      featureStepsRef.current.children[index]?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        block: 'center',
+      })
+    } else {
+      pageRef.current.querySelector('[aria-label="YouKnow app showcase"]')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        block: 'center',
+      })
     }
   }
 
@@ -498,13 +546,15 @@ export default function Landing() {
 
     carousel.scrollTo({
       left: carousel.clientWidth * index,
-      behavior: 'smooth',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
     })
     setActiveSlide(index)
   }
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} ref={pageRef}>
+      <a className={styles.skipLink} href="#how-it-works">Skip to content</a>
+      <div className={styles.scrollProgress} aria-hidden="true" />
       {staticMapUrl && (
         <img
           className={styles.mapBackdrop}
@@ -515,7 +565,7 @@ export default function Landing() {
         />
       )}
 
-      <nav className={styles.nav}>
+      <nav className={styles.nav} aria-label="Primary navigation">
         <div className={`container ${styles.navInner}`}>
           <a className={styles.brand} href="/" aria-label="YouKnow home">
             <img
@@ -526,14 +576,17 @@ export default function Landing() {
             />
           </a>
 
-          <div className={styles.navLinks} aria-label="Primary">
+          <button className={styles.menuToggle} type="button" aria-expanded={isMenuOpen} aria-controls="primary-links" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? 'Close −' : 'Menu +'}
+          </button>
+          <div id="primary-links" className={`${styles.navLinks} ${isMenuOpen ? styles.navLinksOpen : ''}`} onClick={() => setIsMenuOpen(false)}>
             <Link to="/about">About</Link>
             <a href="#guides">Guides</a>
             <a href="#how-it-works">How it works</a>
             <a href="#curators">For curators</a>
             <Link to="/tutorials">Tutorials</Link>
             <a className={styles.navCta} href="#download">
-              Download
+              Get the app <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -543,7 +596,8 @@ export default function Landing() {
         <div className="container">
           <div className={styles.heroInner}>
             <div className={styles.copy}>
-              <h1>A Map Curated by People Who Know.</h1>
+              <span className={styles.heroEyebrow}>YOUR PEOPLE. YOUR PLACES.</span>
+              <h1>The Map Curated by <em>People YouKnow.</em></h1>
               <p className={styles.subhead}>
                 Skip the endless searching. Find restaurants, bars, cafes and nights
                 out through friends and connoisseurs who share your taste.
@@ -561,6 +615,8 @@ export default function Landing() {
             </div>
 
             <div className={styles.visualWrap} aria-label="YouKnow app preview">
+              <MapArtwork />
+              <span className={styles.mapCoordinate} aria-hidden="true">47.3769° N · 8.5417° E</span>
               {FLOATING_TAGS.map((tag) => (
                 <span
                   className={`${styles.floatingTag} ${tag.className}`}
@@ -618,6 +674,10 @@ export default function Landing() {
             </div>
           </div>
         </div>
+        <div className={`container ${styles.heroBottom}`}>
+          <span>A little local knowledge. A whole new world.</span>
+          <a href="#how-it-works">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>
+        </div>
       </section>
 
       <form name="waitlist" method="POST" data-netlify="true" hidden>
@@ -637,7 +697,7 @@ export default function Landing() {
       <main className={styles.editorial}>
         <section className={styles.featureSection} id="how-it-works">
           <div className="container">
-            <div className={styles.featureIntro}>
+            <div className={styles.featureIntro} data-reveal>
               <span className={styles.sectionEyebrow}>How it works</span>
               <h2>No stars. No noise. Just the right places.</h2>
               <p>
@@ -646,48 +706,37 @@ export default function Landing() {
               </p>
             </div>
 
-            <div
-              className={styles.featureRail}
-              ref={featureRailRef}
-              onScroll={handleFeatureScroll}
-              aria-label="YouKnow app features"
-            >
-              {SCREEN_FEATURES.map((feature, index) => (
-                <article
-                  className={`${styles.featureCard} ${
-                    index === activeFeatureStart
-                      ? styles.featureCardActive
-                      : index === activeFeatureStart - 1 ||
-                          index === activeFeatureStart + 1
-                        ? styles.featureCardPreview
-                        : styles.featureCardHidden
-                  }`}
-                  key={feature.src}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => scrollFeatureTo(index)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      scrollFeatureTo(index)
-                    }
-                  }}
-                >
-                  <div className={styles.featurePhone}>
+            <div className={styles.featureStage}>
+              <div className={styles.showcaseSticky}>
+                <div className={styles.showcaseOrbit} aria-hidden="true" />
+                <div className={styles.showcasePhone} aria-label="YouKnow app showcase">
+                  {SCREEN_FEATURES.map((feature, index) => (
                     <img
-                      src={feature.src}
-                      alt={feature.alt}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      decoding="async"
+                      className={`${styles.showcaseScreen} ${index === activeFeatureStart ? styles.showcaseScreenActive : ''}`}
+                      src={feature.src} alt={feature.alt} key={feature.src}
+                      aria-hidden={index !== activeFeatureStart}
+                      loading={index === 0 ? 'eager' : 'lazy'} decoding="async"
                     />
-                  </div>
-                  <div className={styles.featureText}>
-                    <span>{feature.number}</span>
-                    <h3>{feature.title}</h3>
-                    <p>{feature.body}</p>
-                  </div>
-                </article>
-              ))}
+                  ))}
+                </div>
+                <div className={styles.showcaseControls} aria-label="Choose app feature">
+                  <button type="button" onClick={() => scrollFeatureTo(Math.max(0, activeFeatureStart - 1))} disabled={activeFeatureStart === 0} aria-label="Previous app feature">←</button>
+                  <span>{SCREEN_FEATURES[activeFeatureStart].number} <span>/ 06</span></span>
+                  <button type="button" onClick={() => scrollFeatureTo(Math.min(5, activeFeatureStart + 1))} disabled={activeFeatureStart === 5} aria-label="Next app feature">→</button>
+                </div>
+                <span className={styles.showcaseHint}>Scroll to get to know your map</span>
+              </div>
+              <div className={styles.featureSteps} ref={featureStepsRef}>
+                {SCREEN_FEATURES.map((feature, index) => (
+                  <article className={`${styles.featureStep} ${index === activeFeatureStart ? styles.featureStepActive : ''}`} data-feature-step key={feature.src}>
+                    <button type="button" className={styles.featureStepButton} aria-pressed={index === activeFeatureStart} onClick={() => scrollFeatureTo(index)}>
+                      <span className={styles.featureNumber}>{feature.number} <span aria-hidden="true">↗</span></span>
+                      <h3>{feature.title}</h3>
+                      <p>{feature.body}</p>
+                    </button>
+                  </article>
+                ))}
+              </div>
             </div>
 
             <Link className={styles.textLink} to="/tutorials">
@@ -699,16 +748,19 @@ export default function Landing() {
         <section className={`${styles.storySection} ${styles.searchSection}`}>
           <div className={`container ${styles.searchInner}`}>
             <div className={styles.queryPanel}>
-              <span className={styles.queryLabel}>Ask YouKnow</span>
+              <span className={styles.queryLabel}><Sparkle /> Ask YouKnow</span>
               <div className={styles.queryLine}>Find a place for...</div>
+              <div className={styles.queryPrompt} aria-live="polite" key={activeQuery}>{QUERY_PILLS[activeQuery]}<span aria-hidden="true">↗</span></div>
+              <p className={styles.queryHint}>A little inspiration. Pick your mood.</p>
               <div className={styles.queryPills}>
-                {QUERY_PILLS.map((query) => (
-                  <span key={query}>{query}</span>
+                {QUERY_PILLS.map((query, index) => (
+                  <button type="button" className={activeQuery === index ? styles.queryPillActive : ''} aria-pressed={activeQuery === index} onClick={() => setActiveQuery(index)} key={query}>{query}</button>
                 ))}
               </div>
+              <span className={styles.queryFootnote}>Search by vibe in the YouKnow app <span aria-hidden="true">✦</span></span>
             </div>
 
-            <div className={styles.storyCopy}>
+            <div className={styles.storyCopy} data-reveal>
               <span className={styles.sectionEyebrow}>Search by vibe</span>
               <h2 className={styles.searchHeadline}>Ask for a vibe, not a rating.</h2>
               <p>
@@ -721,7 +773,7 @@ export default function Landing() {
 
         <section className={styles.cityGuideSection} id="guides">
           <div className="container">
-            <div className={styles.cityGuideHeader}>
+            <div className={styles.cityGuideHeader} data-reveal>
               <div>
                 <span className={styles.sectionEyebrow}>Explore guides</span>
                 <h2>Guides for your next city.</h2>
@@ -733,12 +785,13 @@ export default function Landing() {
             </div>
 
             <div className={styles.cityGuideCities} aria-label="Available city guides">
-              {CITY_GUIDES.map((guide) => (
+              {CITY_GUIDES.map((guide, index) => (
                 <Link className={styles.cityGuideCityCard} to={guide.href} key={guide.href}>
                   <div className={styles.cityGuideCityTop}>
                     <span>YouKnow city guide</span>
-                    <span aria-hidden="true">{guide.icon}</span>
+                    <span className={styles.cityIndex} aria-hidden="true">0{index + 1} ↗</span>
                   </div>
+                  <CityArtwork city={guide.city} />
                   <div>
                     <h3>{guide.city}</h3>
                     <p>{guide.description}</p>
@@ -752,7 +805,7 @@ export default function Landing() {
 
         <section className={styles.storySection} id="curators">
           <div className={`container ${styles.curatorBand}`}>
-            <div className={styles.storyCopy}>
+            <div className={styles.storyCopy} data-reveal>
               <span className={styles.sectionEyebrow}>For curators</span>
               <h2>Built by people who know you.</h2>
               <p>
@@ -792,6 +845,8 @@ export default function Landing() {
                     className={styles.input}
                     type="text"
                     name="name"
+                    aria-label="Your name"
+                    autoComplete="name"
                     placeholder="Name"
                     value={curatorForm.name}
                     onChange={handleCuratorChange}
@@ -802,6 +857,8 @@ export default function Landing() {
                     className={styles.input}
                     type="email"
                     name="email"
+                    aria-label="Your email"
+                    autoComplete="email"
                     placeholder="Email"
                     value={curatorForm.email}
                     onChange={handleCuratorChange}
@@ -811,6 +868,7 @@ export default function Landing() {
                   <textarea
                     className={styles.textarea}
                     name="taste"
+                    aria-label="Why should people trust your taste?"
                     placeholder="Why should people trust your taste?"
                     value={curatorForm.taste}
                     onChange={handleCuratorChange}
@@ -843,7 +901,7 @@ export default function Landing() {
 
         <section className={styles.faqSection} id="faq" aria-labelledby="faq-heading">
           <div className={`container ${styles.faqInner}`}>
-            <div className={styles.faqIntro}>
+            <div className={styles.faqIntro} data-reveal>
               <span className={styles.sectionEyebrow}>Good to know</span>
               <h2 id="faq-heading">Questions, answered.</h2>
               <p>
@@ -869,7 +927,8 @@ export default function Landing() {
 
       <section className={styles.finalCta} id="download">
         <div className="container">
-          <div className={styles.finalCtaInner}>
+          <div className={styles.finalCtaInner} data-reveal>
+            <span className={styles.sectionEyebrow}>GOOD PLACES. BETTER COMPANY.</span>
             <h2>Start with a place you already love.</h2>
             <StoreButtons compact />
             <p className={styles.freeNote}>Free to download.</p>
@@ -895,6 +954,8 @@ export default function Landing() {
                 className={styles.input}
                 type="email"
                 name="email"
+                aria-label="Email for app updates"
+                autoComplete="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -910,7 +971,7 @@ export default function Landing() {
               </button>
             </form>
 
-            {toast && <p className={styles.toast}>{toast}</p>}
+            {toast && <p className={styles.toast} role="status">{toast}</p>}
           </div>
 
           <div className={styles.supportMark}>

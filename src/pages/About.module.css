@@ -1,18 +1,19 @@
 .page {
   min-height: 100vh;
-  overflow-x: hidden;
-  color: #141210;
-  background: #fbfaf7;
+  overflow-x: clip;
+  color: #171b1d;
+  background: #f7f7f2;
   --blue: #167dc4;
   --red: #e01c1c;
-  --muted: #6e6a64;
+  --muted: #646c70;
 }
 
 .nav {
-  position: relative;
-  z-index: 5;
-  padding: 18px 0;
-  background: rgba(255, 255, 255, 0.78);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: 15px 0;
+  background: rgba(247, 247, 242, .92);
   border-bottom: 1px solid rgba(20, 18, 16, 0.06);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -32,11 +33,10 @@
 
 .brandLogo {
   display: block;
-  width: 190px;
-  max-height: 58px;
+  width: 170px;
+  max-height: 50px;
   object-fit: contain;
   object-position: left center;
-  border-radius: 12px;
 }
 
 .navLinks,
@@ -45,8 +45,8 @@
   align-items: center;
   gap: clamp(14px, 2.2vw, 28px);
   color: #57514a;
-  font-size: 14px;
-  font-weight: 560;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .navLinks a,
@@ -73,17 +73,18 @@
   padding: 0 19px;
   border: 1px solid rgba(20, 18, 16, 0.1);
   border-radius: 999px;
-  background: #fff;
-  color: #141210;
-  box-shadow: 0 14px 36px rgba(29, 36, 43, 0.07);
+  background: #171b1d;
+  color: #fff;
+  box-shadow: none;
 }
+
+.navLinks .navCta:hover { background: var(--blue); color: white; }
 
 .hero {
   position: relative;
   padding: clamp(64px, 8vw, 112px) 0 clamp(86px, 11vw, 150px);
-  background:
-    radial-gradient(circle at 78% 26%, rgba(126, 198, 255, 0.34), transparent 29rem),
-    linear-gradient(180deg, #fff 0%, #f8fbfc 100%);
+  border-bottom: 1px solid rgba(23, 27, 29, .14);
+  background: #f7f7f2;
 }
 
 .heroInner {
@@ -99,8 +100,8 @@
 
 .kicker {
   margin: 0 0 17px;
-  color: var(--red);
-  font-size: 12px;
+  color: var(--blue);
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -111,13 +112,13 @@
 .page h3 {
   margin: 0;
   color: #0b0a09;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.055em;
 }
 
 .hero h1 {
   max-width: 680px;
   font-size: clamp(46px, 6.6vw, 86px);
-  font-weight: 540;
+  font-weight: 500;
   line-height: 0.96;
 }
 
@@ -144,6 +145,26 @@
 .heroVisual {
   position: relative;
   min-height: 590px;
+  isolation: isolate;
+}
+
+.heroVisual::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 10% -5% 4%;
+  border-radius: 50%;
+  background: #cde9ff;
+  border: 1px solid rgba(22, 125, 196, .14);
+}
+
+.heroVisual::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 2% -15% -4%;
+  border: 1px dashed rgba(22, 125, 196, .22);
+  border-radius: 50%;
 }
 
 .phone {
@@ -223,7 +244,7 @@
 }
 
 .problemSection {
-  background: #151412;
+  background: #171b1d;
   color: #f6f4ef;
 }
 
@@ -284,8 +305,9 @@
   min-height: 310px;
   padding: 28px;
   border: 1px solid rgba(20, 18, 16, 0.08);
-  border-radius: 26px;
-  background: #fbfaf7;
+  border-radius: 14px;
+  background: #f7f7f2;
+  transition: transform .3s, border-color .3s;
 }
 
 .principleCard > span {
@@ -311,9 +333,7 @@
 }
 
 .howSection {
-  background:
-    radial-gradient(circle at 90% 5%, rgba(135, 205, 255, 0.22), transparent 26rem),
-    #edf7ff;
+  background: #cde9ff;
 }
 
 .howInner {
@@ -346,7 +366,7 @@
 .factPanel {
   padding: clamp(28px, 4vw, 42px);
   border: 1px solid rgba(20, 18, 16, 0.08);
-  border-radius: 30px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.8);
   box-shadow: 0 28px 70px rgba(30, 74, 108, 0.1);
 }
@@ -393,8 +413,9 @@
 .personCard {
   padding: 26px;
   border: 1px solid rgba(20, 18, 16, 0.08);
-  border-radius: 25px;
-  background: #fbfaf7;
+  border-radius: 14px;
+  background: #f7f7f2;
+  transition: transform .3s, border-color .3s;
 }
 
 .avatar {
@@ -475,9 +496,7 @@
 .finalCta {
   color: #fff;
   text-align: center;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(22, 125, 196, 0.36), transparent 28rem),
-    #141210;
+  background: #171b1d;
 }
 
 .finalCta h2 {
@@ -536,7 +555,22 @@
   border-radius: 8px;
 }
 
+.page section[id] { scroll-margin-top: 95px; }
+.page :is(a, button):focus-visible { outline: 3px solid var(--blue); outline-offset: 5px; }
+.principleCard:hover, .personCard:hover { transform: translateY(-5px); border-color: #167dc450; }
+@keyframes enterSection { from { opacity: .3; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sectionIntro, .principleCard, .personCard, .splitSection, .howCopy {
+      animation: enterSection linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
 @media (prefers-reduced-motion: reduce) {
+  .page *, .page *::before, .page *::after { animation: none !important; transition: none !important; }
+  .principleCard:hover, .personCard:hover { transform: none; }
   .navLinks a,
   .footerLinks a,
   .textLink,

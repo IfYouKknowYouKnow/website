@@ -560,3 +560,7 @@ input, button {
   .city-related-links { grid-template-columns: 1fr; }
   .city-footer-inner { flex-wrap: wrap; padding-top: 30px; padding-bottom: 30px; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

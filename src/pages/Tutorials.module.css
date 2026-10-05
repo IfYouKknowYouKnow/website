@@ -1,12 +1,17 @@
 .page {
   min-height: 100vh;
   color: #171513;
-  background:
-    linear-gradient(180deg, #fff 0%, #fbfaf7 58%, #f5f1eb 100%);
+  background: #f7f7f2;
 }
 
 .nav {
-  padding: 18px 0;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(23, 27, 29, .14);
+  background: rgba(247, 247, 242, .92);
+  backdrop-filter: blur(20px);
 }
 
 .navInner {
@@ -23,13 +28,12 @@
 
 .brandLogo {
   display: block;
-  width: 132px;
+  width: 170px;
   height: auto;
-  max-height: 39px;
+  max-height: 50px;
   object-fit: contain;
   object-position: left center;
-  border-radius: 8px;
-}
+  }
 
 .navLink {
   display: inline-flex;
@@ -39,8 +43,8 @@
   padding: 0 16px;
   border: 1px solid rgba(23, 21, 19, 0.1);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.76);
-  color: #171513;
+  background: #171b1d;
+  color: white;
   font-size: 13px;
   font-weight: 700;
 }
@@ -55,7 +59,7 @@
 
 .kicker {
   margin-bottom: 16px;
-  color: #e01c1c;
+  color: #167dc4;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -67,8 +71,8 @@
   margin: 0;
   color: #141210;
   font-size: clamp(42px, 7vw, 72px);
-  font-weight: 820;
-  letter-spacing: 0;
+  font-weight: 500;
+  letter-spacing: -.055em;
   line-height: 0.98;
 }
 
@@ -90,9 +94,9 @@
 .panel {
   overflow: hidden;
   border: 1px solid rgba(23, 21, 19, 0.08);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 18px 54px rgba(42, 35, 28, 0.06);
+  border-radius: 14px;
+  background: white;
+  transition: border-color .25s;
 }
 
 .panel summary {
@@ -104,7 +108,7 @@
   padding: 0 22px;
   color: #171513;
   font-size: 18px;
-  font-weight: 780;
+  font-weight: 500;
   cursor: pointer;
   list-style: none;
 }
@@ -142,6 +146,7 @@
 }
 
 .panel[open] .summaryIcon {
+  background: #cde9ff;
   transform: rotate(45deg);
 }
 
@@ -251,3 +256,7 @@
     max-height: 58vh;
   }
 }
+
+.panel:hover, .panel[open] { border-color: #167dc450; }
+.page :is(a, summary):focus-visible { outline: 3px solid #167dc4; outline-offset: 5px; }
+@media (prefers-reduced-motion: reduce) { .page *, .page *::before, .page *::after { transition: none !important; } }
