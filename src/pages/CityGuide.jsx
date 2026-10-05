@@ -204,7 +204,7 @@ export default function CityGuide() {
       <header className="city-nav">
         <div className="container city-nav-inner">
           <Link to="/" aria-label="YouKnow home">
-            <img src="/long_logo.png" alt="YouKnow" />
+            <img src="/youknow-wordmark-blue.svg" alt="YouKnow" />
           </Link>
           <nav aria-label="Guide navigation">
             <Link to="/about">About</Link>

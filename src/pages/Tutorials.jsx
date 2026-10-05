@@ -89,7 +89,7 @@ export default function Tutorials() {
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/long_logo.png"
+              src="/youknow-wordmark-blue.svg"
               alt="YouKnow"
               decoding="async"
             />

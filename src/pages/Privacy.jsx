@@ -11,7 +11,7 @@ export default function Privacy() {
           <Link to="/" className={styles.logo} aria-label="YouKnow home">
             <img
               className={styles.logoImage}
-              src="/long_logo.png"
+              src="/youknow-wordmark-blue.svg"
               alt="YouKnow"
               decoding="async"
             />

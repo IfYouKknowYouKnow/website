@@ -1,4 +1,6 @@
 :root {
+  --brand-blue: #86c6fd;
+  --brand-blue-rgb: 134, 198, 253;
   color-scheme: light;
   --ink: #171717;
   --muted: #6f706b;
@@ -7,7 +9,7 @@
   --line: rgba(23, 23, 23, 0.09);
   --shadow: 0 24px 80px rgba(28, 28, 24, 0.14);
   --accent: #c13a96;
-  --accent-2: #95d8f6;
+  --accent-2: var(--brand-blue);
 }
 
 * {
@@ -21,10 +23,11 @@ body {
 
 body {
   margin: 0;
+  font-size: 19.2px;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(149, 216, 246, 0.32), transparent 34rem),
+    radial-gradient(circle at top left, rgba(var(--brand-blue-rgb), 0.32), transparent 34rem),
     radial-gradient(circle at bottom right, rgba(193, 58, 150, 0.18), transparent 30rem),
     var(--paper);
 }
@@ -53,6 +56,7 @@ body {
 }
 
 .brand-logo {
+  border-radius: 14px;
   width: 154px;
   max-height: 86px;
   object-fit: contain;
@@ -73,15 +77,17 @@ body {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.68);
   color: #474842;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 800;
   letter-spacing: 0;
 }
 
 h1 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
   max-width: 660px;
   margin: 0;
-  font-size: clamp(46px, 7vw, 86px);
+  font-size: clamp(55.2px, 8.4vw, 103.2px);
   line-height: 0.92;
   letter-spacing: 0;
 }
@@ -90,7 +96,7 @@ h1 {
   max-width: 570px;
   margin: 22px 0 0;
   color: var(--muted);
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: clamp(19.2px, 2.4vw, 24px);
   font-weight: 700;
   line-height: 1.45;
 }
@@ -107,7 +113,9 @@ h1 {
   border: 0;
   border-radius: 999px;
   min-height: 52px;
-  padding: 0 21px;
+  max-width: 100%;
+  padding: 12px 21px;
+  text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -117,7 +125,7 @@ h1 {
   box-shadow: 0 14px 30px rgba(17, 17, 17, 0.18);
   text-decoration: none;
   font: inherit;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 900;
   cursor: pointer;
 }
@@ -141,7 +149,7 @@ h1 {
   background: rgba(255, 255, 255, 0.74);
   border: 1px solid var(--line);
   color: #4b4c47;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 800;
 }
 
@@ -157,13 +165,13 @@ h1 {
   color: var(--ink);
   background: #fff;
   font: inherit;
-  font-size: 12px;
+  font-size: 14.4px;
   font-weight: 900;
   cursor: pointer;
 }
 
 .copy-code:focus-visible {
-  outline: 3px solid rgba(149, 216, 246, 0.7);
+  outline: 3px solid rgba(var(--brand-blue-rgb), 0.7);
   outline-offset: 2px;
 }
 
@@ -211,14 +219,14 @@ h1 {
 
 .floating-card .title {
   margin: 0;
-  font-size: 17px;
+  font-size: 20.4px;
   font-weight: 950;
 }
 
 .floating-card .text {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 700;
   line-height: 1.35;
 }
@@ -227,7 +235,7 @@ h1 {
   margin-top: 18px;
   min-height: 20px;
   color: #7b7c75;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 700;
 }
 

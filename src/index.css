@@ -5,6 +5,8 @@
 }
 
 :root {
+  --brand-blue: #86c6fd;
+  --brand-blue-rgb: 134, 198, 253;
   --bg: #090909;
   --surface: #111111;
   --surface-2: #1a1a1a;
@@ -24,6 +26,7 @@ html {
 }
 
 body {
+  font-size: 19.2px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
@@ -61,9 +64,19 @@ input, button {
   color: #11110f;
   --city-ink: #11110f;
   --city-muted: #68665f;
-  --city-blue: #cde9ff;
+  --city-blue: var(--brand-blue);
   --city-accent: #ff6339;
   --city-line: rgba(17, 17, 15, 0.14);
+}
+
+.city-page :is(h1, h2, h3) {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.city-editorial-inner > *,
+.city-faq-grid > * {
+  min-width: 0;
 }
 
 .city-nav {
@@ -98,7 +111,7 @@ input, button {
   align-items: center;
   gap: 24px;
   color: #525048;
-  font-size: 14px;
+  font-size: 16.8px;
   font-weight: 600;
 }
 
@@ -131,7 +144,7 @@ input, button {
   display: inline-block;
   margin-bottom: 30px;
   color: #55534c;
-  font-size: 14px;
+  font-size: 16.8px;
   font-weight: 650;
 }
 
@@ -140,7 +153,7 @@ input, button {
 .city-continue-count {
   margin: 0 0 18px;
   color: #6a675f;
-  font-size: 12px;
+  font-size: 14.4px;
   font-weight: 750;
   letter-spacing: 0.12em;
   line-height: 1.4;
@@ -150,7 +163,7 @@ input, button {
 .city-hero h1 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(48px, 7vw, 86px);
+  font-size: clamp(57.6px, 8.4vw, 103.2px);
   font-weight: 520;
   letter-spacing: -0.055em;
   line-height: 0.98;
@@ -160,7 +173,7 @@ input, button {
   max-width: 660px;
   margin: 28px 0 34px;
   color: #4f4d47;
-  font-size: clamp(19px, 2.1vw, 24px);
+  font-size: clamp(22.8px, 2.52vw, 28.8px);
   line-height: 1.5;
 }
 
@@ -173,7 +186,7 @@ input, button {
   border-radius: 999px;
   background: var(--city-ink);
   color: white;
-  font-size: 14px;
+  font-size: 16.8px;
   font-weight: 700;
   transition: transform 0.18s ease, background 0.18s ease;
 }
@@ -223,7 +236,7 @@ input, button {
   border-radius: 28px 28px 28px 7px;
   background: white;
   box-shadow: 0 20px 50px rgba(33, 70, 94, 0.18);
-  font-size: 31px;
+  font-size: 37.2px;
   transform: rotate(-8deg);
 }
 
@@ -254,7 +267,7 @@ input, button {
 .city-faq h2,
 .city-continue h2 {
   margin: 0;
-  font-size: clamp(34px, 4.6vw, 58px);
+  font-size: clamp(40.8px, 5.52vw, 69.6px);
   font-weight: 520;
   letter-spacing: -0.045em;
   line-height: 1.04;
@@ -262,7 +275,7 @@ input, button {
 
 .city-section-heading > p:last-child {
   color: var(--city-muted);
-  font-size: 17px;
+  font-size: 20.4px;
   line-height: 1.65;
 }
 
@@ -288,7 +301,7 @@ input, button {
   border-right: 1px solid var(--city-line);
   background:
     radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.9), transparent 18%),
-    linear-gradient(145deg, #d4edff, #f3e6c7);
+    linear-gradient(145deg, color-mix(in srgb, var(--brand-blue), white 65%), #f3e6c7);
 }
 
 .city-place-card:nth-child(2) .city-place-visual {
@@ -304,7 +317,7 @@ input, button {
 }
 
 .city-place-card:nth-child(5) .city-place-visual {
-  background: linear-gradient(145deg, #e8d9cc, #dce7fb);
+  background: linear-gradient(145deg, #e8d9cc, color-mix(in srgb, var(--brand-blue), white 75%));
 }
 
 .city-place-visual span {
@@ -315,7 +328,7 @@ input, button {
   border-radius: 32px;
   background: rgba(255, 255, 255, 0.76);
   box-shadow: 0 20px 40px rgba(51, 48, 40, 0.12);
-  font-size: 44px;
+  font-size: 52.8px;
 }
 
 .city-place-copy {
@@ -329,7 +342,7 @@ input, button {
 
 .city-place-copy h3 {
   margin: 0;
-  font-size: clamp(28px, 3.5vw, 44px);
+  font-size: clamp(33.6px, 4.2vw, 52.8px);
   font-weight: 540;
   letter-spacing: -0.035em;
   line-height: 1.08;
@@ -338,14 +351,14 @@ input, button {
 .city-place-address {
   margin-top: 10px;
   color: #777269;
-  font-size: 14px;
+  font-size: 16.8px;
 }
 
 .city-place-description {
   max-width: 760px;
   margin-top: 22px;
   color: #4e4c46;
-  font-size: 16px;
+  font-size: 19.2px;
   line-height: 1.7;
 }
 
@@ -364,7 +377,7 @@ input, button {
   border-radius: 999px;
   background: #faf9f5;
   color: #555149;
-  font-size: 12px;
+  font-size: 14.4px;
   font-weight: 650;
 }
 
@@ -373,7 +386,7 @@ input, button {
   margin-top: 26px;
   border-bottom: 1px solid currentColor;
   color: var(--city-ink);
-  font-size: 14px;
+  font-size: 16.8px;
   font-weight: 750;
 }
 
@@ -391,19 +404,19 @@ input, button {
 
 .city-continue h2 {
   max-width: 650px;
-  font-size: clamp(32px, 4vw, 50px);
+  font-size: clamp(38.4px, 4.8vw, 60px);
   color: white;
 }
 
 .city-continue-count {
-  color: #9bd0f8;
+  color: var(--brand-blue);
 }
 
 .city-continue div > p:last-child {
   max-width: 670px;
   margin-top: 18px;
   color: #bdbdb5;
-  font-size: 17px;
+  font-size: 20.4px;
 }
 
 .city-continue-button {
@@ -423,7 +436,7 @@ input, button {
 }
 
 .city-editorial-tint {
-  background: #edf6fc;
+  background: color-mix(in srgb, var(--brand-blue), white 90%);
 }
 
 .city-editorial-inner {
@@ -434,7 +447,7 @@ input, button {
 
 .city-section-number {
   color: #99958b;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -446,7 +459,7 @@ input, button {
 .city-editorial-inner > div > p {
   margin-top: 28px;
   color: #56534d;
-  font-size: 19px;
+  font-size: 22.8px;
   line-height: 1.72;
 }
 
@@ -472,7 +485,7 @@ input, button {
   border: 1px solid rgba(17, 17, 15, 0.16);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.55);
-  font-size: 17px;
+  font-size: 20.4px;
   font-weight: 650;
   transition: background 0.18s ease, transform 0.18s ease;
 }
@@ -507,7 +520,7 @@ input, button {
   justify-content: space-between;
   gap: 20px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20.4px;
   font-weight: 650;
   list-style: none;
 }
@@ -530,7 +543,7 @@ input, button {
 
 .city-footer-inner > p {
   color: var(--city-muted);
-  font-size: 14px;
+  font-size: 16.8px;
 }
 
 .city-not-found {
@@ -544,13 +557,13 @@ input, button {
 }
 
 @media (max-width: 800px) {
-  .city-nav-inner { min-height: 72px; }
-  .city-nav img, .city-footer img { width: 145px; height: 48px; }
+  .city-nav-inner { min-height: 72px; gap: 12px; }
+  .city-nav img, .city-footer img { width: 132px; height: 48px; }
   .city-nav nav > a:first-child { display: none; }
   .city-hero { background: linear-gradient(160deg, #f7f6f1 0 70%, var(--city-blue) 70%); }
   .city-hero-inner { grid-template-columns: 1fr; min-height: auto; padding-top: 56px; padding-bottom: 40px; }
   .city-hero-art { min-height: 250px; }
-  .city-art-pin { width: 65px; height: 65px; border-radius: 22px 22px 22px 6px; font-size: 26px; }
+  .city-art-pin { width: 65px; height: 65px; border-radius: 22px 22px 22px 6px; font-size: 31.2px; }
   .city-places-section, .city-related, .city-faq { padding: 76px 0; }
   .city-section-heading, .city-place-card, .city-continue, .city-editorial-inner, .city-faq-grid { grid-template-columns: 1fr; }
   .city-section-heading .city-eyebrow { margin-bottom: 0; }
@@ -563,4 +576,10 @@ input, button {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+}
+
+/* Keep the original blue wordmark with softer corners everywhere it appears. */
+img[src="/long_logo.png"],
+img[src="/images/youknow-wordmark.png"] {
+  border-radius: 14px;
 }

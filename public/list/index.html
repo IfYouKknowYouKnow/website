@@ -28,7 +28,7 @@
     body {
       background:
         radial-gradient(circle at 12% 8%, rgba(255, 182, 224, .26), transparent 26rem),
-        radial-gradient(circle at 88% 92%, rgba(149, 216, 246, .22), transparent 28rem),
+        radial-gradient(circle at 88% 92%, rgba(var(--brand-blue-rgb), .22), transparent 28rem),
         #fff;
     }
 
@@ -44,6 +44,10 @@
       justify-content: space-between;
       gap: 18px;
       margin-bottom: 34px;
+    }
+
+    .list-header .button {
+      padding-inline: 14px;
     }
 
     .list-header .brand-logo {
@@ -67,7 +71,7 @@
       gap: 10px;
       margin-bottom: 18px;
       color: #52534e;
-      font-size: 14px;
+      font-size: 16.8px;
       font-weight: 800;
     }
 
@@ -90,14 +94,14 @@
 
     .list-copy h1 {
       max-width: 560px;
-      font-size: clamp(40px, 7vw, 72px);
+      font-size: clamp(48px, 8.4vw, 86.4px);
       line-height: .98;
     }
 
     .list-meta {
       margin: 18px 0 0;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 19.2px;
       font-weight: 800;
     }
 
@@ -131,7 +135,7 @@
       overflow: hidden;
       border-radius: 15px;
       background: #e9eae6;
-      font-size: 32px;
+      font-size: 38.4px;
     }
 
     .place-image img {
@@ -142,7 +146,7 @@
 
     .place-name {
       margin: 0;
-      font-size: 17px;
+      font-size: 20.4px;
       font-weight: 950;
       line-height: 1.2;
     }
@@ -150,7 +154,7 @@
     .place-city {
       margin: 7px 0 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 15.6px;
       font-weight: 750;
     }
 
@@ -162,7 +166,7 @@
 
     .list-cta p {
       margin: 0 0 13px;
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 900;
     }
 
@@ -194,7 +198,7 @@
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 900px) {
       .list-page {
         padding-top: 22px;
       }
@@ -213,7 +217,7 @@
       }
 
       .list-copy h1 {
-        font-size: clamp(38px, 12vw, 58px);
+        font-size: clamp(45.6px, 14.4vw, 69.6px);
       }
 
       .list-card {
@@ -234,7 +238,7 @@
 <body>
   <main class="list-page">
     <header class="list-header">
-      <img class="brand-logo" src="/images/youknow-wordmark.png" alt="YouKnow">
+      <img class="brand-logo" src="/youknow-wordmark-blue.svg" alt="YouKnow">
       <a class="button secondary" id="open-app-top" href="#">Open in app</a>
     </header>
 

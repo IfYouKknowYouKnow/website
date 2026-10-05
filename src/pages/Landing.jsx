@@ -19,7 +19,7 @@ const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
 const FLOATING_TAGS = [
   { text: 'Cute brunch spot', className: styles.floatOne, dotColor: '#e01c1c' },
   { text: 'Natural wine in Zurich', className: styles.floatTwo, dotColor: '#16834a' },
-  { text: 'Saved by friends', className: styles.floatThree, dotColor: '#2f6eea' },
+  { text: 'Saved by friends', className: styles.floatThree, dotColor: 'var(--brand-blue)' },
   { text: 'Date night', className: styles.floatFour, dotColor: '#d36b17' },
   { text: 'Hidden terrace', className: styles.floatFive, dotColor: '#9b4de3' },
   { text: 'Friend-approved', className: styles.floatSix, dotColor: '#00a6a6' },
@@ -85,8 +85,8 @@ function MapArtwork() {
     <rect width="640" height="740" fill="url(#map-grid)" />
     <path d="M420-20c-120 140 70 240-80 370S390 610 250 760" stroke="white" strokeOpacity=".5" strokeWidth="76" />
     <g stroke="currentColor" strokeOpacity=".18" strokeWidth="1.5"><path d="M-20 120 660 310M-20 400l680-80M110-20l160 780M500-20 410 760M-20 620l680-100" /><circle cx="320" cy="340" r="250" /><circle cx="320" cy="340" r="190" strokeDasharray="3 9" /></g>
-    <path d="m90 480 115-180 230 95 100-200" stroke="#167dc4" strokeWidth="2" strokeDasharray="6 8" />
-    {[ [90,480], [205,300], [435,395], [535,195] ].map(([x,y],i) => <g key={i}><circle cx={x} cy={y} r="16" fill="#167dc4" fillOpacity=".12" /><circle cx={x} cy={y} r="5" fill="#167dc4" /></g>)}
+    <path d="m90 480 115-180 230 95 100-200" stroke="var(--brand-blue)" strokeWidth="2" strokeDasharray="6 8" />
+    {[ [90,480], [205,300], [435,395], [535,195] ].map(([x,y],i) => <g key={i}><circle cx={x} cy={y} r="16" fill="var(--brand-blue)" fillOpacity=".12" /><circle cx={x} cy={y} r="5" fill="var(--brand-blue)" /></g>)}
   </svg>
 }
 
@@ -570,7 +570,7 @@ export default function Landing() {
           <a className={styles.brand} href="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/long_logo.png"
+              src="/youknow-wordmark-blue.svg"
               alt="YouKnow"
               decoding="async"
             />
@@ -597,7 +597,7 @@ export default function Landing() {
           <div className={styles.heroInner}>
             <div className={styles.copy}>
               <span className={styles.heroEyebrow}>YOUR PEOPLE. YOUR PLACES.</span>
-              <h1>The Map Curated by <em>People YouKnow.</em></h1>
+              <h1>The Map Curated by People <em>YouKnow.</em></h1>
               <p className={styles.subhead}>
                 Skip the endless searching. Find restaurants, bars, cafes and nights
                 out through friends and connoisseurs who share your taste.

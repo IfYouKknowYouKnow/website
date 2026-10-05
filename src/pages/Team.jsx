@@ -14,7 +14,7 @@ const COFOUNDERS = [
     name: 'Fabio Baldini',
     role: 'Co-founder',
     initials: 'FB',
-    accent: '#167dc4',
+    accent: 'var(--brand-blue)',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',
     bio: 'Vision, Concept & Business Development.',
   },
@@ -54,7 +54,7 @@ export default function Team() {
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/long_logo.png"
+              src="/youknow-wordmark-blue.svg"
               alt="YouKnow"
               decoding="async"
             />

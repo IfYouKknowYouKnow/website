@@ -61,7 +61,7 @@
 .kicker {
   margin-bottom: 16px;
   color: #e01c1c;
-  font-size: 12px;
+  font-size: 14.4px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -71,7 +71,7 @@
   max-width: 680px;
   margin: 0;
   color: #141210;
-  font-size: clamp(42px, 7vw, 78px);
+  font-size: clamp(50.4px, 8.4vw, 93.6px);
   font-weight: 820;
   letter-spacing: 0;
   line-height: 0.96;
@@ -81,7 +81,7 @@
   max-width: 520px;
   margin-top: 22px;
   color: #6f6961;
-  font-size: clamp(17px, 2vw, 20px);
+  font-size: clamp(20.4px, 2.4vw, 24px);
   font-weight: 450;
   line-height: 1.55;
 }
@@ -96,7 +96,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.72);
   color: #6f6961;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 720;
   box-shadow: 0 12px 30px rgba(38, 31, 25, 0.06);
 }
@@ -122,7 +122,7 @@
   min-height: 48px;
   padding: 0 22px;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 16.8px;
   font-weight: 760;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
@@ -177,7 +177,7 @@
   min-height: 20px;
   margin-top: 18px;
   color: #8b857e;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 650;
 }
 
@@ -232,7 +232,7 @@
 
 .floatCard p {
   color: #24211e;
-  font-size: 17px;
+  font-size: 20.4px;
   font-weight: 820;
 }
 
@@ -240,7 +240,7 @@
   display: block;
   margin-top: 7px;
   color: #6f6961;
-  font-size: 13px;
+  font-size: 15.6px;
   font-weight: 650;
   line-height: 1.42;
 }
@@ -318,7 +318,7 @@
   }
 
   .copy h1 {
-    font-size: clamp(38px, 12vw, 54px);
+    font-size: clamp(45.6px, 14.4vw, 64.8px);
     line-height: 1;
   }
 

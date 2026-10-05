@@ -20,7 +20,7 @@ const TEAM = [
     role: 'Co-founder',
     focus: 'Vision, Concept & Business Development',
     initials: 'FB',
-    accent: '#167dc4',
+    accent: 'var(--brand-blue)',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',
   },
 ]
@@ -64,7 +64,7 @@ export default function About() {
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
-            <img className={styles.brandLogo} src="/long_logo.png" alt="YouKnow" />
+            <img className={styles.brandLogo} src="/youknow-wordmark-blue.svg" alt="YouKnow" />
           </Link>
 
           <div className={styles.navLinks} aria-label="Primary">
