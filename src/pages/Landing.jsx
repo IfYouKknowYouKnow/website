@@ -776,7 +776,7 @@ export default function Landing() {
             <div className={styles.cityGuideHeader} data-reveal>
               <div>
                 <span className={styles.sectionEyebrow}>Explore guides</span>
-                <h2>Guides for your next city.</h2>
+                <h2>Guides for your next city trip.</h2>
               </div>
               <p>
                 Choose a city to open its guide. Each one starts with five real
