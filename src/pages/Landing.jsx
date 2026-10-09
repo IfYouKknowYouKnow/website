@@ -27,38 +27,57 @@ const FLOATING_TAGS = [
 
 const SCREEN_FEATURES = [
   {
+    id: 'map',
     src: '/images/IMG_6338.PNG',
     title: 'Start with the living map',
     body: 'Explore places recommended by people you trust. Narrow your map by friends, food, drinks, coffee or what is open now.',
   },
   {
+    id: 'cities',
     src: '/images/IMG_6350.PNG',
     title: 'Explore any city',
     body: 'Drop into Zurich, Milan, Paris or wherever you are headed, and see the places the community actually recommends.',
   },
   {
+    id: 'friends',
     src: '/images/IMG_6337.PNG',
     title: 'See what friends recommend',
     body: 'Explore your feed for friends’ recommendations, recent pictures and the community’s top curators.',
   },
   {
+    id: 'social-sharing',
+    title: 'Save places from Instagram & TikTok',
+    body: 'Turn a place you discover while scrolling into somewhere you can actually go. Share it straight into YouKnow to find the location and keep it on your map.',
+    steps: [
+      'Find a restaurant, bar or café on Instagram or TikTok. Tap Share and choose YouKnow.',
+      'YouKnow opens and suggests the likeliest matching places. Check the result to choose the right one.',
+      'Save the place to your map, ready for your next plan.',
+    ],
+    src: '/images/social-sharing-demo.gif',
+    animationStill: '/images/social-sharing-poster.png',
+    alt: 'Animation showing sharing an Instagram post into YouKnow, confirming the place, and saving it to your map.',
+  },
+  {
+    id: 'saved',
     src: '/images/IMG_6339.PNG',
     title: 'Organize your own recommendations',
     body: 'Keep your saved and want-to-go places together on your profile, and browse them by city, category or distance.',
   },
   {
+    id: 'place',
     src: '/images/IMG_6342.PNG',
     title: 'Get to know a place',
     body: 'See photos and who saved a place, check the details, then save it for later or get directions.',
   },
   {
+    id: 'ai-search',
     src: '/images/IMG_6327.PNG',
     title: 'Search by vibe with AI',
     body: 'Describe what you have in mind. Get recommendations from your map and ask follow-up questions to find the right place.',
   },
 ].map((feature, index) => ({
   ...feature,
-  alt: `YouKnow app screenshot showing ${feature.title.toLowerCase()}.`,
+  alt: feature.alt || `YouKnow app screenshot showing ${feature.title.toLowerCase()}.`,
   number: String(index + 1).padStart(2, '0'),
 }))
 
@@ -67,6 +86,45 @@ const HERO_SCREENSHOTS = [
   SCREEN_FEATURES[1],
   SCREEN_FEATURES[2],
 ]
+
+const HERO_BACK_SCREENSHOT = SCREEN_FEATURES.find((feature) => feature.id === 'place')
+
+function AnimatedFeaturePreview({ feature, className }) {
+  const [isPaused, setIsPaused] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = (event) => setIsPaused(event.matches)
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [])
+
+  return (
+    <figure className={className}>
+      <img className={styles.featureAnimationImage}
+        src={isPaused ? feature.animationStill : feature.src}
+        alt={feature.alt} width="320" height="707" loading="lazy" decoding="async" />
+      <button className={styles.featureAnimationToggle} type="button"
+        aria-label={isPaused ? 'Play sharing animation' : 'Pause sharing animation'}
+        onClick={() => setIsPaused((paused) => !paused)}>
+        {isPaused ? 'Play' : 'Pause'}
+      </button>
+    </figure>
+  )
+}
+
+function FeaturePreview({ feature, className, active = true }) {
+  if (feature.animationStill) {
+    return active ? <AnimatedFeaturePreview feature={feature} className={className} /> : null
+  }
+
+  return (
+    <img className={className} src={feature.src} alt={feature.alt}
+      aria-hidden={!active} loading="lazy" decoding="async" />
+  )
+}
 
 const QUERY_PILLS = [
   'cozy bar for a first date',
@@ -615,7 +673,7 @@ export default function Landing() {
               ))}
 
               <div className={styles.heroBackPhone} aria-hidden="true">
-                <img src={SCREEN_FEATURES[4].src} alt="" decoding="async" />
+                <img src={HERO_BACK_SCREENSHOT.src} alt="" decoding="async" />
               </div>
               <div className={styles.phoneShell}>
                 <div
@@ -694,11 +752,11 @@ export default function Landing() {
                 <span className={styles.showcaseKicker}>A little look inside</span>
                 <div className={styles.showcasePhone} aria-label="YouKnow app showcase">
                   {SCREEN_FEATURES.map((feature, index) => (
-                    <img
+                    <FeaturePreview
+                      feature={feature}
                       className={`${styles.showcaseScreen} ${index === activeFeature ? styles.showcaseScreenActive : ''}`}
-                      src={feature.src} alt={feature.alt} key={feature.src}
-                      aria-hidden={index !== activeFeature}
-                      loading="lazy" decoding="async"
+                      key={feature.id}
+                      active={index === activeFeature}
                     />
                   ))}
                 </div>
@@ -710,7 +768,7 @@ export default function Landing() {
               </div>
               <div className={styles.featureSteps}>
                 {SCREEN_FEATURES.map((feature, index) => (
-                  <article className={`${styles.featureStep} ${index === activeFeature ? styles.featureStepActive : ''}`} key={feature.src}>
+                  <article className={`${styles.featureStep} ${index === activeFeature ? styles.featureStepActive : ''}`} key={feature.id}>
                     <h3>
                       <button type="button" className={styles.featureStepButton}
                         aria-expanded={index === activeFeature} aria-controls={`feature-panel-${index}`}
@@ -722,7 +780,14 @@ export default function Landing() {
                     </h3>
                     <div id={`feature-panel-${index}`} hidden={index !== activeFeature} className={styles.featureDescription}>
                       <p>{feature.body}</p>
-                      <img className={styles.featureMobileScreen} src={feature.src} alt={feature.alt} loading="lazy" decoding="async" />
+                      {feature.steps && (
+                        <ol className={styles.sharingSteps}>
+                          {feature.steps.map((step) => <li key={step}>{step}</li>)}
+                        </ol>
+                      )}
+                      {index === activeFeature && (
+                        <FeaturePreview feature={feature} className={styles.featureMobileScreen} />
+                      )}
                       <a href="#download">Try it in YouKnow <span aria-hidden="true">↗</span></a>
                     </div>
                   </article>

@@ -97,8 +97,11 @@
 .showcaseOrbit::before, .showcaseOrbit::after { content: ''; position: absolute; inset: 12%; border: 1px dashed var(--brand-blue); border-radius: 50%; }
 .showcaseOrbit::after { inset: -14%; border-style: solid; border-color: var(--brand-blue); }
 .showcasePhone { position: relative; width: 240px; aspect-ratio: 1290 / 2796; padding: 6px; border: 6px solid #22282b; border-radius: 38px; background: white; box-shadow: 0 26px 55px #17334c22, 0 0 0 1px #ffffff; overflow: hidden; }
-.showcaseScreen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .4s, transform .6s; }
-.showcaseScreenActive { opacity: 1; transform: scale(1); }
+.showcaseScreen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; transform: scale(1.04); transition: opacity .4s, transform .6s; }
+.showcaseScreenActive { z-index: 1; opacity: 1; pointer-events: auto; transform: scale(1); }
+.featureAnimationImage { display: block; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.featureAnimationToggle { position: absolute; right: 8px; bottom: 10px; min-height: 32px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fffffff0; color: var(--ink); font-size: 12px; cursor: pointer; }
+.featureAnimationToggle:hover { background: var(--blue-mist); }
 .showcaseControls { display: flex; align-items: center; gap: 35px; z-index: 1; margin-top: 25px; font-size: 14.4px; font-variant-numeric: tabular-nums; }
 .showcaseControls > span > span { color: var(--muted); margin-left: 3px; }
 .showcaseControls button { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; transition: background .2s; }
@@ -115,6 +118,9 @@
 .featureStepActive .featureToggle { background: var(--ink); border-color: var(--ink); color: white; }
 .featureDescription { padding: 0 36px 28px; animation: promptIn .3s ease-out; }
 .featureDescription p { color: var(--muted); font-size: 17px; line-height: 1.7; }
+.sharingSteps { display: grid; gap: 12px; margin-top: 20px; padding-left: 21px; color: var(--muted); font-size: 15px; line-height: 1.65; }
+.sharingSteps li { padding-left: 5px; }
+.sharingSteps li::marker { color: var(--blue); font-weight: 600; }
 .featureDescription a { display: inline-flex; align-items: center; gap: 22px; margin-top: 18px; font-size: 14px; font-weight: 500; color: var(--blue); }
 .featureMobileScreen { display: none; }
 .featureFooter { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 32px; color: var(--muted); font-size: 14px; }
@@ -343,7 +349,7 @@
   .featureStep h3 { font-size: 23px; }
   .featureDescription { padding: 0 0 25px 28px; }
   .featureDescription p { font-size: 16px; }
-  .featureMobileScreen { display: block; width: 190px; height: auto; margin: 24px auto; border: 5px solid #22282b; border-radius: 29px; box-shadow: 0 12px 30px #17334c18; }
+  .featureMobileScreen { position: relative; display: block; width: 190px; height: auto; margin: 24px auto; border: 5px solid #22282b; border-radius: 29px; overflow: hidden; box-shadow: 0 12px 30px #17334c18; }
   .featureFooter { flex-direction: column; align-items: flex-start; }
   .searchInner { grid-template-columns: 1fr; gap: 35px; }
   .searchInner .storyCopy { grid-row: 1; }
