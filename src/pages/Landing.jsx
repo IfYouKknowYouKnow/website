@@ -17,12 +17,12 @@ const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
 const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
 
 const FLOATING_TAGS = [
-  { text: 'Cute brunch spot', className: styles.floatOne, dotColor: '#e01c1c' },
-  { text: 'Natural wine in Zurich', className: styles.floatTwo, dotColor: '#16834a' },
+  { text: 'Cute brunch spot', className: styles.floatOne, dotColor: 'var(--brand-blue)' },
+  { text: 'Natural wine in Zurich', className: styles.floatTwo, dotColor: 'var(--brand-blue)' },
   { text: 'Saved by friends', className: styles.floatThree, dotColor: 'var(--brand-blue)' },
-  { text: 'Date night', className: styles.floatFour, dotColor: '#d36b17' },
-  { text: 'Hidden terrace', className: styles.floatFive, dotColor: '#9b4de3' },
-  { text: 'Friend-approved', className: styles.floatSix, dotColor: '#00a6a6' },
+  { text: 'Date night', className: styles.floatFour, dotColor: 'var(--brand-blue)' },
+  { text: 'Hidden terrace', className: styles.floatFive, dotColor: 'var(--brand-blue)' },
+  { text: 'Friend-approved', className: styles.floatSix, dotColor: 'var(--brand-blue)' },
 ]
 
 const SCREEN_FEATURES = [
@@ -313,12 +313,11 @@ export default function Landing() {
   const [curatorToast, setCuratorToast] = useState('')
   const [stats, setStats] = useState(FALLBACK_STATS)
   const [activeSlide, setActiveSlide] = useState(0)
-  const [activeFeatureStart, setActiveFeatureStart] = useState(0)
+  const [activeFeature, setActiveFeature] = useState(0)
   const [activeQuery, setActiveQuery] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pageRef = useRef(null)
   const carouselRef = useRef(null)
-  const featureStepsRef = useRef(null)
   const staticMapUrl = getStaticMapUrl()
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount)
@@ -389,9 +388,7 @@ export default function Landing() {
   useEffect(() => {
     const page = pageRef.current
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const desktop = window.matchMedia('(min-width: 901px)')
     const sections = page.querySelectorAll('[data-reveal]')
-    const steps = featureStepsRef.current.querySelectorAll('[data-feature-step]')
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -410,16 +407,6 @@ export default function Landing() {
       page.dataset.scrolled = scroll > 24
       if (!media.matches) {
         page.style.setProperty('--hero-shift', `${Math.min(scroll * 0.12, 85)}px`)
-      }
-      if (desktop.matches) {
-        let closest = 0
-        let distance = Infinity
-        steps.forEach((step, index) => {
-          const rect = step.getBoundingClientRect()
-          const next = Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2)
-          if (next < distance) { closest = index; distance = next }
-        })
-        setActiveFeatureStart(closest)
       }
     }
     function scheduleUpdate() {
@@ -522,19 +509,8 @@ export default function Landing() {
     }
   }
 
-  function scrollFeatureTo(index) {
-    setActiveFeatureStart(index)
-    if (window.matchMedia('(min-width: 901px)').matches) {
-      featureStepsRef.current.children[index]?.scrollIntoView({
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        block: 'center',
-      })
-    } else {
-      pageRef.current.querySelector('[aria-label="YouKnow app showcase"]')?.scrollIntoView({
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        block: 'center',
-      })
-    }
+  function selectFeature(index) {
+    setActiveFeature(index)
   }
 
   function goToSlide(index) {
@@ -597,7 +573,17 @@ export default function Landing() {
           <div className={styles.heroInner}>
             <div className={styles.copy}>
               <span className={styles.heroEyebrow}>YOUR PEOPLE. YOUR PLACES.</span>
-              <h1>The Map Curated by People <em>YouKnow.</em></h1>
+              <h1>
+                The map curated by people
+                <img
+                  className={styles.heroWordmark}
+                  src="/youknow-wordmark-blue.svg"
+                  alt="YouKnow"
+                  width="1420"
+                  height="418"
+                  decoding="async"
+                />
+              </h1>
               <p className={styles.subhead}>
                 Skip the endless searching. Find restaurants, bars, cafes and nights
                 out through friends and connoisseurs who share your taste.
@@ -628,6 +614,9 @@ export default function Landing() {
                 </span>
               ))}
 
+              <div className={styles.heroBackPhone} aria-hidden="true">
+                <img src={SCREEN_FEATURES[4].src} alt="" decoding="async" />
+              </div>
               <div className={styles.phoneShell}>
                 <div
                   className={styles.screenCarousel}
@@ -646,21 +635,14 @@ export default function Landing() {
                     />
                   ))}
                 </div>
-
-                <div className={styles.carouselDots} aria-label="Choose screenshot">
-                  {HERO_SCREENSHOTS.map((screenshot, index) => (
-                    <button
-                      className={`${styles.carouselDot} ${
-                        activeSlide === index ? styles.carouselDotActive : ''
-                      }`}
-                      type="button"
-                      onClick={() => goToSlide(index)}
-                      aria-label={`Show screenshot ${index + 1}`}
-                      aria-pressed={activeSlide === index}
-                      key={screenshot.src}
-                    />
-                  ))}
-                </div>
+              </div>
+              <div className={styles.heroPreviewPicker} aria-label="Choose app preview">
+                {HERO_SCREENSHOTS.map((screenshot, index) => (
+                  <button type="button" onClick={() => goToSlide(index)}
+                    aria-pressed={activeSlide === index} key={screenshot.src}>
+                    {['Your map', 'New cities', 'Your people'][index]}
+                  </button>
+                ))}
               </div>
 
               <div className={styles.visualActions}>
@@ -709,39 +691,49 @@ export default function Landing() {
             <div className={styles.featureStage}>
               <div className={styles.showcaseSticky}>
                 <div className={styles.showcaseOrbit} aria-hidden="true" />
+                <span className={styles.showcaseKicker}>A little look inside</span>
                 <div className={styles.showcasePhone} aria-label="YouKnow app showcase">
                   {SCREEN_FEATURES.map((feature, index) => (
                     <img
-                      className={`${styles.showcaseScreen} ${index === activeFeatureStart ? styles.showcaseScreenActive : ''}`}
+                      className={`${styles.showcaseScreen} ${index === activeFeature ? styles.showcaseScreenActive : ''}`}
                       src={feature.src} alt={feature.alt} key={feature.src}
-                      aria-hidden={index !== activeFeatureStart}
-                      loading={index === 0 ? 'eager' : 'lazy'} decoding="async"
+                      aria-hidden={index !== activeFeature}
+                      loading="lazy" decoding="async"
                     />
                   ))}
                 </div>
                 <div className={styles.showcaseControls} aria-label="Choose app feature">
-                  <button type="button" onClick={() => scrollFeatureTo(Math.max(0, activeFeatureStart - 1))} disabled={activeFeatureStart === 0} aria-label="Previous app feature">←</button>
-                  <span>{SCREEN_FEATURES[activeFeatureStart].number} <span>/ 06</span></span>
-                  <button type="button" onClick={() => scrollFeatureTo(Math.min(5, activeFeatureStart + 1))} disabled={activeFeatureStart === 5} aria-label="Next app feature">→</button>
+                  <button type="button" onClick={() => selectFeature(activeFeature - 1)} disabled={activeFeature === 0} aria-label="Previous app feature">←</button>
+                  <span>{SCREEN_FEATURES[activeFeature].number} <span>/ {String(SCREEN_FEATURES.length).padStart(2, '0')}</span></span>
+                  <button type="button" onClick={() => selectFeature(activeFeature + 1)} disabled={activeFeature === SCREEN_FEATURES.length - 1} aria-label="Next app feature">→</button>
                 </div>
-                <span className={styles.showcaseHint}>Scroll to get to know your map</span>
               </div>
-              <div className={styles.featureSteps} ref={featureStepsRef}>
+              <div className={styles.featureSteps}>
                 {SCREEN_FEATURES.map((feature, index) => (
-                  <article className={`${styles.featureStep} ${index === activeFeatureStart ? styles.featureStepActive : ''}`} data-feature-step key={feature.src}>
-                    <button type="button" className={styles.featureStepButton} aria-pressed={index === activeFeatureStart} onClick={() => scrollFeatureTo(index)}>
-                      <span className={styles.featureNumber}>{feature.number} <span aria-hidden="true">↗</span></span>
-                      <h3>{feature.title}</h3>
+                  <article className={`${styles.featureStep} ${index === activeFeature ? styles.featureStepActive : ''}`} key={feature.src}>
+                    <h3>
+                      <button type="button" className={styles.featureStepButton}
+                        aria-expanded={index === activeFeature} aria-controls={`feature-panel-${index}`}
+                        onClick={() => selectFeature(index)}>
+                        <span className={styles.featureNumber}>{feature.number}</span>
+                        <span>{feature.title}</span>
+                        <span className={styles.featureToggle} aria-hidden="true">{index === activeFeature ? '−' : '+'}</span>
+                      </button>
+                    </h3>
+                    <div id={`feature-panel-${index}`} hidden={index !== activeFeature} className={styles.featureDescription}>
                       <p>{feature.body}</p>
-                    </button>
+                      <img className={styles.featureMobileScreen} src={feature.src} alt={feature.alt} loading="lazy" decoding="async" />
+                      <a href="#download">Try it in YouKnow <span aria-hidden="true">↗</span></a>
+                    </div>
                   </article>
                 ))}
               </div>
             </div>
 
-            <Link className={styles.textLink} to="/tutorials">
-              See how saving works
-            </Link>
+            <div className={styles.featureFooter}>
+              <span>From “where should we go?” to “see you there.”</span>
+              <Link className={styles.textLink} to="/tutorials">See how saving works</Link>
+            </div>
           </div>
         </section>
 
@@ -757,7 +749,7 @@ export default function Landing() {
                   <button type="button" className={activeQuery === index ? styles.queryPillActive : ''} aria-pressed={activeQuery === index} onClick={() => setActiveQuery(index)} key={query}>{query}</button>
                 ))}
               </div>
-              <span className={styles.queryFootnote}>Search by vibe in the YouKnow app <span aria-hidden="true">✦</span></span>
+              <a className={styles.queryFootnote} href="#download">Try search by vibe in the app <span aria-hidden="true">↗</span></a>
             </div>
 
             <div className={styles.storyCopy} data-reveal>
@@ -799,6 +791,16 @@ export default function Landing() {
                   </div>
                 </Link>
               ))}
+            </div>
+            <div className={styles.guideMoods}>
+              <span>Explore Zurich by mood</span>
+              <div aria-label="Zurich guides by mood">
+                <Link to="/zurich/cafes/">Coffee stops <span aria-hidden="true">↗</span></Link>
+                <Link to="/zurich/cosy-restaurants/">Cosy dinners <span aria-hidden="true">↗</span></Link>
+                <Link to="/zurich/bars/">One more drink <span aria-hidden="true">↗</span></Link>
+                <Link to="/zurich/date-night/">Date night <span aria-hidden="true">↗</span></Link>
+                <Link to="/zurich/hidden-gems/">Hidden gems <span aria-hidden="true">↗</span></Link>
+              </div>
             </div>
           </div>
         </section>
