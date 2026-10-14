@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import styles from './Privacy.module.css'
+import { privacyMetadata } from '../pageMetadata'
+import { useDocumentMetadata } from '../usePageMetadata'
 
 const NOTICE_PATH = '/privacy.html'
 
 export default function Privacy() {
+  useDocumentMetadata(privacyMetadata, { '@context': 'https://schema.org', '@type': 'WebPage',
+    name: privacyMetadata.title, url: privacyMetadata.canonical })
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>

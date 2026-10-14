@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { cityMetadata, cityStructuredData } from '../pageMetadata'
+import { useDocumentMetadata } from '../usePageMetadata'
 import {
   buildPlacesUrl,
   displayTags,
@@ -10,24 +12,6 @@ import {
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-const DEFAULT_TITLE = 'YouKnow App | Friend-Powered Restaurant and Bar Recommendations'
-const DEFAULT_DESCRIPTION =
-  'YouKnow is an app for discovering restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.'
-
-function setMeta(selector, attribute, value) {
-  let element = document.head.querySelector(selector)
-  if (!element) {
-    element = document.createElement(selector.startsWith('link') ? 'link' : 'meta')
-    if (selector.includes('rel="canonical"')) element.setAttribute('rel', 'canonical')
-    const property = selector.match(/property="([^"]+)"/)?.[1]
-    const name = selector.match(/name="([^"]+)"/)?.[1]
-    if (property) element.setAttribute('property', property)
-    if (name) element.setAttribute('name', name)
-    document.head.appendChild(element)
-  }
-  element.setAttribute(attribute, value)
-}
-
 async function fetchPlaces(guide, signal) {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return []
   const response = await fetch(buildPlacesUrl(guide, SUPABASE_URL), {
@@ -43,7 +27,7 @@ async function fetchPlaces(guide, signal) {
 
 function initialPlaces(guide) {
   if (!guide) return []
-  const embedded = document.getElementById('city-guide-data')?.textContent
+  const embedded = typeof document === 'undefined' ? null : document.getElementById('city-guide-data')?.textContent
   if (embedded) {
     try {
       const payload = JSON.parse(embedded)
@@ -111,10 +95,11 @@ function NotFound() {
   )
 }
 
-export default function CityGuide() {
-  const { citySlug, topicSlug } = useParams()
-  const guide = useMemo(() => resolveCityGuide(citySlug, topicSlug), [citySlug, topicSlug])
-  const [places, setPlaces] = useState(() => initialPlaces(guide))
+export default function CityGuide({ initialGuide, initialRecords } = {}) {
+  const { citySlug, topicSlug: routeTopicSlug } = useParams()
+  const topicSlug = initialGuide?.topicSlug || routeTopicSlug
+  const guide = useMemo(() => initialGuide || resolveCityGuide(citySlug, topicSlug), [initialGuide, citySlug, topicSlug])
+  const [places, setPlaces] = useState(() => initialRecords || initialPlaces(guide))
 
   useEffect(() => {
     setPlaces(initialPlaces(guide))
@@ -132,66 +117,7 @@ export default function CityGuide() {
     return () => controller.abort()
   }, [guide])
 
-  useEffect(() => {
-    if (!guide) return undefined
-    const previousTitle = document.title
-    const canonical = `https://ifykyk.app${guide.path}`
-    document.title = `${guide.title} | YouKnow`
-    setMeta('meta[name="description"]', 'content', guide.intro)
-    setMeta('link[rel="canonical"]', 'href', canonical)
-    setMeta('meta[property="og:title"]', 'content', `${guide.title} | YouKnow`)
-    setMeta('meta[property="og:description"]', 'content', guide.intro)
-    setMeta('meta[property="og:url"]', 'content', canonical)
-    setMeta('meta[name="twitter:title"]', 'content', `${guide.title} | YouKnow`)
-    setMeta('meta[name="twitter:description"]', 'content', guide.intro)
-
-    document.getElementById('city-guide-structured-data')?.remove()
-    const structuredData = document.createElement('script')
-    structuredData.type = 'application/ld+json'
-    structuredData.id = 'city-guide-structured-data'
-    structuredData.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'ItemList',
-          name: guide.sectionTitle,
-          numberOfItems: places.length,
-          itemListElement: places.map((place, index) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            item: {
-              '@type': 'LocalBusiness',
-              '@id': `https://ifykyk.app/place/${place.id}`,
-              name: place.name,
-              description: place.description || undefined,
-              address: place.address || undefined,
-              url: `https://ifykyk.app/place/${place.id}`,
-            },
-          })),
-        },
-        {
-          '@type': 'FAQPage',
-          mainEntity: guide.faq.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: { '@type': 'Answer', text: item.answer },
-          })),
-        },
-      ],
-    })
-    document.head.appendChild(structuredData)
-    return () => {
-      document.title = previousTitle === `${guide.title} | YouKnow` ? DEFAULT_TITLE : previousTitle
-      setMeta('meta[name="description"]', 'content', DEFAULT_DESCRIPTION)
-      setMeta('link[rel="canonical"]', 'href', 'https://ifykyk.app/')
-      setMeta('meta[property="og:title"]', 'content', 'YouKnow App | Friend-Powered Recommendations')
-      setMeta('meta[property="og:description"]', 'content', DEFAULT_DESCRIPTION)
-      setMeta('meta[property="og:url"]', 'content', 'https://ifykyk.app/')
-      setMeta('meta[name="twitter:title"]', 'content', 'YouKnow App | Friend-Powered Recommendations')
-      setMeta('meta[name="twitter:description"]', 'content', DEFAULT_DESCRIPTION)
-      structuredData.remove()
-    }
-  }, [guide, places])
+  useDocumentMetadata(guide ? cityMetadata(guide) : { title: 'Page not found | YouKnow', description: 'This city guide is not available.', canonical: 'https://ifykyk.app/', image: 'https://ifykyk.app/logo.png' }, guide ? cityStructuredData(guide, places) : {})
 
   if (!guide) return <NotFound />
 

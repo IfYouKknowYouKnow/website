@@ -1,3 +1,5 @@
+# Public content is available to search, user-requested fetches and training crawlers.
+# Search access and model-training access are independent policies; both are allowed here.
 User-agent: *
 Allow: /
 

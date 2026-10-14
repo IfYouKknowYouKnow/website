@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender-pages.mjs && node scripts/prerender-city-guides.mjs",
-    "preview": "vite preview"
+    "build": "vite build && node scripts/prerender-pages.mjs && node scripts/check-crawlability.mjs",
+    "preview": "vite preview",
+    "check:crawlability": "node scripts/check-crawlability.mjs"
   },
   "dependencies": {
     "mapbox-gl": "^3.6.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "parse5": "^7.3.0",
     "vite": "^5.4.0"
   }
 }

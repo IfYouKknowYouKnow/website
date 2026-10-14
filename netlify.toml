@@ -9,6 +9,11 @@
   force = true
 
 [[redirects]]
+  from = "/team"
+  to = "/about"
+  status = 301
+
+[[redirects]]
   from = "/about"
   to = "/about.html"
   status = 200
@@ -19,29 +24,58 @@
   status = 200
 
 [[redirects]]
-  from = "/zurich"
-  to = "/zurich/index.html"
+  from = "/privacy"
+  to = "/privacy.html"
   status = 200
 
 [[redirects]]
-  from = "/zurich/*"
-  to = "/zurich/:splat/index.html"
-  status = 200
+  from = "/zurich"
+  to = "/zurich/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zurich/:topic"
+  to = "/zurich/:topic/"
+  status = 301
 
 [[redirects]]
   from = "/geneva"
-  to = "/geneva/index.html"
-  status = 200
+  to = "/geneva/"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/berlin"
-  to = "/berlin/index.html"
+  to = "/berlin/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/invite/*"
+  to = "/invite/index.html"
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/place/*"
+  to = "/place/index.html"
   status = 200
+
+[[redirects]]
+  from = "/list/*"
+  to = "/list/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/community/*"
+  to = "/community/index.html"
+  status = 200
+
+# Unknown URLs must return 404, rather than a successful copy of the homepage.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "VITE_MAPBOX_TOKEN"
@@ -50,3 +84,40 @@
   for = "/.well-known/apple-app-site-association"
   [headers.values]
     Content-Type = "application/json"
+
+[[headers]]
+  for = "/*.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/llms*.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/invite/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/place/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/community/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

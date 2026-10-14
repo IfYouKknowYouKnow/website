@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FALLBACK_STATS, getFaqItems, initialLandingStats } from '../landingContent'
+import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.youknow.mobile'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
-const FALLBACK_STATS = {
-  curatedPlaces: 10000,
-  cities: 331,
-}
 const COUNT_REFRESH_INTERVAL_MS = 60000
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -154,45 +152,6 @@ function CityArtwork({ city }) {
       {city === 'Zurich' ? <><path d="m0 85 46-47 33 25 42-52 52 60 30-25 45 39M25 102h270M77 102V72h27v30M80 72l10-14 11 14M182 102V51h16v51M190 51V29M181 29h18M135 102V76h30v26M250 102V82h29v20" /><path d="m110 112 40 5 43-5 55 8M37 124h40" /></> : city === 'Geneva' ? <><path d="M0 101h320M134 100c0-23 21-37 23-74M157 26c0 38 24 46 25 74M157 26V7M157 26l-9-13m9 13 10-15M16 100V76h47v24M27 76V58h24v18M240 100V68h44v32M250 68V49h24v19" /><path d="m0 118 45-5 51 7 62-7 53 6 55-6 54 6" /></> : <><path d="M0 110h320M51 110V65h14v45m34 0V65h14v45m33 0V65h14v45m34 0V65h14v45M43 64h175V50H43v14ZM43 50l88-25 87 25M130 25V14M254 110V59m0 0V31m0 28h-10m10 0h10" /><circle cx="254" cy="65" r="13" /><path d="M21 110V83h14v27M285 110V91h26v19" /></>}
     </g>
   </svg>
-}
-
-function getFaqItems(cityCount) {
-  return [
-    {
-      question: 'Is YouKnow free?',
-      answer:
-        'Yes. YouKnow is completely free to download and use on iOS and Android. You can save places, build your map, follow recommendations and search by vibe without paying for the app.',
-    },
-    {
-      question: 'Which cities is YouKnow available in?',
-      answer: `The YouKnow community currently has curated places across ${formatCount(cityCount)} cities. You can explore recommendations in cities including Zurich, Milan and Paris, and coverage keeps growing as friends and curators add places around the world.`,
-    },
-    {
-      question: 'What kinds of places can I discover?',
-      answer:
-        'YouKnow helps you find restaurants, bars, cafes, clubs and experiences. Filter the map by category, distance, what is open now, what is trending or the people whose taste you want to follow.',
-    },
-    {
-      question: 'Where do the recommendations come from?',
-      answer:
-        'Recommendations come from friends, local communities, creators and connoisseurs—not anonymous star ratings. You can explore the wider community or filter the map to see exactly what a particular person has saved.',
-    },
-    {
-      question: 'How can I save a place?',
-      answer:
-        'Save places directly in YouKnow, share a restaurant or bar from Instagram or TikTok, add one from a photo, or import your Google Saved Places. YouKnow helps identify the matching location before adding it to your map.',
-    },
-    {
-      question: 'How does search by vibe work?',
-      answer:
-        'Describe the kind of place or plan you want in natural language—such as a cozy first-date bar or a quiet cafe to work from. YouKnow uses AI to match that request with relevant places on your map.',
-    },
-    {
-      question: 'Which devices and languages are supported?',
-      answer:
-        'YouKnow is available for iPhone and Android. The app supports English, German, French and Italian.',
-    },
-  ]
 }
 
 function StoreButtons({ compact = false }) {
@@ -357,7 +316,7 @@ async function recomputeLandingStats(signal) {
   }
 }
 
-export default function Landing() {
+export default function Landing({ initialStats } = {}) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
@@ -369,7 +328,7 @@ export default function Landing() {
   })
   const [isCuratorSubmitting, setIsCuratorSubmitting] = useState(false)
   const [curatorToast, setCuratorToast] = useState('')
-  const [stats, setStats] = useState(FALLBACK_STATS)
+  const [stats, setStats] = useState(() => initialStats || initialLandingStats())
   const [activeSlide, setActiveSlide] = useState(0)
   const [activeFeature, setActiveFeature] = useState(0)
   const [activeQuery, setActiveQuery] = useState(0)
@@ -380,26 +339,7 @@ export default function Landing() {
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount)
 
-  useEffect(() => {
-    const structuredData = document.createElement('script')
-    structuredData.id = 'landing-faq-structured-data'
-    structuredData.type = 'application/ld+json'
-    structuredData.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqItems.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
-    })
-    document.head.appendChild(structuredData)
-
-    return () => structuredData.remove()
-  }, [cityCount])
+  usePageMetadata('home', { cityCount })
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -1081,6 +1021,7 @@ export default function Landing() {
               </a>
             ))}
             <Link to="/privacy">Privacy</Link>
+            <a href="/sitemap.html">All pages</a>
           </div>
         </div>
       </footer>

@@ -7,6 +7,7 @@ const INSTAGRAM_EXTERNAL_BROWSER_URL =
   `instagram://extbrowser/?url=${encodeURIComponent(APP_STORE_URL)}`
 
 function isIOSDevice() {
+  if (typeof window === 'undefined') return false
   const navigator = window.navigator
   return (
     /iPad|iPhone|iPod/i.test(navigator.userAgent || '') ||
