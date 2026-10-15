@@ -5,6 +5,7 @@ import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import SocialSaveSection from '../components/SocialSaveSection'
 import ScreenshotPinMotion from '../components/ScreenshotPinMotion'
+import HeroMoodCards from '../components/HeroMoodCards'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL =
@@ -15,15 +16,6 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 const STATS_TABLE = import.meta.env.VITE_SUPABASE_STATS_TABLE || 'website_stats'
 const STATS_ROW_ID = import.meta.env.VITE_SUPABASE_STATS_ROW_ID || 'landing'
-
-const FLOATING_TAGS = [
-  { text: 'Cute brunch spot', className: styles.floatOne, dotColor: 'var(--brand-blue)' },
-  { text: 'Natural wine in Zurich', className: styles.floatTwo, dotColor: 'var(--brand-blue)' },
-  { text: 'Saved by friends', className: styles.floatThree, dotColor: 'var(--brand-blue)' },
-  { text: 'Date night', className: styles.floatFour, dotColor: 'var(--brand-blue)' },
-  { text: 'Hidden terrace', className: styles.floatFive, dotColor: 'var(--brand-blue)' },
-  { text: 'Friend-approved', className: styles.floatSix, dotColor: 'var(--brand-blue)' },
-]
 
 const SCREEN_FEATURES = [
   {
@@ -40,9 +32,10 @@ const SCREEN_FEATURES = [
   },
   {
     id: 'friends',
-    src: '/images/IMG_6337.PNG',
+    src: '/images/youknow-feed-20261015.webp',
     title: 'See what friends recommend',
     body: 'Explore your feed for friends’ recommendations, recent pictures and the community’s top curators.',
+    alt: 'YouKnow feed showing top curators and places recommended by friends.',
   },
   {
     id: 'social-sharing',
@@ -59,9 +52,17 @@ const SCREEN_FEATURES = [
   },
   {
     id: 'saved',
-    src: '/images/IMG_6339.PNG',
+    src: '/images/youknow-profile-20261015.webp',
     title: 'Organize your own recommendations',
     body: 'Keep your saved and want-to-go places together on your profile, and browse them by city, category or distance.',
+    alt: 'YouKnow profile showing saved places, want-to-go lists and filters for city, category and distance.',
+  },
+  {
+    id: 'curations',
+    src: '/images/youknow-curations-20261015.webp',
+    title: 'Create and follow curations',
+    body: 'Bring places together in a curation for a trip, a shared plan or a favourite theme. Create your own, follow others, or join a private curation with an invite code.',
+    alt: 'YouKnow Curations screen showing personal collections of places and an option to join a private curation with an invite code.',
   },
   {
     id: 'place',
@@ -86,8 +87,6 @@ const HERO_SCREENSHOTS = [
   SCREEN_FEATURES.find(feature => feature.id === 'ai-search'),
   SCREEN_FEATURES.find(feature => feature.id === 'place'),
 ]
-
-const HERO_BACK_SCREENSHOT = SCREEN_FEATURES.find((feature) => feature.id === 'place')
 
 function AnimatedFeaturePreview({ feature, className }) {
   const [isPaused, setIsPaused] = useState(() =>
@@ -135,17 +134,6 @@ const QUERY_PILLS = [
 
 function Sparkle() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" stroke="currentColor" strokeWidth="1.5" /></svg>
-}
-
-function MapArtwork() {
-  return <svg className={styles.mapArtwork} viewBox="0 0 640 740" fill="none" aria-hidden="true">
-    <defs><pattern id="map-grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" stroke="currentColor" strokeOpacity=".12" /></pattern></defs>
-    <rect width="640" height="740" fill="url(#map-grid)" />
-    <path d="M420-20c-120 140 70 240-80 370S390 610 250 760" stroke="white" strokeOpacity=".5" strokeWidth="76" />
-    <g stroke="currentColor" strokeOpacity=".18" strokeWidth="1.5"><path d="M-20 120 660 310M-20 400l680-80M110-20l160 780M500-20 410 760M-20 620l680-100" /><circle cx="320" cy="340" r="250" /><circle cx="320" cy="340" r="190" strokeDasharray="3 9" /></g>
-    <path d="m90 480 115-180 230 95 100-200" stroke="var(--brand-blue)" strokeWidth="2" strokeDasharray="6 8" />
-    {[ [90,480], [205,300], [435,395], [535,195] ].map(([x,y],i) => <g key={i}><circle cx={x} cy={y} r="16" fill="var(--brand-blue)" fillOpacity=".12" /><circle cx={x} cy={y} r="5" fill="var(--brand-blue)" /></g>)}
-  </svg>
 }
 
 function CityArtwork({ city }) {
@@ -572,9 +560,9 @@ export default function Landing({ initialStats } = {}) {
         <div className="container">
           <div className={styles.heroInner}>
             <div className={styles.copy}>
-              <span className={styles.heroEyebrow}>YOUR PEOPLE. YOUR PLACES.</span>
               <h1>
-                The map curated by people
+                <span>Your people.</span>
+                <span>Your places.</span>
                 <img
                   className={styles.heroWordmark}
                   src="/youknow-wordmark-blue.svg"
@@ -585,8 +573,8 @@ export default function Landing({ initialStats } = {}) {
                 />
               </h1>
               <p className={styles.subhead}>
-                Find places through people who share your taste. Save your Instagram
-                and TikTok finds, and import your Google Saved Places onto one personal map.
+                Find places through people who share your taste, or search by vibe with AI.
+                Save your Instagram and TikTok finds, and import your Google Saved Places onto one personal map.
               </p>
 
               <a className={styles.heroSocialLink} href="#from-feed-to-map">
@@ -610,22 +598,7 @@ export default function Landing({ initialStats } = {}) {
             </div>
 
             <div className={styles.visualWrap} aria-label="YouKnow app preview">
-              <MapArtwork />
-              <span className={styles.mapCoordinate} aria-hidden="true">47.3769° N · 8.5417° E</span>
-              {FLOATING_TAGS.map((tag) => (
-                <span
-                  className={`${styles.floatingTag} ${tag.className}`}
-                  style={{ '--tag-dot': tag.dotColor }}
-                  key={tag.text}
-                  aria-hidden="true"
-                >
-                  {tag.text}
-                </span>
-              ))}
-
-              <div className={styles.heroBackPhone} aria-hidden="true">
-                <img src={HERO_BACK_SCREENSHOT.src} alt="" decoding="async" />
-              </div>
+              <HeroMoodCards />
               <div className={styles.phoneShell}>
                 <div
                   className={styles.screenCarousel}
