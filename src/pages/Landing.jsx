@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { FALLBACK_STATS, getFaqItems, initialLandingStats } from '../landingContent'
 import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
+import SocialSaveSection from '../components/SocialSaveSection'
+import ScreenshotPinMotion from '../components/ScreenshotPinMotion'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL =
@@ -26,7 +28,7 @@ const FLOATING_TAGS = [
 const SCREEN_FEATURES = [
   {
     id: 'map',
-    src: '/images/IMG_6338.PNG',
+    src: '/images/youknow-map-20261015.webp',
     title: 'Start with the living map',
     body: 'Explore places recommended by people you trust. Narrow your map by friends, food, drinks, coffee or what is open now.',
   },
@@ -63,13 +65,13 @@ const SCREEN_FEATURES = [
   },
   {
     id: 'place',
-    src: '/images/IMG_6342.PNG',
+    src: '/images/youknow-place-20261015.webp',
     title: 'Get to know a place',
     body: 'See photos and who saved a place, check the details, then save it for later or get directions.',
   },
   {
     id: 'ai-search',
-    src: '/images/IMG_6327.PNG',
+    src: '/images/youknow-search-20261015.webp',
     title: 'Search by vibe with AI',
     body: 'Describe what you have in mind. Get recommendations from your map and ask follow-up questions to find the right place.',
   },
@@ -81,8 +83,8 @@ const SCREEN_FEATURES = [
 
 const HERO_SCREENSHOTS = [
   SCREEN_FEATURES[0],
-  SCREEN_FEATURES[1],
-  SCREEN_FEATURES[2],
+  SCREEN_FEATURES.find(feature => feature.id === 'ai-search'),
+  SCREEN_FEATURES.find(feature => feature.id === 'place'),
 ]
 
 const HERO_BACK_SCREENSHOT = SCREEN_FEATURES.find((feature) => feature.id === 'place')
@@ -133,21 +135,6 @@ const QUERY_PILLS = [
 
 function Sparkle() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" stroke="currentColor" strokeWidth="1.5" /></svg>
-}
-
-function SocialSaveVisual() {
-  return (
-    <figure className={styles.socialSaveVisual}>
-      <img
-        src="/images/social/save-places-poster.webp"
-        alt="Save places from Instagram, TikTok and Google Maps into YouKnow. Arrows connect all three apps to places on the YouKnow map."
-        width="1122"
-        height="1402"
-        loading="lazy"
-        decoding="async"
-      />
-    </figure>
-  )
 }
 
 function MapArtwork() {
@@ -657,12 +644,13 @@ export default function Landing({ initialStats } = {}) {
                     />
                   ))}
                 </div>
+                {activeSlide === 0 && <ScreenshotPinMotion />}
               </div>
               <div className={styles.heroPreviewPicker} aria-label="Choose app preview">
                 {HERO_SCREENSHOTS.map((screenshot, index) => (
                   <button type="button" onClick={() => goToSlide(index)}
                     aria-pressed={activeSlide === index} key={screenshot.src}>
-                    {['Your map', 'New cities', 'Your people'][index]}
+                    {['Your map', 'Search places', 'Inside a place'][index]}
                   </button>
                 ))}
               </div>
@@ -697,30 +685,7 @@ export default function Landing({ initialStats } = {}) {
       </form>
 
       <main className={styles.editorial}>
-        <section className={styles.socialSaveSection} id="from-feed-to-map" aria-labelledby="social-save-heading">
-          <div className={`container ${styles.socialSaveInner}`}>
-            <div className={styles.socialSaveCopy}>
-              <span className={styles.sectionEyebrow}>Found online. Kept for real life.</span>
-              <h2 id="social-save-heading">All your finds.<br /> One map.</h2>
-              <p>That restaurant on Instagram. That café on TikTok. Your Google Maps saved places. Keep your discoveries together, ready for your next plan.</p>
-              <ol className={styles.socialSaveSteps}>
-                <li><span>01</span> Share the post to YouKnow.</li>
-                <li><span>02</span> Confirm the matching place.</li>
-                <li><span>03</span> Save it to your map.</li>
-              </ol>
-              <p className={styles.googleMapsImport}>
-                Paste a Google Maps list link and choose the places you want.{' '}
-                <Link to="/tutorials#google-saved-places">Import your Google Saved Places <span aria-hidden="true">↗</span></Link>
-              </p>
-              <div className={styles.socialSaveActions}>
-                <a className={styles.navCta} href="#download">Start saving places <span aria-hidden="true">↗</span></a>
-                <Link className={styles.textLink} to="/tutorials">Watch the tutorial</Link>
-              </div>
-              <p className={styles.socialSaveNote}>Free on iOS & Android.</p>
-            </div>
-            <SocialSaveVisual />
-          </div>
-        </section>
+        <SocialSaveSection />
 
         <StatStrip stats={stats} />
 
