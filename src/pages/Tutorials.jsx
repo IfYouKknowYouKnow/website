@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { usePageMetadata } from '../usePageMetadata'
 import styles from './Tutorials.module.css'
@@ -32,6 +32,7 @@ const TUTORIALS = [
     },
   },
   {
+    id: 'google-saved-places',
     title: 'Google Saved Places',
     steps: [
       <>
@@ -117,6 +118,13 @@ function TutorialAnimation({ animation }) {
 
 export default function Tutorials() {
   usePageMetadata('tutorials')
+  const { hash } = useLocation()
+
+  useEffect(() => {
+    if (hash === '#google-saved-places') {
+      document.getElementById('google-saved-places')?.scrollIntoView()
+    }
+  }, [hash])
 
   return (
     <div className={styles.page}>
@@ -147,7 +155,12 @@ export default function Tutorials() {
 
           <div className={styles.accordion}>
             {TUTORIALS.map((tutorial, index) => (
-              <details className={styles.panel} key={tutorial.title} open={index === 0}>
+              <details
+                className={styles.panel}
+                id={tutorial.id}
+                key={tutorial.title}
+                open={hash === '#google-saved-places' ? tutorial.id === 'google-saved-places' : index === 0}
+              >
                 <summary>
                   <span>{tutorial.title}</span>
                   <span className={styles.summaryIcon} aria-hidden="true" />

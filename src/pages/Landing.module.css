@@ -40,6 +40,11 @@
 .copy h1 { max-width: 740px; font-size: clamp(72px, 7.2vw, 102px); font-weight: 500; line-height: 1.01; letter-spacing: -.067em; }
 .heroWordmark { display: block; width: min(100%, 4.85em); height: auto; margin: -.23em 0 -.35em -.18em; }
 .subhead { max-width: 440px; margin-top: 28px; font-size: 20.4px; line-height: 1.65; color: var(--muted); }
+.heroSocialLink { display: inline-flex; align-items: center; gap: 10px; margin-top: 19px; font-size: 14px; font-weight: 600; }
+.heroSocialLink:hover { text-decoration: underline; text-underline-offset: 4px; }
+.heroSocialIcons { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.heroSocialIcons img { display: block; border-radius: 7px; }
+.heroSocialIcons .heroGoogleMapsIcon { object-fit: contain; padding: 2px; border-radius: 0; }
 .heroActions { margin-top: 30px; }
 .heroFreeNote { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
 .heroFreeNote::before { content: '↗'; color: var(--blue); }
@@ -76,6 +81,36 @@
 .heroBottom a span { display: grid; place-items: center; height: 30px; width: 30px; border: 1px solid var(--line); border-radius: 50%; font-size: 16.8px; transition: transform .2s; }
 .heroBottom a:hover span { transform: translateY(4px); }
 .statsStrip { padding-block: 44px; background: var(--blue-wash); border-block: 1px solid var(--line); }
+.socialSaveSection { padding-block: 82px; background: var(--blue-mist); }
+.socialSaveInner { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 5vw, 72px); align-items: center; }
+.socialSaveCopy { min-width: 0; }
+.socialSaveCopy .sectionEyebrow { color: var(--ink); font-size: 11px; letter-spacing: .1em; }
+.socialSaveCopy h2 { font-size: clamp(48px, 5.4vw, 76px); font-weight: 500; line-height: 1.03; letter-spacing: -.06em; }
+.socialSaveCopy > p { max-width: 430px; margin-top: 24px; color: #4b5963; font-size: 18px; line-height: 1.7; }
+.socialSaveSteps { display: grid; gap: 13px; margin-top: 28px; list-style: none; font-size: 16px; }
+.socialSaveSteps li { display: flex; align-items: baseline; gap: 14px; }
+.socialSaveSteps li > span { font-size: 11px; font-weight: 600; color: #4b5963; font-variant-numeric: tabular-nums; }
+.socialSaveCopy .googleMapsImport { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; }
+.googleMapsImport a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.socialSaveActions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px; margin-top: 30px; font-size: 14px; }
+.socialSaveActions .navCta { gap: 15px; }
+.socialSaveActions .textLink { margin-top: 0; align-items: center; }
+.socialSaveActions .navCta:hover { background: white; color: var(--ink); }
+.socialSaveCopy .socialSaveNote { margin-top: 14px; font-size: 12px; }
+.socialSaveVisual { width: 100%; max-width: 520px; margin-inline: auto; }
+.socialSaveVisual > img { display: block; width: 100%; height: auto; border-radius: 24px; }
+@media (max-width: 900px) {
+  .socialSaveSection { padding-block: 65px; }
+  .socialSaveInner { grid-template-columns: 1fr; gap: 32px; }
+  .socialSaveCopy { max-width: 620px; }
+  .socialSaveCopy h2 br { display: none; }
+  .socialSaveVisual { max-width: 520px; }
+}
+@media (max-width: 400px) {
+  .heroSocialLink { gap: 7px; font-size: 12px; }
+  .socialSaveCopy h2 { font-size: 46px; }
+  .socialSaveVisual > img { border-radius: 16px; }
+}
 .statsInner { display: grid; grid-template-columns: repeat(3, 1fr); }
 .statItem { padding: 10px 30px; border-right: 1px solid var(--line); }
 .statItem:first-child { padding-left: 0; }

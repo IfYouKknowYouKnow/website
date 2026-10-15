@@ -135,6 +135,21 @@ function Sparkle() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" stroke="currentColor" strokeWidth="1.5" /></svg>
 }
 
+function SocialSaveVisual() {
+  return (
+    <figure className={styles.socialSaveVisual}>
+      <img
+        src="/images/social/save-places-poster.webp"
+        alt="Save places from Instagram, TikTok and Google Maps into YouKnow. Arrows connect all three apps to places on the YouKnow map."
+        width="1122"
+        height="1402"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  )
+}
+
 function MapArtwork() {
   return <svg className={styles.mapArtwork} viewBox="0 0 640 740" fill="none" aria-hidden="true">
     <defs><pattern id="map-grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" stroke="currentColor" strokeOpacity=".12" /></pattern></defs>
@@ -583,9 +598,18 @@ export default function Landing({ initialStats } = {}) {
                 />
               </h1>
               <p className={styles.subhead}>
-                Skip the endless searching. Find restaurants, bars, cafes and nights
-                out through friends and connoisseurs who share your taste.
+                Find places through people who share your taste. Save your Instagram
+                and TikTok finds, and import your Google Saved Places onto one personal map.
               </p>
+
+              <a className={styles.heroSocialLink} href="#from-feed-to-map">
+                <span className={styles.heroSocialIcons} aria-hidden="true">
+                  <img src="/images/social/instagram.svg" alt="" width="25" height="25" />
+                  <img src="/images/social/tiktok.webp" alt="" width="25" height="25" />
+                  <img className={styles.heroGoogleMapsIcon} src="/images/social/google-maps.png" alt="" width="25" height="25" />
+                </span>
+                <span>All your finds, one map</span> <span aria-hidden="true">↗</span>
+              </a>
 
               <div className={styles.heroActions}>
                 <span className={styles.heroFreeNote}>Completely Free</span>
@@ -672,9 +696,34 @@ export default function Landing({ initialStats } = {}) {
         <textarea name="taste" />
       </form>
 
-      <StatStrip stats={stats} />
-
       <main className={styles.editorial}>
+        <section className={styles.socialSaveSection} id="from-feed-to-map" aria-labelledby="social-save-heading">
+          <div className={`container ${styles.socialSaveInner}`}>
+            <div className={styles.socialSaveCopy}>
+              <span className={styles.sectionEyebrow}>Found online. Kept for real life.</span>
+              <h2 id="social-save-heading">All your finds.<br /> One map.</h2>
+              <p>That restaurant on Instagram. That café on TikTok. Your Google Maps saved places. Keep your discoveries together, ready for your next plan.</p>
+              <ol className={styles.socialSaveSteps}>
+                <li><span>01</span> Share the post to YouKnow.</li>
+                <li><span>02</span> Confirm the matching place.</li>
+                <li><span>03</span> Save it to your map.</li>
+              </ol>
+              <p className={styles.googleMapsImport}>
+                Already saving on Google Maps?{' '}
+                <Link to="/tutorials#google-saved-places">Import your Google Saved Places <span aria-hidden="true">↗</span></Link>
+              </p>
+              <div className={styles.socialSaveActions}>
+                <a className={styles.navCta} href="#download">Start saving places <span aria-hidden="true">↗</span></a>
+                <Link className={styles.textLink} to="/tutorials">Watch the tutorial</Link>
+              </div>
+              <p className={styles.socialSaveNote}>Free on iOS & Android.</p>
+            </div>
+            <SocialSaveVisual />
+          </div>
+        </section>
+
+        <StatStrip stats={stats} />
+
         <section className={styles.featureSection} id="how-it-works">
           <div className="container">
             <div className={styles.featureIntro} data-reveal>
