@@ -24,7 +24,7 @@ const SOURCES = [
   {
     id: 'google-maps',
     name: 'Google Maps',
-    icon: '/images/social/google-maps.png',
+    icon: '/images/social/google-maps.svg',
     heading: 'Your saved list. Ready to go.',
     description: 'Paste a shared Google Maps list link. Select the places you want, choose Want to go or Recommended, and save them to your map.',
     hint: 'From list to your map',

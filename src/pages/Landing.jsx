@@ -581,7 +581,7 @@ export default function Landing({ initialStats } = {}) {
                 <span className={styles.heroSocialIcons} aria-hidden="true">
                   <img src="/images/social/instagram.svg" alt="" width="25" height="25" />
                   <img src="/images/social/tiktok.webp" alt="" width="25" height="25" />
-                  <img className={styles.heroGoogleMapsIcon} src="/images/social/google-maps.png" alt="" width="25" height="25" />
+                  <img className={styles.heroGoogleMapsIcon} src="/images/social/google-maps.svg" alt="" width="25" height="25" />
                 </span>
                 <span>All your finds, one map</span> <span aria-hidden="true">↗</span>
               </a>
