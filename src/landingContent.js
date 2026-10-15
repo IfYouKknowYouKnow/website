@@ -41,7 +41,7 @@ export function getFaqItems(cityCount) {
     {
       question: 'How can I save a place?',
       answer:
-        'Save places directly in YouKnow, share a restaurant or bar from Instagram or TikTok, add one from a photo, or import your Google Saved Places. YouKnow helps identify the matching location before adding it to your map.',
+        'Save places directly in YouKnow, share a restaurant or bar from Instagram or TikTok, or add one from a photo. To import a Google Maps list, paste its shared link in YouKnow, select or deselect the places you want, and save them as Want to go or Recommended.',
     },
     {
       question: 'How does search by vibe work?',

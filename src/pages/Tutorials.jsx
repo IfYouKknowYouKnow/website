@@ -35,41 +35,18 @@ const TUTORIALS = [
     id: 'google-saved-places',
     title: 'Google Saved Places',
     steps: [
-      <>
-        Go to{' '}
-        <a href="https://takeout.google.com/" target="_blank" rel="noreferrer">
-          Google Takeout
-        </a>{' '}
-        and sign in with the Google account that has your saved places.
-      </>,
-      'Click Deselect all so you only export the place data you need.',
-      'Scroll to Saved and select Saved places.',
-      'Choose CSV as the export format, then create the export and download it when Google has prepared the file.',
-      <>
-        Send the CSV to{' '}
-        <a href="mailto:ifyouknowyouknowrecs@gmail.com">ifyouknowyouknowrecs@gmail.com</a>{' '}
-        and we will import it to your user.
-      </>,
+      'Open a saved list in Google Maps, make it public or turn on link sharing, then copy its link.',
+      'In YouKnow, tap the add button, choose Import from Google Maps, and paste the list link.',
+      'Review the places and select the ones you want to add. Deselect any you do not want, or use Select all and Clear to change your selection.',
+      'Choose Want to go or Recommended, then save the selected places to your map.',
     ],
     screenshots: [
       {
-        src: '/takeout_1.png',
-        alt: 'Google Takeout tutorial step 1.',
-      },
-      {
-        src: '/takeout_2.png',
-        alt: 'Google Takeout tutorial step 2.',
-      },
-      {
-        src: '/takeout_3.png',
-        alt: 'Google Takeout tutorial step 3.',
-      },
-      {
-        src: '/takeout_4.png',
-        alt: 'Google Takeout tutorial step 4.',
+        src: '/images/google-maps-list-import.webp',
+        alt: 'YouKnow Google Maps list import: paste a list link, select or deselect places, choose Want to go or Recommended, and save your selection.',
       },
     ],
-    mediaVariant: 'takeoutMedia',
+    mediaVariant: 'googleMapsMedia',
   },
   {
     title: 'Manually',

@@ -709,7 +709,7 @@ export default function Landing({ initialStats } = {}) {
                 <li><span>03</span> Save it to your map.</li>
               </ol>
               <p className={styles.googleMapsImport}>
-                Already saving on Google Maps?{' '}
+                Paste a Google Maps list link and choose the places you want.{' '}
                 <Link to="/tutorials#google-saved-places">Import your Google Saved Places <span aria-hidden="true">↗</span></Link>
               </p>
               <div className={styles.socialSaveActions}>
