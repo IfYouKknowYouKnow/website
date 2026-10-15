@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { usePageMetadata } from '../usePageMetadata'
 import styles from './Tutorials.module.css'
 
@@ -10,10 +11,10 @@ const TUTORIALS = [
       'YouKnow will open automatically and identify the likeliest matching places.',
       'Review the detected place and save it once it looks right.',
     ],
-    video: {
-      src: '/video_insta.mp4',
-      type: 'video/mp4',
-      label: 'Instagram or TikTok place sharing tutorial video.',
+    animation: {
+      src: '/images/social-sharing-demo.gif',
+      poster: '/images/social-sharing-poster.png',
+      alt: 'Animation showing sharing an Instagram post into YouKnow, confirming the place, and saving it to your map.',
     },
   },
   {
@@ -79,6 +80,41 @@ const TUTORIALS = [
   },
 ]
 
+function TutorialAnimation({ animation }) {
+  const [isPaused, setIsPaused] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = (event) => setIsPaused(event.matches)
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [])
+
+  return (
+    <div className={styles.animationMedia}>
+      <img
+        className={styles.tutorialVideo}
+        src={isPaused ? animation.poster : animation.src}
+        alt={animation.alt}
+        width="320"
+        height="706"
+        loading="lazy"
+        decoding="async"
+      />
+      <button
+        className={styles.animationToggle}
+        type="button"
+        aria-label={isPaused ? 'Play sharing animation' : 'Pause sharing animation'}
+        onClick={() => setIsPaused((paused) => !paused)}
+      >
+        {isPaused ? 'Play' : 'Pause'}
+      </button>
+    </div>
+  )
+}
+
 export default function Tutorials() {
   usePageMetadata('tutorials')
 
@@ -122,6 +158,12 @@ export default function Tutorials() {
                     <li key={stepIndex}>{step}</li>
                   ))}
                 </ol>
+
+                {tutorial.animation && (
+                  <div className={styles.videoMedia}>
+                    <TutorialAnimation animation={tutorial.animation} />
+                  </div>
+                )}
 
                 {tutorial.screenshots && (
                   <div

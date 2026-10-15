@@ -103,7 +103,7 @@ function AnimatedFeaturePreview({ feature, className }) {
     <figure className={className}>
       <img className={styles.featureAnimationImage}
         src={isPaused ? feature.animationStill : feature.src}
-        alt={feature.alt} width="320" height="707" loading="lazy" decoding="async" />
+        alt={feature.alt} width="320" height="706" loading="lazy" decoding="async" />
       <button className={styles.featureAnimationToggle} type="button"
         aria-label={isPaused ? 'Play sharing animation' : 'Pause sharing animation'}
         onClick={() => setIsPaused((paused) => !paused)}>
