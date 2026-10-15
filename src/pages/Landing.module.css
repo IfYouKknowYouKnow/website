@@ -39,17 +39,17 @@
 .hero > :first-child { display: grid; flex: 1; width: 100%; }
 .heroInner { display: grid; grid-template-columns: .95fr 1.1fr; align-items: center; gap: 36px; min-height: 800px; }
 .copy { position: relative; z-index: 5; padding-block: 38px 55px; }
-.copy h1 { max-width: 740px; font-size: clamp(64px, 6.1vw, 88px); font-weight: 680; line-height: 1.02; letter-spacing: -.065em; }
+.copy h1 { max-width: 740px; font-size: clamp(64px, 6.1vw, 88px); font-weight: 680; line-height: 1.08; letter-spacing: -.065em; }
 .copy h1 > span { display: block; }
 .heroWordmark { display: block; width: min(100%, 5.9em); height: auto; margin: -.23em 0 -.35em -.18em; }
-.subhead { max-width: 430px; margin-top: 28px; font-size: 20.4px; line-height: 1.65; color: var(--muted); }
-.heroSocialLink { display: inline-flex; align-items: center; gap: 14px; margin-top: 26px; font-size: 14px; font-weight: 550; }
+.subhead { max-width: 430px; margin-top: 40px; font-size: 20.4px; line-height: 1.75; color: var(--muted); }
+.heroSocialLink { display: inline-flex; align-items: center; gap: 14px; margin-top: 34px; font-size: 14px; font-weight: 550; }
 .heroSocialLink:hover { text-decoration: underline; text-underline-offset: 4px; }
 .heroSocialIcons { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; }
 .heroSocialIcons img { display: block; width: 32px; height: 32px; border-radius: 9px; }
 .heroSocialIcons .heroGoogleMapsIcon { object-fit: contain; padding: 2px; border-radius: 0; }
-.heroActions { margin-top: 30px; }
-.heroFreeNote { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
+.heroActions { margin-top: 38px; }
+.heroFreeNote { display: flex; align-items: center; gap: 7px; margin-bottom: 16px; font-size: 14px; font-weight: 600; }
 .heroFreeNote::before { content: '↗'; color: var(--blue); }
 .actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .storeBadgeLink { display: inline-flex; line-height: 0; border-radius: 9px; transition: transform .25s; }
@@ -57,7 +57,7 @@
 .storeBadge { display: block; height: auto; }
 .appStoreBadge { width: 140px; }
 .googlePlayBadge { width: 164px; }
-.proof { display: grid; gap: 4px; margin-top: 23px; color: var(--muted); font-size: 14px; }
+.proof { display: grid; gap: 8px; margin-top: 32px; color: var(--muted); font-size: 14px; }
 .proof span:first-child { color: var(--ink); font-weight: 600; }
 .visualWrap { position: relative; display: grid; place-items: center; min-height: 800px; padding: 40px 0 25px; isolation: isolate; }
 .visualWrap::before { content: ''; position: absolute; z-index: -1; inset: 0 -9% 12% -7%; border-radius: 48% 49% 46% 45%; background: #bae7ff; transform: rotate(-9deg); }
@@ -259,7 +259,7 @@
   .heroInner { grid-template-columns: .95fr 1.1fr; gap: 20px; min-height: 650px; }
   .copy { padding-block: 15px 40px; }
   .copy h1 { font-size: clamp(49px, 6.6vw, 65px); }
-  .subhead { font-size: 16.8px; margin-top: 22px; }
+  .subhead { font-size: 16.8px; margin-top: 32px; }
   .visualWrap { min-height: 650px; }
   .phoneShell { width: 225px; border-radius: 35px; padding: 5px; }
   .screenCarousel { border-radius: 29px; }
@@ -300,8 +300,8 @@
   .heroInner { grid-template-columns: 1fr; }
   .copy { padding: 10px 0 32px; }
   .copy h1 { font-size: clamp(44px, 13.7vw, 78px); max-width: 490px; }
-  .subhead { max-width: 430px; font-size: 18px; margin-top: 22px; }
-  .heroActions { margin-top: 24px; }
+  .subhead { max-width: 430px; font-size: 18px; margin-top: 32px; }
+  .heroActions { margin-top: 32px; }
   .appStoreBadge { width: 136px; }
   .googlePlayBadge { width: 159px; }
   .heroActions .actions { gap: 8px; }
