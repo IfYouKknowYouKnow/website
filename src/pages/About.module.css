@@ -340,9 +340,9 @@
 
 .howInner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(290px, 0.55fr);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.7fr);
   align-items: start;
-  gap: clamp(50px, 10vw, 140px);
+  gap: clamp(40px, 6vw, 80px);
 }
 
 .howCopy > p:not(.kicker) {
@@ -380,6 +380,7 @@
   font-weight: 620;
   letter-spacing: -0.05em;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .factLabel {
