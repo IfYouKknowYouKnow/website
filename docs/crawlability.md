@@ -1,6 +1,6 @@
 # AI crawling and search: YouKnow implementation
 
-Reviewed on 14 October 2026.
+Reviewed on 17 October 2026.
 
 ## What AI systems read
 
@@ -54,4 +54,14 @@ The checks inspect initial HTML without executing JavaScript: content, headings,
 
 Deploy through the existing Netlify workflow. After deployment, verify the actual HTTP responses for `/`, `/about`, `/privacy`, `/zurich/`, `/zurich/cafes/`, `/zurich/index.md`, `/content/index.json`, `/invite/example`, `/place/example` and a nonexistent URL. Check the Markdown content type, canonical Link headers and HTTP 404 behavior. Submit `/sitemap.xml` in Google Search Console and Bing Webmaster Tools when those accounts are available. Host-level bot challenges and firewall configuration are outside this repository; if access is blocked there, use the providers' current verified IP ranges rather than trusting a User-Agent alone.
 
-Local browser verification was unavailable because the installed Browser runtime could not initialize in this session. The build and raw HTML checks are the available verification evidence; production Netlify routing and headers still need a deployed HTTP check.
+Local browser verification was unavailable because the installed Browser runtime could not initialize in this session. Build checks verify the generated files; the live HTTP audit below records the currently deployed responses. The corrected city routing still needs verification after deployment.
+
+## Redesign crawlability audit — 17 October 2026
+
+The redesigned homepage still renders its real text into the initial HTML. The community statement, all eight feature descriptions, travel headline and friends’ recommendation copy also appear in the Markdown, JSON and combined text exports. New build checks protect this content and the parity of every page's combined text export. Decorative background labels are excluded from Markdown through `aria-hidden`; the interactive neighbourhood remains explicitly labelled as imaginary and is not used as real place structured data.
+
+Live HTTP checks returned 200 for the homepage both normally and with an OAI-SearchBot user-agent string. The public robots.txt allows all crawlers; the sitemap returns XML, and the homepage Markdown returns `text/markdown` with a canonical Link header. A user-agent check alone does not prove access from OpenAI's actual crawler IPs or inclusion in its search index.
+
+The deployed `/zurich/` page failed after 50 self-redirects to `/zurich/`. The local Netlify configuration had explicit slash-only redirects for Zurich, its topics, Geneva and Berlin. Netlify normalizes trailing slashes before matching redirect rules, so these rules were removed in favour of serving the generated directory index files. A build check now rejects redirects whose source and target become identical after trailing-slash normalization. See [Netlify's trailing-slash guidance](https://docs.netlify.com/manage/routing/redirects/redirect-options/#trailing-slash).
+
+The live homepage still contains the previous design. Deploy this build, then recheck city guide HTTP responses and the latest homepage copy. Search indexing and citations cannot be guaranteed; allowing the search crawler is independent of allowing model training, as described in the [official OpenAI crawler documentation](https://developers.openai.com/api/docs/bots).

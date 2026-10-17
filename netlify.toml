@@ -28,28 +28,8 @@
   to = "/privacy.html"
   status = 200
 
-[[redirects]]
-  from = "/zurich"
-  to = "/zurich/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/zurich/:topic"
-  to = "/zurich/:topic/"
-  status = 301
-
-[[redirects]]
-  from = "/geneva"
-  to = "/geneva/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/berlin"
-  to = "/berlin/"
-  status = 301
-  force = true
+# Netlify normalizes trailing slashes before matching redirects. Let it serve
+# the generated city/index.html files directly; slash-only redirects can loop.
 
 [[redirects]]
   from = "/invite/*"
