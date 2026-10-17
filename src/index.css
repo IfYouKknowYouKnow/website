@@ -7,7 +7,7 @@
 :root {
   --brand-blue: #86c6fd;
   --brand-blue-rgb: 134, 198, 253;
-  --bg: #090909;
+  --bg: #0c1520;
   --surface: #111111;
   --surface-2: #1a1a1a;
   --border: rgba(255, 255, 255, 0.08);
@@ -59,14 +59,16 @@ input, button {
 /* City guides intentionally use stable global class names. The build step also
    renders this markup into static HTML so place entities are useful before JS. */
 .city-page {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  background: #f7f6f1;
-  color: #11110f;
-  --city-ink: #11110f;
-  --city-muted: #68665f;
+  background: #0c1520;
+  color: #edf4fa;
+  --city-ink: #edf4fa;
+  --city-muted: #acbdcb;
   --city-blue: var(--brand-blue);
   --city-accent: #ff6339;
-  --city-line: rgba(17, 17, 15, 0.14);
+  --city-line: rgba(183, 216, 243, .16);
 }
 
 .city-page :is(h1, h2, h3) {
@@ -83,7 +85,7 @@ input, button {
   position: relative;
   z-index: 10;
   border-bottom: 1px solid var(--city-line);
-  background: rgba(247, 246, 241, 0.9);
+  background: rgba(12, 21, 32, .84);
   backdrop-filter: blur(18px);
 }
 
@@ -110,7 +112,7 @@ input, button {
   display: flex;
   align-items: center;
   gap: 24px;
-  color: #525048;
+  color: #acbdcb;
   font-size: 16.8px;
   font-weight: 600;
 }
@@ -125,9 +127,7 @@ input, button {
 .city-hero {
   overflow: hidden;
   border-bottom: 1px solid var(--city-line);
-  background:
-    radial-gradient(circle at 72% 30%, rgba(255, 255, 255, 0.82), transparent 27%),
-    linear-gradient(135deg, #f7f6f1 0 55%, var(--city-blue) 55% 100%);
+  background: transparent;
 }
 
 .city-hero-inner {
@@ -143,7 +143,7 @@ input, button {
 .city-back-link {
   display: inline-block;
   margin-bottom: 30px;
-  color: #55534c;
+  color: #acbdcb;
   font-size: 16.8px;
   font-weight: 650;
 }
@@ -152,7 +152,7 @@ input, button {
 .city-place-kicker,
 .city-continue-count {
   margin: 0 0 18px;
-  color: #6a675f;
+  color: #99cffb;
   font-size: 14.4px;
   font-weight: 750;
   letter-spacing: 0.12em;
@@ -172,7 +172,7 @@ input, button {
 .city-lead {
   max-width: 660px;
   margin: 28px 0 34px;
-  color: #4f4d47;
+  color: #acbdcb;
   font-size: clamp(22.8px, 2.52vw, 28.8px);
   line-height: 1.5;
 }
@@ -184,8 +184,8 @@ input, button {
   min-height: 52px;
   padding: 0 22px;
   border-radius: 999px;
-  background: var(--city-ink);
-  color: white;
+  background: var(--city-blue);
+  color: #102333;
   font-size: 16.8px;
   font-weight: 700;
   transition: transform 0.18s ease, background 0.18s ease;
@@ -193,7 +193,7 @@ input, button {
 
 .city-primary-button:hover {
   transform: translateY(-2px);
-  background: #2f2f2a;
+  background: #b4ddff;
 }
 
 .city-hero-art {
@@ -205,7 +205,7 @@ input, button {
 .city-hero-art::after {
   position: absolute;
   content: '';
-  border: 2px solid rgba(17, 17, 15, 0.28);
+  border: 2px solid rgba(134, 198, 253, .3);
   border-radius: 50%;
 }
 
@@ -220,7 +220,7 @@ input, button {
 .city-art-map-line {
   position: absolute;
   inset: 25% 12% 24% 5%;
-  border-top: 2px dashed rgba(17, 17, 15, 0.36);
+  border-top: 2px dashed rgba(134, 198, 253, .3);
   border-radius: 50%;
   transform: rotate(-13deg);
 }
@@ -234,8 +234,8 @@ input, button {
   place-items: center;
   border: 1px solid rgba(17, 17, 15, 0.16);
   border-radius: 28px 28px 28px 7px;
-  background: white;
-  box-shadow: 0 20px 50px rgba(33, 70, 94, 0.18);
+  background: #142a3d;
+  box-shadow: 0 0 35px #ffce7b15, 0 20px 50px rgba(33, 70, 94, 0.18);
   font-size: 37.2px;
   transform: rotate(-8deg);
 }
@@ -290,7 +290,7 @@ input, button {
   overflow: hidden;
   border: 1px solid var(--city-line);
   border-radius: 24px;
-  background: #fff;
+  background: #112334e6;
   box-shadow: 0 18px 55px rgba(37, 35, 29, 0.055);
 }
 
@@ -299,25 +299,23 @@ input, button {
   min-height: 330px;
   place-items: center;
   border-right: 1px solid var(--city-line);
-  background:
-    radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.9), transparent 18%),
-    linear-gradient(145deg, color-mix(in srgb, var(--brand-blue), white 65%), #f3e6c7);
+  background: radial-gradient(circle at 50% 45%, #86c6fd20, transparent 65%), #142c3d;
 }
 
 .city-place-card:nth-child(2) .city-place-visual {
-  background: linear-gradient(145deg, #f8d9ce, #eef2c9);
+  background: linear-gradient(145deg, #273d38, #18313b);
 }
 
 .city-place-card:nth-child(3) .city-place-visual {
-  background: linear-gradient(145deg, #dce8cf, #e7d9f8);
+  background: linear-gradient(145deg, #31304b, #17323c);
 }
 
 .city-place-card:nth-child(4) .city-place-visual {
-  background: linear-gradient(145deg, #f3e2ba, #d8edf0);
+  background: linear-gradient(145deg, #3c3038, #19303e);
 }
 
 .city-place-card:nth-child(5) .city-place-visual {
-  background: linear-gradient(145deg, #e8d9cc, color-mix(in srgb, var(--brand-blue), white 75%));
+  background: linear-gradient(145deg, #223e46, #243044);
 }
 
 .city-place-visual span {
@@ -326,7 +324,7 @@ input, button {
   height: 104px;
   place-items: center;
   border-radius: 32px;
-  background: rgba(255, 255, 255, 0.76);
+  background: #14293ee8;
   box-shadow: 0 20px 40px rgba(51, 48, 40, 0.12);
   font-size: 52.8px;
 }
@@ -337,7 +335,7 @@ input, button {
 
 .city-place-kicker {
   margin-bottom: 10px;
-  color: #857d71;
+  color: #99cffb;
 }
 
 .city-place-copy h3 {
@@ -350,14 +348,14 @@ input, button {
 
 .city-place-address {
   margin-top: 10px;
-  color: #777269;
+  color: #acbdcb;
   font-size: 16.8px;
 }
 
 .city-place-description {
   max-width: 760px;
   margin-top: 22px;
-  color: #4e4c46;
+  color: #acbdcb;
   font-size: 19.2px;
   line-height: 1.7;
 }
@@ -375,8 +373,8 @@ input, button {
   padding: 7px 12px;
   border: 1px solid var(--city-line);
   border-radius: 999px;
-  background: #faf9f5;
-  color: #555149;
+  background: #1b3042;
+  color: #c1d2df;
   font-size: 14.4px;
   font-weight: 650;
 }
@@ -421,8 +419,8 @@ input, button {
 
 .city-continue-button {
   max-width: 310px;
-  background: white;
-  color: #151512;
+  background: var(--city-blue);
+  color: #102333;
   text-align: center;
 }
 
@@ -436,7 +434,7 @@ input, button {
 }
 
 .city-editorial-tint {
-  background: color-mix(in srgb, var(--brand-blue), white 90%);
+  background: #122a4033;
 }
 
 .city-editorial-inner {
@@ -446,7 +444,7 @@ input, button {
 }
 
 .city-section-number {
-  color: #99958b;
+  color: #9eb3c5;
   font-size: 15.6px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -458,7 +456,7 @@ input, button {
 
 .city-editorial-inner > div > p {
   margin-top: 28px;
-  color: #56534d;
+  color: #acbdcb;
   font-size: 22.8px;
   line-height: 1.72;
 }
@@ -466,7 +464,7 @@ input, button {
 .city-related {
   padding: 110px 0;
   border-top: 1px solid var(--city-line);
-  background: #f5e6de;
+  background: transparent;
 }
 
 .city-related-links {
@@ -484,20 +482,20 @@ input, button {
   padding: 0 24px;
   border: 1px solid rgba(17, 17, 15, 0.16);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.55);
+  background: #122638d9;
   font-size: 20.4px;
   font-weight: 650;
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
 .city-related-links a:hover {
-  background: white;
+  background: #183348;
   transform: translateY(-2px);
 }
 
 .city-faq {
   padding: 110px 0;
-  background: #fff;
+  background: #112334e6;
 }
 
 .city-faq-grid {
@@ -534,7 +532,7 @@ input, button {
 
 .city-footer {
   border-top: 1px solid var(--city-line);
-  background: #f7f6f1;
+  background: transparent;
 }
 
 .city-footer-inner {
@@ -551,7 +549,7 @@ input, button {
   min-height: 100vh;
   place-content: center;
   gap: 20px;
-  background: #f7f6f1;
+  background: transparent;
   color: #11110f;
   text-align: center;
 }
@@ -560,7 +558,7 @@ input, button {
   .city-nav-inner { min-height: 72px; gap: 12px; }
   .city-nav img, .city-footer img { width: 132px; height: 48px; }
   .city-nav nav > a:first-child { display: none; }
-  .city-hero { background: linear-gradient(160deg, #f7f6f1 0 70%, var(--city-blue) 70%); }
+  .city-hero { background: transparent; }
   .city-hero-inner { grid-template-columns: 1fr; min-height: auto; padding-top: 56px; padding-bottom: 40px; }
   .city-hero-art { min-height: 250px; }
   .city-art-pin { width: 65px; height: 65px; border-radius: 22px 22px 22px 6px; font-size: 31.2px; }

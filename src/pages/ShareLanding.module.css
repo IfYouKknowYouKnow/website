@@ -1,21 +1,10 @@
 .page {
   position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  color: #171513;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(224, 28, 28, 0.08), transparent 28rem),
-    radial-gradient(circle at 86% 80%, rgba(139, 92, 246, 0.12), transparent 30rem),
-    linear-gradient(180deg, #fff 0%, #fbfaf7 58%, #f5f1eb 100%);
+  color: #edf4fa;
+  background: #0c1520;
   overflow: hidden;
-}
-
-.page::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.82) 52%, rgba(255, 255, 255, 0.58) 100%);
 }
 
 .nav {
@@ -60,7 +49,7 @@
 
 .kicker {
   margin-bottom: 16px;
-  color: #e01c1c;
+  color: var(--brand-blue);
   font-size: 14.4px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -70,7 +59,7 @@
 .copy h1 {
   max-width: 680px;
   margin: 0;
-  color: #141210;
+  color: #edf4fa;
   font-size: clamp(50.4px, 8.4vw, 93.6px);
   font-weight: 820;
   letter-spacing: 0;
@@ -80,7 +69,7 @@
 .subhead {
   max-width: 520px;
   margin-top: 22px;
-  color: #6f6961;
+  color: #acbdcb;
   font-size: clamp(20.4px, 2.4vw, 24px);
   font-weight: 450;
   line-height: 1.55;
@@ -92,17 +81,17 @@
   gap: 8px;
   margin-top: 22px;
   padding: 9px 13px;
-  border: 1px solid rgba(23, 21, 19, 0.1);
+  border: 1px solid rgba(183, 216, 243, .16);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  color: #6f6961;
+  background: #122b3de6;
+  color: #acbdcb;
   font-size: 15.6px;
   font-weight: 720;
   box-shadow: 0 12px 30px rgba(38, 31, 25, 0.06);
 }
 
 .code strong {
-  color: #171513;
+  color: #edf4fa;
   letter-spacing: 0.04em;
 }
 
@@ -167,16 +156,16 @@
 }
 
 .secondaryButton {
-  border: 1px solid rgba(23, 21, 19, 0.1);
-  background: rgba(255, 255, 255, 0.76);
-  color: #171513;
+  border: 1px solid rgba(183, 216, 243, .16);
+  background: #122b3de6;
+  color: #edf4fa;
   box-shadow: 0 10px 24px rgba(38, 31, 25, 0.05);
 }
 
 .status {
   min-height: 20px;
   margin-top: 18px;
-  color: #8b857e;
+  color: #a2b9cc;
   font-size: 15.6px;
   font-weight: 650;
 }
@@ -193,9 +182,9 @@
   top: 3%;
   width: min(58vw, 326px);
   padding: 9px;
-  border: 1px solid rgba(23, 21, 19, 0.08);
+  border: 1px solid rgba(183, 216, 243, .16);
   border-radius: 48px;
-  background: rgba(255, 255, 255, 0.88);
+  background: #142333;
   box-shadow:
     0 34px 90px rgba(42, 35, 28, 0.16),
     0 10px 32px rgba(42, 35, 28, 0.08);
@@ -222,16 +211,16 @@
   bottom: 11%;
   width: min(82%, 318px);
   padding: 18px;
-  border: 1px solid rgba(23, 21, 19, 0.08);
+  border: 1px solid rgba(183, 216, 243, .16);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.82);
+  background: #122638ed;
   box-shadow: 0 18px 42px rgba(42, 35, 28, 0.1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .floatCard p {
-  color: #24211e;
+  color: #edf4fa;
   font-size: 20.4px;
   font-weight: 820;
 }
@@ -239,7 +228,7 @@
 .floatCard span {
   display: block;
   margin-top: 7px;
-  color: #6f6961;
+  color: #acbdcb;
   font-size: 15.6px;
   font-weight: 650;
   line-height: 1.42;
@@ -258,10 +247,6 @@
     overflow-y: auto;
   }
 
-  .page::before {
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(251, 250, 247, 0.92) 56%, #f5f1eb 100%);
-  }
 
   .hero {
     grid-template-columns: 1fr;

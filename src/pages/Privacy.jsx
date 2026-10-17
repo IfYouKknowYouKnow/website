@@ -1,3 +1,4 @@
+import NightMapBackground from '../components/NightMapBackground'
 import { Link } from 'react-router-dom'
 import styles from './Privacy.module.css'
 import { privacyMetadata } from '../pageMetadata'
@@ -10,6 +11,7 @@ export default function Privacy() {
     name: privacyMetadata.title, url: privacyMetadata.canonical })
   return (
     <div className={styles.page}>
+      <NightMapBackground />
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
           <Link to="/" className={styles.logo} aria-label="YouKnow home">

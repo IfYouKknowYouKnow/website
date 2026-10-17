@@ -1,10 +1,12 @@
 .page {
-  --text: #171b1d;
-  --text-muted: #646c70;
+  --text: #edf4fa;
+  --text-muted: #acbdcb;
   --orange: var(--brand-blue);
-  --border: rgba(23, 27, 29, .14);
-  color: #171b1d;
-  background: #f7f7f2;
+  --border: rgba(183, 216, 243, .16);
+  position: relative;
+  isolation: isolate;
+  color: var(--text);
+  background: #0c1520;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,7 +17,7 @@
   top: 0;
   z-index: 100;
   padding: 18px 0;
-  background: rgba(247, 247, 242, .92);
+  background: rgba(12, 21, 32, .84);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }

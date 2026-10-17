@@ -1,3 +1,4 @@
+import NightMapBackground from '../components/NightMapBackground'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { cityMetadata, cityStructuredData } from '../pageMetadata'
@@ -127,6 +128,7 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
 
   return (
     <div className="city-page">
+      <NightMapBackground />
       <header className="city-nav">
         <div className="container city-nav-inner">
           <Link to="/" aria-label="YouKnow home">

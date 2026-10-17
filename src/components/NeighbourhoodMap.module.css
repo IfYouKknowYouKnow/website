@@ -1,0 +1,33 @@
+.section { padding: clamp(76px, 9vw, 130px) 0; }
+.intro { max-width: 850px; margin: 0 auto; text-align: center; }
+.eyebrow { display: block; margin-bottom: 24px; color: var(--brand-blue); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.intro h2 { font-size: clamp(48px, 6.7vw, 90px); font-weight: 600; letter-spacing: -.065em; line-height: 1.02; }
+.intro h2 > span { color: var(--brand-blue); }
+.intro p { max-width: 510px; margin: 26px auto 0; color: #acbccb; font-size: 18px; line-height: 1.7; }
+.filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 38px 0 28px; }
+.filters button { min-height: 44px; padding: 10px 18px; border: 1px solid #ffffff26; border-radius: 999px; background: #101d2acc; color: #b8c7d4; font-size: 12px; font-weight: 550; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.filters button:hover { background: #21374b; transform: translateY(-2px); }
+.filters button[aria-pressed='true'] { background: var(--brand-blue); border-color: var(--brand-blue); color: #102333; }
+.stage { position: relative; overflow: hidden; border: 1px solid #86c6fd33; border-radius: 28px; background: #111c28; box-shadow: 0 35px 100px #00000030; }
+.map { position: relative; height: 620px; background: linear-gradient(110deg, #0c1520a0, #0c152000 55%, #0c152050), url('/images/night-city-map.svg') center / cover; }
+.mapNote { position: absolute; top: 28px; left: 30px; color: #b9cbd9; font-size: 12px; letter-spacing: -.02em; }
+.mapCaption { position: absolute; bottom: 23px; right: 26px; max-width: 200px; text-align: right; color: #b9cbd9; font-size: 10px; line-height: 1.6; }
+.pin { position: absolute; z-index: 1; display: grid; justify-items: center; gap: 12px; min-width: 92px; padding: 10px; border: 0; background: transparent; color: #e9f1f7; transform: translate(-50%, -50%); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pinEmoji { position: relative; display: grid; place-items: center; width: 62px; height: 62px; font-size: 42px; line-height: 1; filter: drop-shadow(0 0 15px color-mix(in srgb, var(--glow), transparent 45%)); transition: transform .3s; }
+.pinEmoji::before { content: ''; position: absolute; z-index: -1; inset: -28px; border-radius: 50%; background: radial-gradient(ellipse at 50% 65%, color-mix(in srgb, var(--glow), transparent 65%), transparent 65%); }
+.pinEmoji::after { content: ''; position: absolute; bottom: -5px; width: 12px; height: 6px; border-radius: 50%; background: #fff3d8; box-shadow: 0 0 15px 5px var(--glow); }
+.pinName { padding: 5px 10px; border: 1px solid transparent; border-radius: 999px; background: #0c152070; font-size: 12px; font-weight: 550; white-space: nowrap; text-shadow: 0 1px 6px #000; transition: background .2s, border-color .2s; }
+.pin:hover .pinEmoji, .pin[aria-pressed='true'] .pinEmoji { transform: translateY(-7px) scale(1.12); }
+.pin[aria-pressed='true'] .pinName { border-color: #86c6fd66; background: #14283a; color: #d8eeff; }
+.pin:focus-visible { outline: 3px solid var(--brand-blue); outline-offset: 4px; border-radius: 16px; }
+.detail { position: absolute; left: 26px; bottom: 26px; width: 315px; padding: 26px; border: 1px solid #86c6fd33; border-radius: 22px; background: #0d1b29ed; backdrop-filter: blur(18px); box-shadow: 0 15px 45px #00000030; }
+.detailEmoji { position: absolute; top: 25px; right: 24px; font-size: 28px; }
+.detailEyebrow { color: #9bb4c8; font-size: 9px; font-weight: 550; letter-spacing: .1em; text-transform: uppercase; }
+.detail h3 { margin-top: 14px; font-size: 32px; font-weight: 550; letter-spacing: -.05em; line-height: 1.15; }
+.vibe { margin-top: 12px; color: #d9e7f1; font-size: 13px; }
+.description { min-height: 66px; margin-top: 10px; color: #9eb3c5; font-size: 12px; line-height: 1.7; }
+.detail a { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 18px; border-top: 1px solid #ffffff1c; color: var(--brand-blue); font-size: 12px; font-weight: 550; }
+.detail a:hover { color: white; }
+@media (max-width: 1100px) { .detail { position: relative; left: auto; bottom: auto; width: 100%; padding: 24px; border: 0; border-top: 1px solid #86c6fd33; border-radius: 0; } .description { min-height: 42px; max-width: 480px; } .map { height: 520px; } }
+@media (max-width: 760px) { .intro p { font-size: 16px; } .filters { gap: 7px; margin-top: 28px; } .filters button { padding-inline: 13px; font-size: 11px; } .map { height: 430px; background-size: auto 115%; } .pin { min-width: 70px; padding: 8px 4px; gap: 10px; } .pinEmoji { width: 42px; height: 42px; font-size: 31px; } .pinName { padding: 4px 6px; font-size: 10px; } .mapNote { top: 20px; left: 20px; font-size: 10px; } .mapCaption { right: 18px; bottom: 16px; font-size: 9px; max-width: 170px; } .detail { position: relative; left: auto; bottom: auto; width: 100%; min-height: 260px; border: 0; border-top: 1px solid #86c6fd33; border-radius: 0; padding: 24px; } .description { min-height: 42px; max-width: 480px; } }
+@media (prefers-reduced-motion: reduce) { .pinEmoji, .filters button { transition: none; } .pin:hover .pinEmoji, .pin[aria-pressed='true'] .pinEmoji, .filters button:hover { transform: none; } }

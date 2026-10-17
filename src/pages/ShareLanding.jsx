@@ -1,3 +1,4 @@
+import NightMapBackground from '../components/NightMapBackground'
 import { useEffect, useMemo } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
@@ -86,6 +87,7 @@ export default function ShareLanding({ type }) {
 
   return (
     <main className={styles.page}>
+      <NightMapBackground />
       <nav className={styles.nav}>
         <Link className={styles.brand} to="/" aria-label="YouKnow home">
           <img src="/youknow-wordmark-blue.svg" alt="YouKnow" decoding="async" />

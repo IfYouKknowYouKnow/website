@@ -1,3 +1,4 @@
+import NightMapBackground from '../components/NightMapBackground'
 import { usePageMetadata } from '../usePageMetadata'
 import { Link } from 'react-router-dom'
 import styles from './About.module.css'
@@ -61,6 +62,7 @@ export default function About() {
 
   return (
     <div className={styles.page}>
+      <NightMapBackground />
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
           <Link className={styles.brand} to="/" aria-label="YouKnow home">

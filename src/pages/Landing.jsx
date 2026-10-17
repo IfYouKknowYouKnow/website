@@ -1,16 +1,15 @@
+import NightMapBackground from '../components/NightMapBackground'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FALLBACK_STATS, getFaqItems, initialLandingStats } from '../landingContent'
 import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import SocialSaveSection from '../components/SocialSaveSection'
-import ScreenshotPinMotion from '../components/ScreenshotPinMotion'
-import HeroMoodCards from '../components/HeroMoodCards'
+import NeighbourhoodMap from '../components/NeighbourhoodMap'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.youknow.mobile'
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 const COUNT_REFRESH_INTERVAL_MS = 60000
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -125,17 +124,6 @@ function FeaturePreview({ feature, className, active = true }) {
   )
 }
 
-const QUERY_PILLS = [
-  'cozy bar for a first date',
-  'casual dinner',
-  'quiet cafe to work from',
-  'places my friends saved in Paris',
-]
-
-function Sparkle() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 14.8 9.2 22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z" stroke="currentColor" strokeWidth="1.5" /></svg>
-}
-
 function CityArtwork({ city }) {
   return <svg className={styles.cityArtwork} viewBox="0 0 320 130" fill="none" aria-hidden="true">
     <g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
@@ -190,11 +178,11 @@ function StatStrip({ stats }) {
       <div className={`container ${styles.statsInner}`}>
         <div className={styles.statItem}>
           <strong>{formatCount(curatedPlaces)} curated places</strong>
-          <span>Saved by people with taste</span>
+          <span>Shared by the YouKnow community</span>
         </div>
         <div className={styles.statItem}>
           <strong>{formatCount(cityCount)} cities</strong>
-          <span>Zero-noise layers for places worth knowing</span>
+          <span>Local knowledge, shared from person to person</span>
         </div>
         <div className={styles.statItem}>
           <strong>No stars. No noise.</strong>
@@ -207,7 +195,8 @@ function StatStrip({ stats }) {
 
 const FOOTER_LINKS = [
   { label: 'About', href: '/about' },
-  { label: 'Guides', href: '#guides' },
+  { label: 'Community', href: '#community' },
+  { label: 'Travel', href: '#guides' },
   { label: 'How it works', href: '#how-it-works' },
   { label: 'For curators', href: '#curators' },
   { label: 'FAQ', href: '#faq' },
@@ -218,18 +207,6 @@ const CITY_GUIDES = [
   { city: 'Geneva', href: '/geneva/', description: 'Lakefront cafés, dinners and local finds' },
   { city: 'Berlin', href: '/berlin/', description: 'Kiez favourites, coffee and nights out' },
 ]
-
-function getStaticMapUrl() {
-  if (!MAPBOX_TOKEN) {
-    return null
-  }
-
-  const params = new URLSearchParams({
-    access_token: MAPBOX_TOKEN,
-  })
-
-  return `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/8.5417,47.3769,12,0,0/1280x900@2x?${params}`
-}
 
 function encode(data) {
   return Object.keys(data)
@@ -319,13 +296,9 @@ export default function Landing({ initialStats } = {}) {
   const [isCuratorSubmitting, setIsCuratorSubmitting] = useState(false)
   const [curatorToast, setCuratorToast] = useState('')
   const [stats, setStats] = useState(() => initialStats || initialLandingStats())
-  const [activeSlide, setActiveSlide] = useState(0)
   const [activeFeature, setActiveFeature] = useState(0)
-  const [activeQuery, setActiveQuery] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pageRef = useRef(null)
-  const carouselRef = useRef(null)
-  const staticMapUrl = getStaticMapUrl()
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount)
 
@@ -375,7 +348,6 @@ export default function Landing({ initialStats } = {}) {
 
   useEffect(() => {
     const page = pageRef.current
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
     const sections = page.querySelectorAll('[data-reveal]')
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -393,9 +365,6 @@ export default function Landing({ initialStats } = {}) {
       const total = document.documentElement.scrollHeight - window.innerHeight
       page.style.setProperty('--scroll-progress', total > 0 ? scroll / total : 0)
       page.dataset.scrolled = scroll > 24
-      if (!media.matches) {
-        page.style.setProperty('--hero-shift', `${Math.min(scroll * 0.12, 85)}px`)
-      }
     }
     function scheduleUpdate() {
       if (!frame) frame = window.requestAnimationFrame(updateScroll)
@@ -488,47 +457,15 @@ export default function Landing({ initialStats } = {}) {
     }))
   }
 
-  function handleCarouselScroll(e) {
-    const { scrollLeft, clientWidth } = e.currentTarget
-    const nextSlide = Math.round(scrollLeft / clientWidth)
-
-    if (nextSlide !== activeSlide) {
-      setActiveSlide(nextSlide)
-    }
-  }
-
   function selectFeature(index) {
     setActiveFeature(index)
   }
 
-  function goToSlide(index) {
-    const carousel = carouselRef.current
-
-    if (!carousel) {
-      return
-    }
-
-    carousel.scrollTo({
-      left: carousel.clientWidth * index,
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-    })
-    setActiveSlide(index)
-  }
-
   return (
     <div className={styles.page} ref={pageRef}>
+      <NightMapBackground />
       <a className={styles.skipLink} href="#how-it-works">Skip to content</a>
       <div className={styles.scrollProgress} aria-hidden="true" />
-      {staticMapUrl && (
-        <img
-          className={styles.mapBackdrop}
-          src={staticMapUrl}
-          alt=""
-          aria-hidden="true"
-          decoding="async"
-        />
-      )}
-
       <nav className={styles.nav} aria-label="Primary navigation">
         <div className={`container ${styles.navInner}`}>
           <a className={styles.brand} href="/" aria-label="YouKnow home">
@@ -544,106 +481,16 @@ export default function Landing({ initialStats } = {}) {
             {isMenuOpen ? 'Close −' : 'Menu +'}
           </button>
           <div id="primary-links" className={`${styles.navLinks} ${isMenuOpen ? styles.navLinksOpen : ''}`} onClick={() => setIsMenuOpen(false)}>
+            <a href="#community">Community</a>
             <Link to="/about">About</Link>
-            <a href="#guides">Guides</a>
+            <a href="#guides">Travel</a>
             <a href="#how-it-works">How it works</a>
-            <a href="#curators">For curators</a>
-            <Link to="/tutorials">Tutorials</Link>
             <a className={styles.navCta} href="#download">
               Get the app <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
       </nav>
-
-      <section className={styles.hero}>
-        <div className="container">
-          <div className={styles.heroInner}>
-            <div className={styles.copy}>
-              <h1>
-                <span>Your people.</span>
-                <span>Your places.</span>
-                <img
-                  className={styles.heroWordmark}
-                  src="/youknow-wordmark-blue.svg"
-                  alt="YouKnow"
-                  width="1420"
-                  height="418"
-                  decoding="async"
-                />
-              </h1>
-              <p className={styles.subhead}>
-                Find places through people who share your taste, or search by vibe with AI.
-                Save your Instagram and TikTok finds, and import your Google Saved Places onto one personal map.
-              </p>
-
-              <a className={styles.heroSocialLink} href="#from-feed-to-map">
-                <span className={styles.heroSocialIcons} aria-hidden="true">
-                  <img src="/images/social/instagram.svg" alt="" width="25" height="25" />
-                  <img src="/images/social/tiktok.webp" alt="" width="25" height="25" />
-                  <img className={styles.heroGoogleMapsIcon} src="/images/social/google-maps.svg" alt="" width="25" height="25" />
-                </span>
-                <span>All your finds, one map</span> <span aria-hidden="true">↗</span>
-              </a>
-
-              <div className={styles.heroActions}>
-                <span className={styles.heroFreeNote}>Completely Free</span>
-                <StoreButtons />
-              </div>
-
-              <div className={styles.proof} aria-label="Live YouKnow community stats">
-                <span>Live in {formatCount(cityCount)} cities</span>
-                <span>Available in English, German, French and Italian</span>
-              </div>
-            </div>
-
-            <div className={styles.visualWrap} aria-label="YouKnow app preview">
-              <HeroMoodCards />
-              <div className={styles.phoneShell}>
-                <div
-                  className={styles.screenCarousel}
-                  ref={carouselRef}
-                  onScroll={handleCarouselScroll}
-                  aria-label="YouKnow app screenshots"
-                >
-                  {HERO_SCREENSHOTS.map((screenshot, index) => (
-                    <img
-                      className={styles.phoneScreen}
-                      src={screenshot.src}
-                      alt={screenshot.alt}
-                      decoding="async"
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      key={screenshot.src}
-                    />
-                  ))}
-                </div>
-                {activeSlide === 0 && <ScreenshotPinMotion />}
-              </div>
-              <div className={styles.heroPreviewPicker} aria-label="Choose app preview">
-                {HERO_SCREENSHOTS.map((screenshot, index) => (
-                  <button type="button" onClick={() => goToSlide(index)}
-                    aria-pressed={activeSlide === index} key={screenshot.src}>
-                    {['Your map', 'Search places', 'Inside a place'][index]}
-                  </button>
-                ))}
-              </div>
-
-              <div className={styles.visualActions}>
-                <a className={`${styles.secondaryCta} ${styles.visualCta}`} href="#waitlist">
-                  Join mailing list
-                </a>
-                <Link className={`${styles.secondaryCta} ${styles.visualCta}`} to="/about">
-                  Why YouKnow
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={`container ${styles.heroBottom}`}>
-          <span>A little local knowledge. A whole new world.</span>
-          <a href="#how-it-works">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a>
-        </div>
-      </section>
 
       <form name="waitlist" method="POST" data-netlify="true" hidden>
         <input type="hidden" name="form-name" value="waitlist" />
@@ -658,9 +505,45 @@ export default function Landing({ initialStats } = {}) {
       </form>
 
       <main className={styles.editorial}>
-        <SocialSaveSection />
+        <SocialSaveSection
+          screenshots={HERO_SCREENSHOTS}
+          downloadButtons={<StoreButtons />}
+          communityNote={`Live in ${formatCount(cityCount)} cities`}
+        />
 
         <StatStrip stats={stats} />
+
+        <section className={styles.communitySection} id="community" aria-labelledby="community-heading">
+          <div className="container">
+            <div className={styles.communityIntro}>
+              <span className={styles.sectionEyebrow}>Good places. Better together.</span>
+              <h2 id="community-heading">Your people<br />know a place.</h2>
+              <p>
+                A friend’s favourite café. A local’s little secret. A place you
+                cannot wait to share. Every recommendation adds a little more
+                local knowledge to a map built by the community.
+              </p>
+            </div>
+            <div className={styles.communityWays}>
+              <article>
+                <span>01 / Your friends</span>
+                <h3>Start with people you trust.</h3>
+                <p>See what your friends recommend, follow their finds, and turn “you’d love this place” into your next plan.</p>
+              </article>
+              <article>
+                <span>02 / Your kind of locals</span>
+                <h3>Find people who get your taste.</h3>
+                <p>Discover local connoisseurs and curations made by people who know the neighbourhood, wherever you go.</p>
+              </article>
+              <article>
+                <span>03 / A little from you</span>
+                <h3>Pass a good place on.</h3>
+                <p>Save somewhere you love and share your recommendations. Your favourite spot could be someone else’s next great find.</p>
+              </article>
+            </div>
+            <a className={styles.textLink} href="#download">Find your people. Build your map.</a>
+          </div>
+        </section>
 
         <section className={styles.featureSection} id="how-it-works">
           <div className="container">
@@ -729,42 +612,19 @@ export default function Landing({ initialStats } = {}) {
           </div>
         </section>
 
-        <section className={`${styles.storySection} ${styles.searchSection}`}>
-          <div className={`container ${styles.searchInner}`}>
-            <div className={styles.queryPanel}>
-              <span className={styles.queryLabel}><Sparkle /> Ask YouKnow</span>
-              <div className={styles.queryLine}>Find a place for...</div>
-              <div className={styles.queryPrompt} aria-live="polite" key={activeQuery}>{QUERY_PILLS[activeQuery]}<span aria-hidden="true">↗</span></div>
-              <p className={styles.queryHint}>A little inspiration. Pick your mood.</p>
-              <div className={styles.queryPills}>
-                {QUERY_PILLS.map((query, index) => (
-                  <button type="button" className={activeQuery === index ? styles.queryPillActive : ''} aria-pressed={activeQuery === index} onClick={() => setActiveQuery(index)} key={query}>{query}</button>
-                ))}
-              </div>
-              <a className={styles.queryFootnote} href="#download">Try search by vibe in the app <span aria-hidden="true">↗</span></a>
-            </div>
+        <NeighbourhoodMap />
 
-            <div className={styles.storyCopy} data-reveal>
-              <span className={styles.sectionEyebrow}>Search by vibe</span>
-              <h2 className={styles.searchHeadline}>Ask for a vibe, not a rating.</h2>
-              <p>
-                Describe the night you want, from a quiet coffee to a second-date
-                wine bar, and find places that match your people and your mood.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.cityGuideSection} id="guides">
+        <section className={styles.cityGuideSection} id="guides" aria-labelledby="travel-heading">
           <div className="container">
             <div className={styles.cityGuideHeader} data-reveal>
               <div>
-                <span className={styles.sectionEyebrow}>Explore guides</span>
-                <h2>Guides for your next city trip.</h2>
+                <span className={styles.sectionEyebrow}>Travel with your people’s favourites</span>
+                <h2 id="travel-heading">New city. Your friends might already know a place.</h2>
               </div>
               <p>
-                Choose a city to open its guide. Each one starts with five real
-                community recommendations, then lets you continue on the full map.
+                Your friends’ favourites shouldn’t be scattered across chats, notes
+                and screenshots. Ask them to save their spots on YouKnow, then see
+                all their recommendations together on your map—ready for your next trip.
               </p>
             </div>
 
