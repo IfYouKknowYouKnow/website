@@ -9,7 +9,7 @@ export function pageContentPaths(route) {
 
 export const homeMetadata = {
   title: 'YouKnow App | Friend-Powered Restaurant and Bar Recommendations',
-  description: 'YouKnow is an app for discovering restaurants, bars, cafes, clubs, and experiences through recommendations from people you trust.',
+  description: 'YouKnow brings places recommended by friends and local communities together with independent curations from the Michelin Guide, The World’s 50 Best and La Liste on one map.',
   canonical: 'https://ifykyk.app/',
   image: 'https://ifykyk.app/logo.png',
   card: 'summary',

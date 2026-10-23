@@ -60,7 +60,7 @@ const SCREEN_FEATURES = [
     id: 'curations',
     src: '/images/youknow-curations-20261015.webp',
     title: 'Create and follow curations',
-    body: 'Bring places together in a curation for a trip, a shared plan or a favourite theme. Create your own, follow others, or join a private curation with an invite code.',
+    body: 'Follow independent curations drawn from the Michelin Guide, The World’s 50 Best and La Liste alongside collections made by friends and creators. Or bring places together in a curation of your own.',
     alt: 'YouKnow Curations screen showing personal collections of places and an option to join a private curation with an invite code.',
   },
   {

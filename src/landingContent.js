@@ -36,7 +36,7 @@ export function getFaqItems(cityCount) {
     {
       question: 'Where do the recommendations come from?',
       answer:
-        'Recommendations come from friends, local communities, creators and connoisseurs—not anonymous star ratings. You can explore the wider community or filter the map to see exactly what a particular person has saved.',
+        'Recommendations come from friends, local communities and creators, alongside independent curations drawn from the Michelin Guide, The World’s 50 Best and La Liste. Follow a guide or a person to explore their picks on the map.',
     },
     {
       question: 'How can I save a place?',
