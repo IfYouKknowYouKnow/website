@@ -147,8 +147,8 @@ export default function SocialSaveSection({ screenshots, downloadButtons, commun
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>
           <span className={styles.eyebrow}><span aria-hidden="true">↗</span> Your people. Your places.</span>
-          <h1 id="social-save-heading">Found it?<br /><span>Map it.</span></h1>
-          <p className={styles.communityHeadline}>The map built by people <strong>YouKnow.</strong></p>
+          <h1 id="social-save-heading">The map built by people <span>YouKnow.</span></h1>
+          <p className={styles.tagline}>Found it? <strong>Map it.</strong></p>
           <p className={styles.intro}>Discover places recommended by friends and local communities alongside independent curations from the Michelin Guide, The World’s 50 Best and La Liste. Bring their picks and your Instagram, TikTok and Google Maps finds together on one personal map.</p>
 
           <div className={styles.downloads}>

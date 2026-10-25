@@ -22,10 +22,10 @@
 .copy { min-width: 0; position: relative; z-index: 2; }
 .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 11px; font-weight: 650; letter-spacing: .14em; text-transform: uppercase; color: #c4d1db; }
 .eyebrow > span { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid #86c6fd66; border-radius: 50%; color: var(--brand-blue); font-size: 16px; }
-.copy h1 { font-size: clamp(76px, 8vw, 116px); font-weight: 600; letter-spacing: -.06em; line-height: 1.02; }
+.copy h1 { font-size: clamp(52px, 5.4vw, 76px); font-weight: 600; letter-spacing: -.06em; line-height: 1.02; }
 .copy h1 > span { color: var(--brand-blue); }
-.communityHeadline { max-width: 440px; margin-top: 24px; color: #e5eef6; font-size: clamp(23px, 2.5vw, 32px); font-weight: 500; letter-spacing: -.045em; line-height: 1.2; }
-.communityHeadline strong { color: var(--brand-blue); font-weight: 600; }
+.tagline { max-width: 440px; margin-top: 24px; color: #e5eef6; font-size: clamp(23px, 2.5vw, 32px); font-weight: 500; letter-spacing: -.045em; line-height: 1.2; }
+.tagline strong { color: var(--brand-blue); font-weight: 600; }
 .intro { max-width: 450px; margin-top: 22px; font-size: 18px; line-height: 1.65; color: #bccbd6; }
 .sources { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 .sourceButton { position: absolute; left: var(--source-x); top: var(--source-y); display: grid; place-items: center; width: 14%; min-width: 44px; aspect-ratio: 1; padding: 10px; border: 1px solid #86c6fd40; border-radius: 23%; background: #102030d9; color: #d8e8f4; box-shadow: 0 12px 28px #00000050; transform: rotate(var(--source-angle)); cursor: pointer; pointer-events: auto; transition: transform .25s, border-color .25s, background .25s; }
@@ -79,7 +79,7 @@
 
 @media (max-width: 1000px) {
   .inner { gap: 40px; }
-  .copy h1 { font-size: clamp(66px, 9vw, 90px); }
+  .copy h1 { font-size: clamp(48px, 6vw, 60px); }
   .intro { font-size: 16px; }
   .guide { min-height: 106px; }
 }
@@ -90,8 +90,8 @@
   .inner { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
   .copy { display: contents; }
   .eyebrow { order: 0; align-self: flex-start; }
-  .copy h1 { order: 1; font-size: clamp(64px, 12vw, 82px); }
-  .communityHeadline { order: 2; }
+  .copy h1 { order: 1; font-size: clamp(44px, 9vw, 64px); }
+  .tagline { order: 2; }
   .downloads { order: 3; }
   .visual { order: 4; max-width: 420px; margin: 20px auto 12px; }
   .intro { order: 5; max-width: 470px; font-size: 17px; }
@@ -102,7 +102,7 @@
 }
 
 @media (max-width: 400px) {
-  .copy h1 { font-size: 62px; }
+  .copy h1 { font-size: 44px; }
   .eyebrow { font-size: 10px; letter-spacing: .1em; gap: 8px; }
   .sourceButton { padding: 7px; }
   .sourceButton::after { font-size: 9px; }
