@@ -604,8 +604,9 @@ img[src="/images/youknow-wordmark.png"] {
 
 /* Show the real app view for the city, keeping its map and place list visible. */
 .city-hero-art { display: grid; place-items: center; min-height: 0; height: auto; max-height: none; padding: 30px 24px; background: #e5eaff; border-radius: 24px; }
-.city-hero-art[data-city='geneva'] { background: #ffecf5; }
-.city-hero-art[data-city='berlin'] { background: #efffc1; }
+.city-hero-art[data-city='geneva'],.city-hero-art[data-city='paris'] { background: #ffecf5; }
+.city-hero-art[data-city='berlin'],.city-hero-art[data-city='tokyo'] { background: #efffc1; }
+.city-community-signal { margin-top:10px; color:#3157ff; font-size:12px; font-weight:600; }
 .city-hero-art::before, .city-hero-art::after { display: none; }
 .city-hero-art img { display: block; width: min(100%, 245px); height: auto; min-height: 0; border: 5px solid #12121c; border-radius: 30px; box-shadow: 5px 7px 0 #12121c20; }
 .city-nav-button { background: #12121c; border-radius: 4px; color: #fff; font-size: 12px; }

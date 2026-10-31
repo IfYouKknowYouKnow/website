@@ -42,7 +42,7 @@ function initialPlaces(guide) {
   return normalizePlaces(guide.fallbackPlaces)
 }
 
-function PlaceCard({ place, topicSlug }) {
+function PlaceCard({ place, topicSlug, rank }) {
   const categories = (place.category_labels || []).slice(0, 2).map(formatLabel)
   const tags = displayTags(place, topicSlug)
 
@@ -56,6 +56,7 @@ function PlaceCard({ place, topicSlug }) {
           {[...categories, place.city].filter(Boolean).join(' · ')}
         </p>
         <h3>{place.name}</h3>
+        {rank && <p className="city-community-signal">{String(rank).padStart(2, '0')} · {place.recommendation_count} community {place.recommendation_count === 1 ? 'recommendation' : 'recommendations'}</p>}
         {place.address && <p className="city-place-address">{place.address}</p>}
         {place.description && <p className="city-place-description">{place.description}</p>}
         {tags.length > 0 && (
@@ -163,8 +164,8 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
               <p>{guide.sectionIntro}</p>
             </div>
             <div className="city-place-list">
-              {places.map((place) => (
-                <PlaceCard place={place} topicSlug={topicSlug} key={place.id} />
+              {places.map((place, index) => (
+                <PlaceCard place={place} topicSlug={topicSlug} rank={guide.ranking === 'recommendations' ? index + 1 : undefined} key={place.id} />
               ))}
             </div>
             <ContinueInAppCTA guide={guide} publicPlaceCount={places.length} />

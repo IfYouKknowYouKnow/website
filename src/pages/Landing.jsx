@@ -4,8 +4,10 @@ import { FALLBACK_STATS, getFaqItems, initialLandingStats } from '../landingCont
 import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import ProductStory from '../components/ProductStory'
+import Personalization from '../components/Personalization'
 import HeroRecommendations from '../components/HeroRecommendations'
 import { HERO_MOOD_EXAMPLES } from '../heroMoodExamples'
+import communityPlaces from '../cityGuideCommunityPlaces.js'
 import styles from './Landing.module.css'
 
 const ANDROID_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.youknow.mobile'
@@ -55,6 +57,9 @@ const CITY_GUIDES = [
   { city: 'Zurich', href: '/zurich/', image: '/images/cities/zurich-app.png', mood: 'Coffee stops. Dinner plans. Your people’s picks.', alt: 'YouKnow’s Zurich city view, showing the map, category filters and recommended places.' },
   { city: 'Geneva', href: '/geneva/', image: '/images/cities/geneva-app.png', mood: 'A little local knowledge, ready when you land.', alt: 'YouKnow’s Geneva city view, showing the lakeside map and a list of places to explore.' },
   { city: 'Berlin', href: '/berlin/', image: '/images/cities/berlin-app.png', mood: 'Good food. Late nights. One city map.', alt: 'YouKnow’s Berlin city view, showing the map and recommendations including Gropius Bau and Bellboy Bar.' },
+  { city: 'Milan', href: '/milan/', image: '/images/cities/milan-app.png', mood: 'Aperitivo plans. Long dinners. Good company.', alt: 'YouKnow’s Milan city view, with the map and its Top picks list.', picks: communityPlaces.milan.slice(0, 3).map(place => place.name) },
+  { city: 'Paris', href: '/paris/', image: '/images/cities/paris-app.png', mood: 'Bistros, wine bars and your next favourite address.', alt: 'YouKnow’s Paris city view, with the map and its Top picks list.', picks: communityPlaces.paris.slice(0, 3).map(place => place.name) },
+  { city: 'Tokyo', href: '/tokyo/', image: '/images/cities/tokyo-app.png', mood: 'Dinner, discoveries and nights worth sharing.', alt: 'YouKnow’s Tokyo city view, with the map and its Top picks list.', picks: communityPlaces.tokyo.slice(0, 3).map(place => place.name) },
 ]
 
 function useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen) {
@@ -337,7 +342,7 @@ export default function Landing({ initialStats } = {}) {
           <span className={styles.heroEyebrow}><span className={styles.liveDot} /> YOUR PEOPLE KNOW A PLACE.</span>
           <h1 id="hero-heading">GOOD SPOTS.<br /><span>GREAT PEOPLE.</span></h1>
           <p className={styles.heroDescription}>Less “where should we go?”<br />More “you have to try this.”</p>
-          <p className={styles.heroSubline}>Your friends. Curators you trust. Their favourite spots.<br />One map. A whole lot of good plans.</p>
+          <p className={styles.heroSubline}>Your friends. Curators you trust. Their favourite spots.<br />One map. Shaped by your taste.</p>
           <div className={styles.moodPicker} role="group" aria-label="Choose a mood for the homepage preview">
             {HERO_MOOD_EXAMPLES.map((example, index) => <button type="button" key={example.label} aria-pressed={heroMood === index}
               aria-controls="hero-recommendations" onClick={() => { setHeroMood(index); setHeroPlace(0) }}>{example.label}</button>)}
@@ -379,6 +384,8 @@ export default function Landing({ initialStats } = {}) {
 
       <div className={styles.wrap}><ProductStory /></div>
 
+      <div className={styles.wrap}><Personalization /></div>
+
       <section className={`${styles.collection} ${styles.wrap}`} id="community" aria-labelledby="collection-heading">
         <div className={styles.sectionHeader} data-reveal>
           <div><span className={styles.eyebrow}>YOUR TASTE. YOUR LITTLE WORLD.</span><h2 id="collection-heading">YOUR MAP.<br /><span>YOUR KIND OF GOOD.</span></h2></div>
@@ -403,11 +410,11 @@ export default function Landing({ initialStats } = {}) {
         <div className={styles.wrap}>
           <div className={styles.sectionHeader} data-reveal>
             <div><span className={styles.eyebrow}>A LITTLE FURTHER AFIELD</span><h2 id="travel-heading">New city.<br /><span>Already in the know.</span></h2></div>
-            <div className={styles.travelIntro}><p>Explore recommendations in <strong>{formatCount(cityCount)} cities and counting.</strong> These are just three city previews.</p><a className={styles.textLink} href="#download">Explore more cities in the app <Icon /></a></div>
+            <div className={styles.travelIntro}><p>Explore recommendations in <strong>{formatCount(cityCount)} cities and counting.</strong> These are just a few city previews.</p><a className={styles.textLink} href="#download">Explore more cities in the app <Icon /></a></div>
           </div>
           <div className={styles.cityGrid}>{CITY_GUIDES.map((guide, index) => <Link className={styles.cityCard} to={guide.href} key={guide.city} data-reveal>
             <div className={styles.cityImage}><img src={guide.image} alt={guide.alt} width="1290" height="2796" loading="lazy" decoding="async" /><span className={styles.cityBadge}>CITY PREVIEW / 0{index + 1}</span><span className={styles.cityArrow}><Icon /></span></div>
-            <div className={styles.cityCopy}><h3>{guide.city}</h3><p>{guide.mood}</p></div>
+            <div className={styles.cityCopy}><h3>{guide.city}</h3><p>{guide.mood}</p>{guide.picks && <p className={styles.cityCommunityPicks}><span>COMMUNITY PICKS</span>{guide.picks.join(' · ')}</p>}</div>
           </Link>)}</div>
           <div className={styles.moodLinks}><span>ZURICH, BY MOOD</span><Link to="/zurich/cafes/">Coffee stops ↗</Link><Link to="/zurich/cosy-restaurants/">Cosy dinners ↗</Link><Link to="/zurich/bars/">One more drink ↗</Link><Link to="/zurich/date-night/">Date night ↗</Link><Link to="/zurich/hidden-gems/">Hidden gems ↗</Link></div>
         </div>

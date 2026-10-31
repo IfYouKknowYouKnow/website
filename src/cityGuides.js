@@ -1,3 +1,5 @@
+import communityPlaces from './cityGuideCommunityPlaces.js'
+
 const ZURICH_PLACES = [
   {
     id: 'fd6d6d30-cb3d-46c2-b522-b4d54975d2d4',
@@ -409,6 +411,23 @@ const TOPICS = {
   },
 }
 
+function communityCityGuide(slug, city, contentSections) {
+  return {
+    slug, city, path: `/${slug}/`,
+    title: `Discover ${city} Like a Local`,
+    eyebrow: 'YouKnow city guide',
+    intro: `Your next ${city} find starts with people who know a good place. Explore five of the most recommended spots from the YouKnow community, then find more in the app.`,
+    sectionTitle: `Top picks in ${city}`,
+    sectionIntro: `Five places ranked by community recommendations, with saves breaking ties. This is a small preview of the wider ${city} map; rankings update as the community shares new finds.`,
+    ranking: 'recommendations',
+    ctaTitle: 'Five good places. A whole city to explore.',
+    ctaBody: `Discover more ${city} recommendations from friends and curators you trust. Save your favourites and build your own map in YouKnow.`,
+    ctaLabel: `Explore more of ${city} on YouKnow`,
+    fallbackPlaces: communityPlaces[slug],
+    topics: {}, contentSections, faq: cityFaq(city),
+  }
+}
+
 export const cityGuides = {
   zurich: {
     slug: 'zurich',
@@ -497,6 +516,18 @@ export const cityGuides = {
     ],
     faq: cityFaq('Berlin'),
   },
+  milan: communityCityGuide('milan', 'Milan', [
+    { title: 'From a coffee stop to a long dinner', body: 'A pastry stop, an aperitivo and a dinner with friends all call for something different. Start with the places the community recommends, then use categories and vibe tags to find the Milan spot that fits your plan.' },
+    { title: 'Keep your own Milan shortlist', body: 'Save the places you want to try alongside the ones you already love. Follow friends and curators whose taste matches yours, and keep their Milan recommendations together on your map.' },
+  ]),
+  paris: communityCityGuide('paris', 'Paris', [
+    { title: 'Find your kind of Paris', body: 'A neighbourhood bistro, a wine bar and a coffee with a friend each make a different kind of day. Community recommendations give you a starting point, with addresses and vibe tags to help you choose.' },
+    { title: 'Good addresses are better shared', body: 'Keep the Paris places you hear about in one place. Save a friend’s recommendation, follow a curator you trust and share your own finds when someone asks where to go.' },
+  ]),
+  tokyo: communityCityGuide('tokyo', 'Tokyo', [
+    { title: 'Make room for more than dinner', body: 'The Tokyo community map includes places to eat, drink and explore. Start with these recommendations, then follow the categories and vibe tags that fit the kind of day or night you have in mind.' },
+    { title: 'Turn recommendations into a Tokyo map', body: 'Bring the places your friends mention and the curators you follow into one shortlist. Keep your want-to-go spots ready in YouKnow, then pass on the places you end up loving.' },
+  ]),
 }
 
 export const PUBLIC_PLACE_LIMIT = 5
@@ -536,7 +567,9 @@ export function buildPlacesUrl(guide, supabaseUrl) {
   }
   url.searchParams.set(
     'order',
-    'save_count.desc.nullslast,recommendation_count.desc.nullslast',
+    guide.ranking === 'recommendations'
+      ? 'recommendation_count.desc.nullslast,save_count.desc.nullslast'
+      : 'save_count.desc.nullslast,recommendation_count.desc.nullslast',
   )
   url.searchParams.set('limit', String(PUBLIC_PLACE_LIMIT))
   return url
