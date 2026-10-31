@@ -1,3 +1,22 @@
+/* latin-ext */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/space-grotesk-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/space-grotesk-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -27,7 +46,7 @@ html {
 
 body {
   font-size: 19.2px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -61,14 +80,15 @@ input, button {
 .city-page {
   position: relative;
   isolation: isolate;
+  font-size: 16px;
   min-height: 100vh;
-  background: #0c1520;
-  color: #edf4fa;
-  --city-ink: #edf4fa;
-  --city-muted: #acbdcb;
-  --city-blue: var(--brand-blue);
+  background: #ffffff;
+  color: #12121c;
+  --city-ink: #12121c;
+  --city-muted: #575766;
+  --city-blue: #12121c;
   --city-accent: #ff6339;
-  --city-line: rgba(183, 216, 243, .16);
+  --city-line: #dadae8;
 }
 
 .city-page :is(h1, h2, h3) {
@@ -85,7 +105,7 @@ input, button {
   position: relative;
   z-index: 10;
   border-bottom: 1px solid var(--city-line);
-  background: rgba(12, 21, 32, .84);
+  background: #ffffffed;
   backdrop-filter: blur(18px);
 }
 
@@ -101,8 +121,8 @@ input, button {
 .city-nav img,
 .city-footer img {
   display: block;
-  width: 190px;
-  height: 58px;
+  width: 145px;
+  height: 48px;
   object-fit: contain;
   object-position: left center;
 }
@@ -112,15 +132,15 @@ input, button {
   display: flex;
   align-items: center;
   gap: 24px;
-  color: #acbdcb;
-  font-size: 16.8px;
+  color: #575766;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .city-nav-button {
   padding: 10px 17px;
   border: 1px solid var(--city-ink);
-  border-radius: 999px;
+  border-radius: 4px;
   color: var(--city-ink);
 }
 
@@ -143,18 +163,18 @@ input, button {
 .city-back-link {
   display: inline-block;
   margin-bottom: 30px;
-  color: #acbdcb;
-  font-size: 16.8px;
-  font-weight: 650;
+  color: #575766;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .city-eyebrow,
 .city-place-kicker,
 .city-continue-count {
   margin: 0 0 18px;
-  color: #99cffb;
-  font-size: 14.4px;
-  font-weight: 750;
+  color: #3157ff;
+  font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.12em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -164,7 +184,7 @@ input, button {
   max-width: 760px;
   margin: 0;
   font-size: clamp(57.6px, 8.4vw, 103.2px);
-  font-weight: 520;
+  font-weight: 700;
   letter-spacing: -0.055em;
   line-height: 0.98;
 }
@@ -172,7 +192,7 @@ input, button {
 .city-lead {
   max-width: 660px;
   margin: 28px 0 34px;
-  color: #acbdcb;
+  color: #575766;
   font-size: clamp(22.8px, 2.52vw, 28.8px);
   line-height: 1.5;
 }
@@ -183,17 +203,17 @@ input, button {
   justify-content: center;
   min-height: 52px;
   padding: 0 22px;
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--city-blue);
-  color: #102333;
-  font-size: 16.8px;
-  font-weight: 700;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
   transition: transform 0.18s ease, background 0.18s ease;
 }
 
 .city-primary-button:hover {
   transform: translateY(-2px);
-  background: #b4ddff;
+  background: #3157ff;
 }
 
 .city-hero-art {
@@ -268,14 +288,14 @@ input, button {
 .city-continue h2 {
   margin: 0;
   font-size: clamp(40.8px, 5.52vw, 69.6px);
-  font-weight: 520;
+  font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 1.04;
 }
 
 .city-section-heading > p:last-child {
   color: var(--city-muted);
-  font-size: 20.4px;
+  font-size: 16px;
   line-height: 1.65;
 }
 
@@ -289,8 +309,8 @@ input, button {
   grid-template-columns: minmax(180px, 0.32fr) minmax(0, 1fr);
   overflow: hidden;
   border: 1px solid var(--city-line);
-  border-radius: 24px;
-  background: #112334e6;
+  border-radius: 20px;
+  background: #f2f3ff;
   box-shadow: 0 18px 55px rgba(37, 35, 29, 0.055);
 }
 
@@ -299,23 +319,23 @@ input, button {
   min-height: 330px;
   place-items: center;
   border-right: 1px solid var(--city-line);
-  background: radial-gradient(circle at 50% 45%, #86c6fd20, transparent 65%), #142c3d;
+  background: #dbe2ff;
 }
 
 .city-place-card:nth-child(2) .city-place-visual {
-  background: linear-gradient(145deg, #273d38, #18313b);
+  background: #efffc1;
 }
 
 .city-place-card:nth-child(3) .city-place-visual {
-  background: linear-gradient(145deg, #31304b, #17323c);
+  background: #e5eaff;
 }
 
 .city-place-card:nth-child(4) .city-place-visual {
-  background: linear-gradient(145deg, #3c3038, #19303e);
+  background: #ffe4f2;
 }
 
 .city-place-card:nth-child(5) .city-place-visual {
-  background: linear-gradient(145deg, #223e46, #243044);
+  background: #efffc1;
 }
 
 .city-place-visual span {
@@ -324,7 +344,7 @@ input, button {
   height: 104px;
   place-items: center;
   border-radius: 32px;
-  background: #14293ee8;
+  background: #ffffff;
   box-shadow: 0 20px 40px rgba(51, 48, 40, 0.12);
   font-size: 52.8px;
 }
@@ -335,28 +355,28 @@ input, button {
 
 .city-place-kicker {
   margin-bottom: 10px;
-  color: #99cffb;
+  color: #3157ff;
 }
 
 .city-place-copy h3 {
   margin: 0;
   font-size: clamp(33.6px, 4.2vw, 52.8px);
-  font-weight: 540;
+  font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 1.08;
 }
 
 .city-place-address {
   margin-top: 10px;
-  color: #acbdcb;
-  font-size: 16.8px;
+  color: #575766;
+  font-size: 13px;
 }
 
 .city-place-description {
   max-width: 760px;
   margin-top: 22px;
-  color: #acbdcb;
-  font-size: 19.2px;
+  color: #575766;
+  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -372,11 +392,11 @@ input, button {
 .city-tags li {
   padding: 7px 12px;
   border: 1px solid var(--city-line);
-  border-radius: 999px;
-  background: #1b3042;
-  color: #c1d2df;
-  font-size: 14.4px;
-  font-weight: 650;
+  border-radius: 4px;
+  background: #e5eadd;
+  color: #58634f;
+  font-size: 10px;
+  font-weight: 500;
 }
 
 .city-place-link {
@@ -384,8 +404,8 @@ input, button {
   margin-top: 26px;
   border-bottom: 1px solid currentColor;
   color: var(--city-ink);
-  font-size: 16.8px;
-  font-weight: 750;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .city-continue {
@@ -395,8 +415,8 @@ input, button {
   gap: 30px 70px;
   margin-top: 26px;
   padding: clamp(34px, 6vw, 64px);
-  border-radius: 24px;
-  background: #171714;
+  border-radius: 20px;
+  background: #3157ff;
   color: white;
 }
 
@@ -414,13 +434,13 @@ input, button {
   max-width: 670px;
   margin-top: 18px;
   color: #bdbdb5;
-  font-size: 20.4px;
+  font-size: 16px;
 }
 
 .city-continue-button {
   max-width: 310px;
   background: var(--city-blue);
-  color: #102333;
+  color: #fff;
   text-align: center;
 }
 
@@ -434,7 +454,7 @@ input, button {
 }
 
 .city-editorial-tint {
-  background: #122a4033;
+  background: #eceeff;
 }
 
 .city-editorial-inner {
@@ -444,9 +464,9 @@ input, button {
 }
 
 .city-section-number {
-  color: #9eb3c5;
+  color: #6f7b64;
   font-size: 15.6px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.1em;
 }
 
@@ -456,8 +476,8 @@ input, button {
 
 .city-editorial-inner > div > p {
   margin-top: 28px;
-  color: #acbdcb;
-  font-size: 22.8px;
+  color: #575766;
+  font-size: 18px;
   line-height: 1.72;
 }
 
@@ -481,21 +501,21 @@ input, button {
   min-height: 82px;
   padding: 0 24px;
   border: 1px solid rgba(17, 17, 15, 0.16);
-  border-radius: 16px;
-  background: #122638d9;
-  font-size: 20.4px;
-  font-weight: 650;
+  border-radius: 20px;
+  background: #f1f0ff;
+  font-size: 16px;
+  font-weight: 500;
   transition: background 0.18s ease, transform 0.18s ease;
 }
 
 .city-related-links a:hover {
-  background: #183348;
+  background: #e1e7d8;
   transform: translateY(-2px);
 }
 
 .city-faq {
   padding: 110px 0;
-  background: #112334e6;
+  background: #f2f3ff;
 }
 
 .city-faq-grid {
@@ -518,8 +538,8 @@ input, button {
   justify-content: space-between;
   gap: 20px;
   cursor: pointer;
-  font-size: 20.4px;
-  font-weight: 650;
+  font-size: 16px;
+  font-weight: 500;
   list-style: none;
 }
 
@@ -541,7 +561,7 @@ input, button {
 
 .city-footer-inner > p {
   color: var(--city-muted);
-  font-size: 16.8px;
+  font-size: 13px;
 }
 
 .city-not-found {
@@ -581,3 +601,15 @@ img[src="/long_logo.png"],
 img[src="/images/youknow-wordmark.png"] {
   border-radius: 14px;
 }
+
+/* Show the real app view for the city, keeping its map and place list visible. */
+.city-hero-art { display: grid; place-items: center; min-height: 0; height: auto; max-height: none; padding: 30px 24px; background: #e5eaff; border-radius: 24px; }
+.city-hero-art[data-city='geneva'] { background: #ffecf5; }
+.city-hero-art[data-city='berlin'] { background: #efffc1; }
+.city-hero-art::before, .city-hero-art::after { display: none; }
+.city-hero-art img { display: block; width: min(100%, 245px); height: auto; min-height: 0; border: 5px solid #12121c; border-radius: 30px; box-shadow: 5px 7px 0 #12121c20; }
+.city-nav-button { background: #12121c; border-radius: 4px; color: #fff; font-size: 12px; }
+.city-continue-button { background: #b8d8eb; color: #3157ff; }
+.city-continue-button:hover { background: #d6eaf5; color: #3157ff; }
+.city-page :is(a,summary):focus-visible { outline: 3px solid #2570aa; outline-offset: 5px; }
+@media(max-width:800px) { .city-hero-art { min-height: 0; height: auto; } .city-hero-art img { width: min(80%, 245px); min-height: 0; height: auto; } }

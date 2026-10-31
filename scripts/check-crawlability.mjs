@@ -48,6 +48,11 @@ for (const page of pages) {
       'Save places from Instagram & TikTok', 'Organize your own recommendations', 'Create and follow curations',
       'Get to know a place', 'Search by vibe with AI']) {
       assert.ok(markdown.includes(title), `/: feature ${title} is extractable`)
+      const featureTitle = elements.find(node => ['h3', 'span'].includes(node.tagName) && textContent(node).trim() === title)
+      assert.ok(featureTitle, `/: feature ${title} has a visible label`)
+      for (let node = featureTitle; node; node = node.parentNode) {
+        assert.equal(attr(node, 'hidden'), undefined, `/: feature ${title} is available without expanding a panel`)
+      }
     }
     const initialText = textContent(tree).replace(/\s+/g, ' ')
     const exportedText = markdown.replace(/\s+/g, ' ')
@@ -56,14 +61,14 @@ for (const page of pages) {
       'Instagram, TikTok and Google Maps',
       'Start with people you trust.',
       'Find people who get your taste.',
-      'New city. Your friends might already know a place.',
-      'Your friends’ favourites shouldn’t be scattered across chats, notes and screenshots.',
-      'Ask them to save their spots on YouKnow',
+      'Good finds.',
+      'Made into real plans.',
+      'Already in the know.',
+      'Import a shared Google Maps list',
     ]) {
       assert.ok(initialText.includes(passage), `/: initial HTML contains ${passage}`)
       assert.ok(exportedText.includes(passage), `/: text exports contain ${passage}`)
     }
-    assert.ok(html.includes('<noscript>'), '/: native fallback reveals expandable feature text')
     assert.deepEqual(JSON.parse(textContent(select('script', 'id', 'landing-stats-data')[0])), record.community_stats)
   }
   for (const faq of (record.structured_data['@graph'] || []).filter((entity) => entity['@type'] === 'FAQPage')) {

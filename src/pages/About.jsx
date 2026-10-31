@@ -1,6 +1,6 @@
-import NightMapBackground from '../components/NightMapBackground'
+import { useEffect } from 'react'
 import { usePageMetadata } from '../usePageMetadata'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styles from './About.module.css'
 
 const APP_STORE_URL = 'https://apps.apple.com/us/app/yk-youknow/id6759484614'
@@ -11,17 +11,31 @@ const TEAM = [
   {
     name: 'Marie-Louise Dugua',
     role: 'Co-founder',
-    focus: 'Product & Development',
-    initials: 'ML',
-    accent: '#e01c1c',
+    focus: 'Product, AI and engineering',
+    portraitX: 43,
+    accent: '#ff88c5',
+    background: [
+      'MSc Computer Science, ETH Zurich',
+      'Researcher, Agentic Systems Lab, ETH',
+      'Student Project House and J-Floor Zurich',
+      'Co-founder, LupAi LLC',
+    ],
+    quote: 'If a place has a queue, I don’t go. Hidden gems only.',
     linkedin: 'https://www.linkedin.com/in/marie-louise-dugua-aa6956186',
   },
   {
     name: 'Fabio Baldini',
     role: 'Co-founder',
-    focus: 'Vision, Concept & Business Development',
-    initials: 'FB',
-    accent: 'var(--brand-blue)',
+    focus: 'Business, partnerships and finance',
+    portraitX: 822,
+    accent: '#dfff4f',
+    background: [
+      '15+ years, J.P. Morgan Private Bank',
+      'MSc Finance, Bocconi',
+      'MAS AI and Digital Technology, ETH',
+      'Co-founder, LupAi LLC',
+    ],
+    quote: 'I book the restaurants before I book the flights.',
     linkedin: 'https://www.linkedin.com/in/fabio-baldini-16937422/',
   },
 ]
@@ -59,10 +73,16 @@ function StoreButtons() {
 
 export default function About() {
   usePageMetadata('about')
+  const { hash } = useLocation()
+
+  useEffect(() => {
+    if (hash !== '#team') return
+    const frame = window.requestAnimationFrame(() => document.getElementById('team')?.scrollIntoView({ behavior: 'instant' }))
+    return () => window.cancelAnimationFrame(frame)
+  }, [hash])
 
   return (
     <div className={styles.page}>
-      <NightMapBackground />
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
@@ -188,11 +208,11 @@ export default function About() {
           </div>
         </section>
 
-        <section className={styles.teamSection}>
+        <section className={styles.teamSection} id="team" aria-labelledby="team-heading">
           <div className="container">
             <div className={styles.sectionIntro}>
               <p className={styles.kicker}>The people behind YouKnow</p>
-              <h2>Small team, shared obsession.</h2>
+              <h2 id="team-heading">Small team, shared obsession.</h2>
               <p className={styles.introBody}>
                 We are building YouKnow to make personal recommendations easier to keep,
                 share and act on—without flattening taste into a single score.
@@ -201,15 +221,24 @@ export default function About() {
 
             <div className={styles.teamGrid}>
               {TEAM.map((person) => (
-                <article className={styles.personCard} key={person.name}>
-                  <div className={styles.avatar} style={{ '--accent': person.accent }}>
-                    {person.initials}
+                <article className={styles.personCard} key={person.name} style={{ '--person-accent': person.accent }}>
+                  <div className={styles.personHeader}>
+                    <div className={styles.portrait} style={{ '--portrait-left': `${-person.portraitX / 184 * 100}%` }}>
+                      <img className={styles.portraitImage} src="/images/team/founder-reference.png"
+                        alt={`Portrait of ${person.name}`} width="1556" height="530" loading="lazy" decoding="async" />
+                    </div>
+                    <div className={styles.personIdentity}>
+                      <p className={styles.personRole}>{person.role}</p>
+                      <h3>{person.name}</h3>
+                      <p className={styles.personFocus}>{person.focus}</p>
+                    </div>
                   </div>
-                  <p className={styles.personRole}>{person.role}</p>
-                  <h3>{person.name}</h3>
-                  <p>{person.focus}</p>
-                  <a href={person.linkedin} target="_blank" rel="noreferrer">
-                    LinkedIn
+                  <ul className={styles.personBackground}>
+                    {person.background.map(detail => <li key={detail}>{detail}</li>)}
+                  </ul>
+                  <blockquote className={styles.personQuote}>“{person.quote}”</blockquote>
+                  <a href={person.linkedin} target="_blank" rel="noreferrer" aria-label={`${person.name} on LinkedIn`}>
+                    LinkedIn <span aria-hidden="true">↗</span>
                   </a>
                 </article>
               ))}

@@ -1,4 +1,3 @@
-import NightMapBackground from '../components/NightMapBackground'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { cityMetadata, cityStructuredData } from '../pageMetadata'
@@ -128,7 +127,6 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
 
   return (
     <div className="city-page">
-      <NightMapBackground />
       <header className="city-nav">
         <div className="container city-nav-inner">
           <Link to="/" aria-label="YouKnow home">
@@ -151,11 +149,8 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
               <p className="city-lead">{guide.intro}</p>
               <a className="city-primary-button" href="/#download">Find places on YouKnow →</a>
             </div>
-            <div className="city-hero-art" aria-hidden="true">
-              <span className="city-art-pin city-art-pin-one">☕</span>
-              <span className="city-art-pin city-art-pin-two">🍷</span>
-              <span className="city-art-pin city-art-pin-three">🍽️</span>
-              <div className="city-art-map-line" />
+            <div className="city-hero-art" data-city={guide.slug}>
+              <img src={`/images/cities/${guide.slug}-app.png`} alt={`YouKnow’s ${guide.city} city view, with its map and recommended places.`} width="1290" height="2796" />
             </div>
           </div>
         </section>

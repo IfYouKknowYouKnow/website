@@ -28,7 +28,7 @@ export default function App() {
         <Route path="/invite/:code" element={<ShareLanding type="invite" />} />
         <Route path="/place" element={<ShareLanding type="place" />} />
         <Route path="/place/:placeId" element={<ShareLanding type="place" />} />
-        <Route path="/team" element={<Navigate to="/about" replace />} />
+        <Route path="/team" element={<Navigate to="/about#team" replace />} />
         <Route path="/tutorials" element={<Tutorials />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/:citySlug/:topicSlug" element={<CityGuide />} />
