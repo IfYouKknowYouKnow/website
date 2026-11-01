@@ -1,0 +1,5 @@
+.line { display:block; min-height:1.1em; line-height:1.05; white-space:nowrap; }
+.cursor { display:inline-block; width:.035em; height:.73em; margin-left:.07em; background:currentColor; visibility:hidden; }
+.line[data-active='true'] .cursor { visibility:visible; animation:cursorBlink 1s steps(1,end) infinite; }
+@keyframes cursorBlink { 50% { opacity:0; } }
+@media(prefers-reduced-motion:reduce) { .cursor { display:none; } }

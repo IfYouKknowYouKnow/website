@@ -90,7 +90,7 @@ export default function ShareLanding({ type }) {
       <NightMapBackground />
       <nav className={styles.nav}>
         <Link className={styles.brand} to="/" aria-label="YouKnow home">
-          <img src="/youknow-wordmark-blue.svg" alt="YouKnow" decoding="async" />
+          <img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" decoding="async" />
         </Link>
       </nav>
 

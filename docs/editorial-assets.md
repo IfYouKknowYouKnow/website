@@ -1,7 +1,7 @@
 # Homepage editorial photographs
 
-Locally stored venue photography supplies atmosphere in the hero and curator
-sections, rather than representing a specific recommendation. City cards and
+Locally stored venue photography supplies atmosphere in the hero examples,
+rather than representing a specific recommendation. City cards and
 city guide pages use the corresponding user-supplied app screenshots.
 
 - `public/images/editorial/cafe.jpg`: https://images.unsplash.com/photo-1554118811-1e0d58224f24
@@ -19,6 +19,10 @@ place lists at the bottom of the profile screen.
 `public/images/cities/{geneva,zurich,berlin,milan,paris,tokyo}-app.png` are the user's screenshots
 of flying to each city in YouKnow. Both the homepage city cards and the matching
 guide pages show the full city screen, including the map and place list.
+Responsive `-430.webp` and `-860.webp` copies preserve that complete screen
+while reducing transfer size. The same optimization is applied to the curation
+screenshot and main map. The existing raster-backed wordmark SVG is also served
+as a smaller transparent WebP, with the original source retained.
 
 `src/cityGuideCommunityPlaces.js` contains five public community place records
 per new city (Milan, Paris and Tokyo), read from the website's existing public

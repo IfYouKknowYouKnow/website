@@ -86,7 +86,7 @@ export default function About() {
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
-            <img className={styles.brandLogo} src="/youknow-wordmark-blue.svg" alt="YouKnow" />
+            <img className={styles.brandLogo} src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" />
           </Link>
 
           <div className={styles.navLinks} aria-label="Primary">

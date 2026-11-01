@@ -110,7 +110,7 @@ export default function Tutorials() {
           <Link className={styles.brand} to="/" aria-label="YouKnow home">
             <img
               className={styles.brandLogo}
-              src="/youknow-wordmark-blue.svg"
+              src="/images/youknow-wordmark-blue-592.webp"
               alt="YouKnow"
               decoding="async"
             />

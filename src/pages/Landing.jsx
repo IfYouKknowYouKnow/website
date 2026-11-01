@@ -5,6 +5,7 @@ import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import ProductStory from '../components/ProductStory'
 import Personalization from '../components/Personalization'
+import RotatingWord from '../components/RotatingWord'
 import HeroRecommendations from '../components/HeroRecommendations'
 import { HERO_MOOD_EXAMPLES } from '../heroMoodExamples'
 import communityPlaces from '../cityGuideCommunityPlaces.js'
@@ -51,15 +52,15 @@ function StoreButtons() {
 const COLLECTION_FEATURES = [
   { number: '01', title: 'See what friends recommend', text: 'Find people who get your taste. Follow their finds and see what they are loving lately.', src: '/images/youknow-feed-20261015.webp', alt: 'YouKnow feed showing top curators and recommendations from friends.', theme: 'peach', icon: 'people' },
   { number: '02', title: 'Organize your own recommendations', text: 'Want to go. Already love. Keep your places together, ready for the right moment.', src: '/images/youknow-profile-20261015.webp', alt: 'YouKnow profile with saved places, want-to-go lists and filters.', theme: 'blue', icon: 'bookmark' },
-  { number: '03', title: 'Create and follow curations', text: 'Your personal shortlist, a friend’s collection, or an independent guide. Good taste comes in many forms.', src: '/images/youknow-curations-editorial.png', alt: 'YouKnow curations showing Augusta Sboccia in Città, the MICHELIN Guide and La Liste.', theme: 'green', icon: 'map' },
+  { number: '03', title: 'Create and follow curations', text: 'Your personal shortlist, a friend’s collection, or an independent guide. Good taste comes in many forms.', src: '/images/youknow-curations-editorial-860.webp', srcSet: '/images/youknow-curations-editorial-430.webp 430w, /images/youknow-curations-editorial-860.webp 860w', alt: 'YouKnow curations showing Augusta Sboccia in Città, the MICHELIN Guide and La Liste.', theme: 'green', icon: 'map' },
 ]
 const CITY_GUIDES = [
-  { city: 'Zurich', href: '/zurich/', image: '/images/cities/zurich-app.png', mood: 'Coffee stops. Dinner plans. Your people’s picks.', alt: 'YouKnow’s Zurich city view, showing the map, category filters and recommended places.' },
-  { city: 'Geneva', href: '/geneva/', image: '/images/cities/geneva-app.png', mood: 'A little local knowledge, ready when you land.', alt: 'YouKnow’s Geneva city view, showing the lakeside map and a list of places to explore.' },
-  { city: 'Berlin', href: '/berlin/', image: '/images/cities/berlin-app.png', mood: 'Good food. Late nights. One city map.', alt: 'YouKnow’s Berlin city view, showing the map and recommendations including Gropius Bau and Bellboy Bar.' },
-  { city: 'Milan', href: '/milan/', image: '/images/cities/milan-app.png', mood: 'Aperitivo plans. Long dinners. Good company.', alt: 'YouKnow’s Milan city view, with the map and its Top picks list.', picks: communityPlaces.milan.slice(0, 3).map(place => place.name) },
-  { city: 'Paris', href: '/paris/', image: '/images/cities/paris-app.png', mood: 'Bistros, wine bars and your next favourite address.', alt: 'YouKnow’s Paris city view, with the map and its Top picks list.', picks: communityPlaces.paris.slice(0, 3).map(place => place.name) },
-  { city: 'Tokyo', href: '/tokyo/', image: '/images/cities/tokyo-app.png', mood: 'Dinner, discoveries and nights worth sharing.', alt: 'YouKnow’s Tokyo city view, with the map and its Top picks list.', picks: communityPlaces.tokyo.slice(0, 3).map(place => place.name) },
+  { city: 'Zurich', href: '/zurich/', image: '/images/cities/zurich-app-860.webp', mood: 'Coffee stops. Dinner plans. Your people’s picks.', alt: 'YouKnow’s Zurich city view, showing the map, category filters and recommended places.' },
+  { city: 'Geneva', href: '/geneva/', image: '/images/cities/geneva-app-860.webp', mood: 'A little local knowledge, ready when you land.', alt: 'YouKnow’s Geneva city view, showing the lakeside map and a list of places to explore.' },
+  { city: 'Berlin', href: '/berlin/', image: '/images/cities/berlin-app-860.webp', mood: 'Good food. Late nights. One city map.', alt: 'YouKnow’s Berlin city view, showing the map and recommendations including Gropius Bau and Bellboy Bar.' },
+  { city: 'Milan', href: '/milan/', image: '/images/cities/milan-app-860.webp', mood: 'Aperitivo plans. Long dinners. Good company.', alt: 'YouKnow’s Milan city view, with the map and its Top picks list.', picks: communityPlaces.milan.slice(0, 3).map(place => place.name) },
+  { city: 'Paris', href: '/paris/', image: '/images/cities/paris-app-860.webp', mood: 'Bistros, wine bars and your next favourite address.', alt: 'YouKnow’s Paris city view, with the map and its Top picks list.', picks: communityPlaces.paris.slice(0, 3).map(place => place.name) },
+  { city: 'Tokyo', href: '/tokyo/', image: '/images/cities/tokyo-app-860.webp', mood: 'Dinner, discoveries and nights worth sharing.', alt: 'YouKnow’s Tokyo city view, with the map and its Top picks list.', picks: communityPlaces.tokyo.slice(0, 3).map(place => place.name) },
 ]
 
 function useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen) {
@@ -193,6 +194,8 @@ export default function Landing({ initialStats } = {}) {
   const [stats, setStats] = useState(() => initialStats || initialLandingStats())
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pageRef = useRef(null)
+  const cityScrollerRef = useRef(null)
+  const [cityScroll, setCityScroll] = useState({ start: true, end: false })
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount)
   const mood = HERO_MOOD_EXAMPLES[heroMood]
@@ -200,6 +203,26 @@ export default function Landing({ initialStats } = {}) {
 
   usePageMetadata('home', { cityCount })
   useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen)
+
+  useEffect(() => {
+    const scroller = cityScrollerRef.current
+    const update = () => {
+      const start = scroller.scrollLeft < 2
+      const end = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 2
+      setCityScroll(current => current.start === start && current.end === end ? current : { start, end })
+    }
+    const resize = new ResizeObserver(update)
+    resize.observe(scroller)
+    scroller.addEventListener('scroll', update, { passive: true })
+    update()
+    return () => { resize.disconnect(); scroller.removeEventListener('scroll', update) }
+  }, [])
+
+  function scrollCities(direction) {
+    const scroller = cityScrollerRef.current
+    const step = scroller.firstElementChild.offsetWidth + parseFloat(getComputedStyle(scroller).columnGap)
+    scroller.scrollBy({ left: direction * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+  }
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -326,7 +349,7 @@ export default function Landing({ initialStats } = {}) {
     <div className={styles.scrollProgress} aria-hidden="true" />
     <header className={styles.nav}>
       <div className={styles.navInner}>
-        <Link className={styles.brand} to="/" aria-label="YouKnow home"><img src="/youknow-wordmark-blue.svg" alt="YouKnow" width="145" height="43" /></Link>
+        <Link className={styles.brand} to="/" aria-label="YouKnow home"><img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" width="145" height="43" /></Link>
         <button className={styles.menuToggle} type="button" aria-expanded={isMenuOpen} aria-controls="primary-links" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? 'Close −' : 'Menu +'}</button>
         <nav id="primary-links" className={`${styles.navLinks} ${isMenuOpen ? styles.navLinksOpen : ''}`} aria-label="Primary navigation" onClick={() => setIsMenuOpen(false)}>
           <a href="#how-it-works">The app</a><a href="#community">Your people</a><a href="#guides">City guides</a><Link to="/about">Our story</Link>
@@ -359,7 +382,7 @@ export default function Landing({ initialStats } = {}) {
             <p>{mood.caption}</p>
           </div>
           <div className={styles.heroPhone}>
-            <img src="/images/youknow-map-20261015.webp" alt="YouKnow app map showing real recommendations around Zurich." width="1290" height="2796" fetchpriority="high" />
+            <img src="/images/youknow-map-860.webp" srcSet="/images/youknow-map-430.webp 430w, /images/youknow-map-860.webp 860w" sizes="(max-width:420px) 190px, 245px" alt="YouKnow app map showing real recommendations around Zurich." width="1290" height="2796" fetchpriority="high" />
             <span className={styles.heroMapPick} aria-hidden="true" key={`${heroMood}-${heroPlace}`}
               style={{ left: `${selectedHeroPlace.x}%`, top: `${selectedHeroPlace.y}%`, '--source-accent': mood.accent }}>
               <span>{mood.initial}</span><strong>{mood.name}’s pick</strong>
@@ -395,7 +418,7 @@ export default function Landing({ initialStats } = {}) {
           {COLLECTION_FEATURES.map(feature => <article className={styles.featureCard} data-theme={feature.theme} key={feature.number} data-reveal>
             <div className={styles.cardTop}><Icon name={feature.icon} /><span>{feature.number} / COLLECTION</span></div>
             <h3>{feature.title}</h3><p>{feature.text}</p>
-            <div className={styles.cardScreen}><img src={feature.src} alt={feature.alt} width="1290" height="2796" loading="lazy" decoding="async" /></div>
+            <div className={styles.cardScreen}><img src={feature.src} srcSet={feature.srcSet} sizes={feature.srcSet ? '240px' : undefined} alt={feature.alt} width="1290" height="2796" loading="lazy" decoding="async" /></div>
           </article>)}
         </div>
         <div className={styles.smallFeatures}>
@@ -412,8 +435,20 @@ export default function Landing({ initialStats } = {}) {
             <div><span className={styles.eyebrow}>A LITTLE FURTHER AFIELD</span><h2 id="travel-heading">New city.<br /><span>Already in the know.</span></h2></div>
             <div className={styles.travelIntro}><p>Explore recommendations in <strong>{formatCount(cityCount)} cities and counting.</strong> These are just a few city previews.</p><a className={styles.textLink} href="#download">Explore more cities in the app <Icon /></a></div>
           </div>
-          <div className={styles.cityGrid}>{CITY_GUIDES.map((guide, index) => <Link className={styles.cityCard} to={guide.href} key={guide.city} data-reveal>
-            <div className={styles.cityImage}><img src={guide.image} alt={guide.alt} width="1290" height="2796" loading="lazy" decoding="async" /><span className={styles.cityBadge}>CITY PREVIEW / 0{index + 1}</span><span className={styles.cityArrow}><Icon /></span></div>
+          <div className={styles.cityControls}>
+            <span>SIX CITY GUIDES. KEEP EXPLORING. <span aria-hidden="true">↔</span></span>
+            <div role="group" aria-label="Scroll city guides">
+              <button type="button" aria-label="Previous city guides" aria-controls="city-previews" disabled={cityScroll.start} onClick={() => scrollCities(-1)}><span aria-hidden="true">←</span></button>
+              <button type="button" aria-label="Next city guides" aria-controls="city-previews" disabled={cityScroll.end} onClick={() => scrollCities(1)}><span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+          <div className={styles.cityGrid} id="city-previews" ref={cityScrollerRef} role="region" aria-label="City guide previews" tabIndex={0} onKeyDown={event => {
+            if (event.target === event.currentTarget && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+              event.preventDefault()
+              scrollCities(event.key === 'ArrowRight' ? 1 : -1)
+            }
+          }}>{CITY_GUIDES.map((guide, index) => <Link className={styles.cityCard} to={guide.href} key={guide.city} data-reveal>
+            <div className={styles.cityImage}><img src={guide.image} srcSet={`${guide.image.replace('-860.webp', '-430.webp')} 430w, ${guide.image} 860w`} sizes="230px" alt={guide.alt} width="1290" height="2796" loading="lazy" decoding="async" /><span className={styles.cityBadge}>CITY PREVIEW / 0{index + 1}</span><span className={styles.cityArrow}><Icon /></span></div>
             <div className={styles.cityCopy}><h3>{guide.city}</h3><p>{guide.mood}</p>{guide.picks && <p className={styles.cityCommunityPicks}><span>COMMUNITY PICKS</span>{guide.picks.join(' · ')}</p>}</div>
           </Link>)}</div>
           <div className={styles.moodLinks}><span>ZURICH, BY MOOD</span><Link to="/zurich/cafes/">Coffee stops ↗</Link><Link to="/zurich/cosy-restaurants/">Cosy dinners ↗</Link><Link to="/zurich/bars/">One more drink ↗</Link><Link to="/zurich/date-night/">Date night ↗</Link><Link to="/zurich/hidden-gems/">Hidden gems ↗</Link></div>
@@ -452,14 +487,14 @@ export default function Landing({ initialStats } = {}) {
       </section>
 
       <section className={styles.download} id="download" aria-labelledby="download-heading">
-        <div className={styles.wrap} data-reveal><span className={styles.eyebrow}>YOUR NEXT FAVOURITE IS OUT THERE.</span><h2 id="download-heading">Go somewhere<br /><em>good.</em><span className={styles.downloadArrow} aria-hidden="true">↗</span></h2><div className={styles.downloadBottom}><p>Start with a place you already love.<br />See where your people take you.</p><div><AppIdentity /><StoreButtons /><span className={styles.freeNote}>Free to download. Made to go places.</span></div></div></div>
+        <div className={styles.wrap} data-reveal><span className={styles.eyebrow}>YOUR NEXT FAVOURITE IS OUT THERE.</span><h2 id="download-heading" aria-label="Go somewhere great.">Go somewhere<RotatingWord /><span className={styles.downloadArrow} aria-hidden="true">↗</span></h2><div className={styles.downloadBottom}><p>Start with a place you already love.<br />See where your people take you.</p><div><AppIdentity /><StoreButtons /><span className={styles.freeNote}>Free to download. Made to go places.</span></div></div></div>
       </section>
     </main>
 
     <footer className={styles.footer}>
       <div className={styles.wrap}>
         <div className={styles.footerTop} id="waitlist">
-          <div><Link to="/" className={styles.footerBrand} aria-label="YouKnow home"><img src="/youknow-wordmark-blue.svg" alt="YouKnow" width="160" height="48" /></Link><p>Good places. Better together.</p></div>
+          <div><Link to="/" className={styles.footerBrand} aria-label="YouKnow home"><img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" width="160" height="48" /></Link><p>Good places. Better together.</p></div>
           <div className={styles.newsletter}><label htmlFor="newsletter-email">A little YouKnow in your inbox.</label><form name="waitlist" method="POST" data-netlify="true" onSubmit={handleSubmit}><input type="hidden" name="form-name" value="waitlist" /><input id="newsletter-email" type="email" name="email" autoComplete="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required /><button type="submit" disabled={isSubmitting} aria-label="Join mailing list">{isSubmitting ? '…' : <Icon />}</button></form>{toast && <p className={styles.formStatus} role="status">{toast}</p>}</div>
         </div>
         <div className={styles.footerMiddle}><nav aria-label="Footer navigation"><Link to="/about">Our story</Link><Link to="/tutorials">How to save</Link><a href="#curators">For curators</a><a href="#faq">FAQ</a><Link to="/privacy">Privacy</Link><a href="/sitemap.html">All pages</a></nav><div className={styles.support}><span>SUPPORTED BY</span><img src="/sph_logo.jpeg" alt="ETH Student Project House" width="75" height="38" loading="lazy" /><img src="/asl-logo-white.svg" alt="Agentic Systems Lab" width="110" height="30" loading="lazy" /></div></div>

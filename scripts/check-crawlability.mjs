@@ -15,6 +15,9 @@ assert.match(robots, /Sitemap: https:\/\/ifykyk\.app\/sitemap.xml/)
 assert.equal(new Set(pages.map((page) => page.url)).size, pages.length)
 assert.equal((sitemap.match(/<loc>/g) || []).length, pages.length)
 const knownRoutes = new Set(pages.map((page) => new URL(page.url).pathname))
+const titles = new Set()
+const descriptions = new Set()
+const pageLinks = new Map()
 let linksChecked = 0
 for (const page of pages) {
   const route = new URL(page.url).pathname
@@ -29,7 +32,32 @@ for (const page of pages) {
   assert.equal(attr(elements.find((node) => node.tagName === 'link' && attr(node, 'type') === 'text/markdown'), 'href'), page.markdown_url)
   assert.equal(attr(elements.find((node) => node.tagName === 'link' && attr(node, 'type') === 'application/json'), 'href'), page.json_url)
   assert.equal(elements.filter((node) => node.tagName === 'title').length, 1)
-  assert.ok(elements.some((node) => node.tagName === 'h1'), `${route}: initial HTML has a heading`)
+  const title = textContent(elements.find(node => node.tagName === 'title')).trim()
+  assert.ok(!titles.has(title), `${route}: unique title`)
+  titles.add(title)
+  assert.equal(select('meta', 'name', 'description').length, 1, `${route}: one description`)
+  const description = attr(select('meta', 'name', 'description')[0], 'content')
+  assert.ok(description && !descriptions.has(description), `${route}: unique, nonempty description`)
+  descriptions.add(description)
+  assert.equal(elements.filter((node) => node.tagName === 'h1').length, 1, `${route}: one primary heading`)
+  const links = elements.filter(node => node.tagName === 'a').map(node => attr(node, 'href')).filter(Boolean)
+  pageLinks.set(route, links.map(href => new URL(href, page.url)).filter(url => url.origin === SITE_URL).map(url => url.pathname))
+  for (const image of elements.filter(node => node.tagName === 'img')) {
+    assert.notEqual(attr(image, 'alt'), undefined, `${route}: images have alt text or are decorative`)
+  }
+  if (route !== '/privacy') {
+    assert.equal(attr(select('meta', 'property', 'og:site_name')[0], 'content'), 'YouKnow Map')
+    assert.equal(attr(select('meta', 'property', 'og:title')[0], 'content'), title)
+    assert.equal(attr(select('meta', 'property', 'og:description')[0], 'content'), description)
+    assert.equal(attr(select('meta', 'name', 'twitter:card')[0], 'content'), 'summary_large_image')
+    assert.ok(attr(select('meta', 'property', 'og:image:alt')[0], 'content'))
+    assert.ok(attr(select('meta', 'name', 'twitter:image:alt')[0], 'content'))
+    assert.equal(attr(select('meta', 'property', 'og:image:width')[0], 'content'), '1200')
+    assert.equal(attr(select('meta', 'property', 'og:image:height')[0], 'content'), '630')
+    const image = new URL(attr(select('meta', 'property', 'og:image')[0], 'content'))
+    assert.equal(image.origin, SITE_URL)
+    await fs.access(`dist${image.pathname}`)
+  }
   assert.ok(htmlToMarkdown(html, page.url).length > 300, `${route}: initial HTML has substantial text`)
   assert.ok(!select('meta', 'name', 'robots').some((node) => /noindex/.test(attr(node, 'content'))))
   const schemaNodes = select('script', 'type', 'application/ld+json')
@@ -65,11 +93,20 @@ for (const page of pages) {
       'Made into real plans.',
       'Already in the know.',
       'Import a shared Google Maps list',
+      'The more you interact, the more it feels like you.',
     ]) {
       assert.ok(initialText.includes(passage), `/: initial HTML contains ${passage}`)
       assert.ok(exportedText.includes(passage), `/: text exports contain ${passage}`)
     }
     assert.deepEqual(JSON.parse(textContent(select('script', 'id', 'landing-stats-data')[0])), record.community_stats)
+    const demos = elements.filter(node => node.tagName === 'video')
+    assert.equal(demos.length, 3, '/: three personalization videos in initial HTML')
+    for (const video of demos) {
+      await fs.access(`dist${attr(video, 'poster')}`)
+      const source = findAll(video, node => node.tagName === 'source')[0]
+      assert.ok(attr(source, 'src'), '/: video sources are crawlable without clicking or scrolling')
+      await fs.access(`dist${attr(source, 'src')}`)
+    }
   }
   for (const faq of (record.structured_data['@graph'] || []).filter((entity) => entity['@type'] === 'FAQPage')) {
     for (const question of faq.mainEntity) {
@@ -97,6 +134,15 @@ for (const page of pages) {
     linksChecked++
   }
 }
+const reachable = new Set()
+const queue = ['/']
+while (queue.length) {
+  const route = queue.shift()
+  if (reachable.has(route)) continue
+  reachable.add(route)
+  for (const next of pageLinks.get(route) || []) if (knownRoutes.has(next) && !reachable.has(next)) queue.push(next)
+}
+for (const route of knownRoutes) assert.ok(reachable.has(route), `${route}: reachable from the homepage through crawlable links`)
 assert.equal(records.length, pages.length)
 assert.match(await fs.readFile('dist/404.html', 'utf8'), /noindex/)
 const netlify = await fs.readFile('netlify.toml', 'utf8')

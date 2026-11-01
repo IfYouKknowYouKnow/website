@@ -23,10 +23,10 @@ function pageHtml(page, schema, markup, route, records, stats) {
   let html = template.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
   for (const [tag, attribute, name, valueAttribute, value] of metadataTags(page)) {
     const pattern = new RegExp(`<${tag}\\s+${attribute}="${name}"[^>]*>`)
-    if (!pattern.test(html)) throw new Error(`Missing ${name} in HTML template`)
-    html = html.replace(pattern, `<${tag} ${attribute}="${name}" ${valueAttribute}="${escapeHtml(value)}" />`)
+    const element = `<${tag} ${attribute}="${name}" ${valueAttribute}="${escapeHtml(value)}" />`
+    html = pattern.test(html) ? html.replace(pattern, element) : html.replace('</head>', `${element}\n</head>`)
   }
-  html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+  html = html.replace(/<script\b[^>]*type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/,
     `<script id="page-structured-data" type="application/ld+json">${JSON.stringify(schema).replaceAll('<', '\\u003c')}</script>`)
   if (records) html = html.replace('</head>', `<script id="city-guide-data" type="application/json">${JSON.stringify({ path: route, places: records }).replaceAll('<', '\\u003c')}</script>\n</head>`)
   if (stats) html = html.replace('</head>', `<script id="landing-stats-data" type="application/json">${JSON.stringify(stats)}</script>\n</head>`)

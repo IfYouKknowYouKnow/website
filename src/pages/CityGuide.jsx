@@ -4,6 +4,7 @@ import { cityMetadata, cityStructuredData } from '../pageMetadata'
 import { useDocumentMetadata } from '../usePageMetadata'
 import {
   buildPlacesUrl,
+  cityGuides,
   displayTags,
   formatLabel,
   normalizePlaces,
@@ -131,7 +132,7 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
       <header className="city-nav">
         <div className="container city-nav-inner">
           <Link to="/" aria-label="YouKnow home">
-            <img src="/youknow-wordmark-blue.svg" alt="YouKnow" />
+            <img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" />
           </Link>
           <nav aria-label="Guide navigation">
             <Link to="/about">About</Link>
@@ -151,7 +152,7 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
               <a className="city-primary-button" href="/#download">Find places on YouKnow →</a>
             </div>
             <div className="city-hero-art" data-city={guide.slug}>
-              <img src={`/images/cities/${guide.slug}-app.png`} alt={`YouKnow’s ${guide.city} city view, with its map and recommended places.`} width="1290" height="2796" />
+              <img src={`/images/cities/${guide.slug}-app-860.webp`} srcSet={`/images/cities/${guide.slug}-app-430.webp 430w, /images/cities/${guide.slug}-app-860.webp 860w`} sizes="245px" fetchpriority="high" alt={`YouKnow’s ${guide.city} city view, with its map and recommended places.`} width="1290" height="2796" />
             </div>
           </div>
         </section>
@@ -199,6 +200,18 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
             </div>
           </section>
         )}
+
+        <section className="city-related" aria-labelledby="other-cities-heading">
+          <div className="container">
+            <p className="city-eyebrow">Take your good taste with you</p>
+            <h2 id="other-cities-heading">Explore another city</h2>
+            <nav className="city-related-links" aria-label="More city guides">
+              {Object.values(cityGuides).filter(city => city.slug !== guide.slug).map(city => (
+                <Link to={city.path} key={city.slug}>{city.city} city guide <span aria-hidden="true">→</span></Link>
+              ))}
+            </nav>
+          </div>
+        </section>
 
         <section className="city-faq" aria-labelledby="city-faq-heading">
           <div className="container city-faq-grid">

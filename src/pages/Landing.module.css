@@ -114,10 +114,17 @@
 .travelIntro strong { color:var(--acid); font-weight:700; }
 .textLink { display:inline-flex; align-items:center; gap:28px; margin-top:22px; padding-bottom:6px; border-bottom:1px solid currentColor; font-size:12px; font-weight:500; }
 .textLink svg { width:16px; height:16px; }
-.cityGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
-.cityCard { min-width:0; background:#fff; color:var(--ink); padding:9px 9px 19px; border:2px solid var(--ink); border-radius:20px; box-shadow:5px 5px 0 #11111c; transition:rotate .35s,transform .35s; }
-.cityCard:hover { transform:translateY(-8px); rotate:-2deg; }
-.cityCard:nth-child(2):hover { rotate:2deg; }
+.cityControls { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:9px; }
+.cityControls > span { display:flex; align-items:center; gap:12px; color:#e5eaff; font-size:9px; font-weight:600; letter-spacing:.06em; }
+.cityControls > span > span { color:var(--acid); font-size:22px; }
+.cityControls > div { display:flex; gap:10px; }
+.cityControls button { display:grid; place-items:center; width:44px; height:44px; border:2px solid var(--ink); border-radius:50%; background:var(--acid); color:var(--ink); cursor:pointer; font-size:22px; transition:background .2s,transform .2s; }
+.cityControls button:hover:not(:disabled) { background:#fff; transform:translateY(-2px); }
+.cityControls button:disabled { background:transparent; color:#ffffff70; border-color:#ffffff50; cursor:default; }
+.cityGrid { display:flex; gap:24px; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x mandatory; scroll-padding-inline:3px; padding:15px 10px 22px 3px; scrollbar-width:thin; scrollbar-color:var(--acid) #ffffff30; }
+.cityGrid:focus-visible { outline:3px solid var(--pink); outline-offset:5px; }
+.cityCard { flex:0 0 clamp(290px,calc((100% - 72px)/3.2),380px); min-width:0; scroll-snap-align:start; background:#fff; color:var(--ink); padding:9px 9px 19px; border:2px solid var(--ink); border-radius:20px; box-shadow:5px 5px 0 #11111c; transition:transform .35s; }
+.cityCard:hover { transform:translateY(-5px); }
 .cityImage { position:relative; display:flex; align-items:flex-start; justify-content:center; padding:65px 12px 25px; border-radius:12px; background:#e5eaff; }
 .cityCard:nth-child(3n + 2) .cityImage { background:#ffecf5; }
 .cityCard:nth-child(3n) .cityImage { background:#efffc1; }
@@ -212,8 +219,8 @@ textarea.input { resize:vertical; }
 .support img:last-child { width:110px; }
 .footerBottom { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid #ffffff25; padding-block:22px; color:#b1b1c5; font-size:10px; }
 .footerBottom a { font-size:9px; letter-spacing:.06em; }
-.page[data-motion='true'] [data-reveal] { opacity:0; transform:translateY(40px) rotate(1deg); transition:opacity .65s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
-.page[data-motion='true'] [data-reveal][data-visible='true'] { opacity:1; transform:translateY(0) rotate(0); }
+.page[data-motion='true'] [data-reveal][data-visible='true'] { animation:sectionReveal .8s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sectionReveal { from { opacity:.1; transform:translateY(40px) rotate(1deg); } to { opacity:1; transform:translateY(0) rotate(0); } }
 .featureGrid > :nth-child(2),.cityGrid > :nth-child(2) { transition-delay:80ms; }
 .featureGrid > :nth-child(3),.cityGrid > :nth-child(3) { transition-delay:160ms; }
 @keyframes photoIn { from { opacity:.4; transform:scale(.95); } to { opacity:1; transform:scale(1); } }
@@ -345,7 +352,11 @@ textarea.input { resize:vertical; }
   .guideNote p { font-size:12px; line-height:2; }
   .guideNote p > span { margin-inline:7px; }
   .travel { padding-block:65px; border-radius:24px; }
-  .cityGrid { grid-template-columns:1fr; gap:25px; }
+  .cityGrid { gap:18px; }
+  .cityCard { flex-basis:min(90%,350px); }
+  .cityControls { gap:12px; }
+  .cityControls > span { max-width:190px; font-size:8px; letter-spacing:.025em; }
+  .cityControls > span > span { display:none; }
   .cityBadge { font-size:9px; top:28px; left:18px; }
   .cityCopy h3 { font-size:38px; }
   .cityCopy p { font-size:12px; }
@@ -363,7 +374,7 @@ textarea.input { resize:vertical; }
   .faqItem summary { font-size:14px; gap:18px; }
   .faqItem > p { font-size:14px; }
   .download { padding-block:60px 40px; border-radius:24px 24px 0 0; }
-  .download h2 { font-size:clamp(60px,10.9vw,88px); margin-top:26px; }
+  .download h2 { font-size:clamp(46px,10.9vw,88px); margin-top:26px; }
   .downloadArrow { font-size:1.25em; top:40px; right:0; }
   .downloadBottom { align-items:start; flex-direction:column; gap:25px; margin-top:35px; padding-top:25px; }
   .downloadBottom > p { font-size:14px; }
