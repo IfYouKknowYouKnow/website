@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './ProductStory.module.css'
+import SavingVideo from './SavingVideo'
+import { SAVING_DEMOS } from '../savingDemos'
 
 const CHAPTERS = [
   {
-    id: 'discover', label: 'Discover', eyebrow: '01 / Follow good taste',
+    id: 'discover', label: 'Discover', eyebrow: 'Follow good taste',
     title: <>Your people.<br />Their good spots.</>,
     description: 'The café your friend keeps going back to. The bar a local swears by. Bring recommendations from people you trust onto a map that feels like you.',
     detail: 'Start with the living map',
@@ -13,16 +15,16 @@ const CHAPTERS = [
     note: 'A little local knowledge goes a long way.',
   },
   {
-    id: 'save', label: 'Save', eyebrow: '02 / From your feed to your map',
+    id: 'save', label: 'Save', eyebrow: 'From your feed to your map',
     title: <>Found it?<br />Make it a plan.</>,
     description: 'That restaurant on Instagram. A late-night TikTok find. Share it with YouKnow, confirm the place, and save it for the moment you actually want to go.',
     detail: 'Save places from Instagram & TikTok',
-    src: '/images/social-sharing-poster.png',
+    src: SAVING_DEMOS[0].poster,
     alt: 'YouKnow saving flow: share a social post, confirm the matching place, and save it to your map.',
     note: 'Less lost in your saved posts. More see you there.',
   },
   {
-    id: 'find', label: 'Find', eyebrow: '03 / A search that gets the mood',
+    id: 'find', label: 'Find', eyebrow: 'A search that gets the mood',
     title: <>Name the vibe.<br />Find the place.</>,
     description: 'A quiet café to work from. A cosy bar for a first date. Describe what you have in mind and let AI help you find the right place on your map.',
     detail: 'Search by vibe with AI',
@@ -40,6 +42,8 @@ export default function ProductStory() {
   const [playing, setPlaying] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [prompt, setPrompt] = useState(0)
+  const [savingDemoIndex, setSavingDemoIndex] = useState(0)
+  const savingDemo = SAVING_DEMOS[savingDemoIndex]
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -89,21 +93,23 @@ export default function ProductStory() {
   function preview(chapter, index, mobile = false) {
     return <div className={mobile ? styles.mobilePreview : `${styles.screen} ${index === active ? styles.activeScreen : ''}`}
       aria-hidden={!mobile && index !== active} key={chapter.id}>
-      <img src={index === 1 && playing && !reducedMotion && (mobile || active === index) ? '/images/social-sharing-demo.gif' : chapter.src}
-        alt={chapter.alt} width="1290" height="2796" loading="lazy" decoding="async" />
+      {index === 1
+        ? <SavingVideo key={savingDemo.id} demo={savingDemo} playing={playing && (mobile || active === index)}
+            id={mobile ? 'mobile-saving-demo' : 'desktop-saving-demo'} />
+        : <img src={chapter.src} alt={chapter.alt} width="1290" height="2796" loading="lazy" decoding="async" />}
     </div>
   }
 
   return <section className={styles.section} id="how-it-works" ref={sectionRef} aria-labelledby="product-heading">
     <div className={styles.heading} data-reveal>
-      <span className={styles.eyebrow}>A little look inside</span>
-      <h2 id="product-heading">Good finds.<br /><span>Made into real plans.</span></h2>
-      <p>Everything you love discovering.<br />One place to bring it all together.</p>
+      <span className={styles.eyebrow}>GOOD PLANS START HERE</span>
+      <h2 id="product-heading">From a recommendation<br /><span>to your next plan.</span></h2>
+      <p>Discover, save and find your way back.<br />Everything you need, on one map.</p>
     </div>
     <div className={styles.layout}>
       <div className={styles.sticky}>
         <div className={styles.stage} data-active={active}>
-          <span className={styles.stageLabel}>YOUKNOW / IN YOUR POCKET</span>
+          <span className={styles.stageLabel}>Good taste, to go.</span>
           <div className={styles.phone}>{CHAPTERS.map((chapter, index) => preview(chapter, index))}</div>
           <div className={styles.stageFooter}>
             <span className={styles.stageCount}>0{active + 1}<span> / 03</span></span>
@@ -121,7 +127,7 @@ export default function ProductStory() {
           <div className={styles.chapterCopy} data-reveal>
             <span className={styles.eyebrow}>{chapter.eyebrow}</span>
             <h3>{chapter.title}</h3>
-            <p>{chapter.description}</p>
+            <p aria-live={index === 1 ? 'polite' : undefined}>{index === 1 ? savingDemo.description : chapter.description}</p>
             {index === 0 && <div className={styles.peopleNote}><span aria-hidden="true">↗</span> Start with people you trust.</div>}
             {index === 1 && <>
               <div className={styles.sources} aria-label="Save places from Instagram, TikTok and Google Maps">
@@ -130,8 +136,13 @@ export default function ProductStory() {
                 <img src="/images/social/google-maps.svg" alt="Google Maps" width="24" height="24" />
                 <span>All your finds. One map.</span>
               </div>
-              <button className={styles.demoButton} type="button" aria-pressed={playing} onClick={() => setPlaying(!playing)} disabled={reducedMotion}>
-                <span aria-hidden="true">{playing ? 'Ⅱ' : '▶'}</span>{reducedMotion ? 'Saving preview · reduced motion' : playing ? 'Pause saving demo' : 'Play saving demo'}
+              <div className={styles.savingChoices} role="group" aria-label="Choose a saving demo">
+                {SAVING_DEMOS.map((demo, i) => <button type="button" key={demo.id} aria-pressed={savingDemoIndex === i}
+                  aria-controls="desktop-saving-demo mobile-saving-demo" onClick={() => setSavingDemoIndex(i)}>{demo.label}</button>)}
+              </div>
+              <button className={styles.demoButton} type="button" aria-pressed={playing}
+                aria-controls="desktop-saving-demo mobile-saving-demo" onClick={() => setPlaying(!playing)}>
+                <span aria-hidden="true">{playing ? 'Ⅱ' : '▶'}</span>{playing ? 'Pause saving demo' : 'Play saving demo'}
               </button>
             </>}
             {index === 2 && <div className={styles.promptDemo}>
@@ -142,8 +153,8 @@ export default function ProductStory() {
               </div>
               <span className={styles.promptHint}>Search your own map in the app.</span>
             </div>}
-            <span className={styles.featureName}>{chapter.detail}</span>
-            {index === 1 && <Link className={styles.tutorialLink} to="/tutorials">See the saving guide <span aria-hidden="true">↗</span></Link>}
+            <span className={styles.featureName}>{index === 1 ? savingDemo.detail : chapter.detail}</span>
+            {index === 1 && <Link className={styles.tutorialLink} to={`/tutorials#${savingDemo.id}`}>See the saving guide <span aria-hidden="true">↗</span></Link>}
           </div>
           {preview(chapter, index, true)}
         </article>)}

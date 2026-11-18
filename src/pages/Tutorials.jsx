@@ -1,23 +1,23 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { usePageMetadata } from '../usePageMetadata'
 import styles from './Tutorials.module.css'
+import SavingVideo from '../components/SavingVideo'
+import { SAVING_DEMOS } from '../savingDemos'
 
 const TUTORIALS = [
   {
+    id: 'social-sharing',
     title: 'Instagram / TikTok',
     steps: [
       'When you see a restaurant, bar, cafe, or place on Instagram or TikTok, share it with the app!',
       'YouKnow will open automatically and identify the likeliest matching places.',
-      'Review the detected place and save it once it looks right.',
+      'Review the detected places and save the ones you want to try.',
     ],
-    animation: {
-      src: '/images/social-sharing-demo.gif',
-      poster: '/images/social-sharing-poster.png',
-      alt: 'Animation showing sharing an Instagram post into YouKnow, confirming the place, and saving it to your map.',
-    },
+    video: SAVING_DEMOS[0],
   },
   {
+    id: 'photo-sharing',
     title: 'Pictures',
     steps: [
       'Take a picture directly in the app when you see a place you want to remember.',
@@ -25,11 +25,7 @@ const TUTORIALS = [
       'You can also share a picture from your gallery straight into YouKnow.',
       'Confirm the matched place, then save it for later.',
     ],
-    video: {
-      src: '/gallery_video.MP4',
-      type: 'video/mp4',
-      label: 'Gallery place sharing tutorial video.',
-    },
+    video: SAVING_DEMOS[1],
   },
   {
     id: 'google-saved-places',
@@ -58,49 +54,12 @@ const TUTORIALS = [
   },
 ]
 
-function TutorialAnimation({ animation }) {
-  const [isPaused, setIsPaused] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  )
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = (event) => setIsPaused(event.matches)
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
-  }, [])
-
-  return (
-    <div className={styles.animationMedia}>
-      <img
-        className={styles.tutorialVideo}
-        src={isPaused ? animation.poster : animation.src}
-        alt={animation.alt}
-        width="320"
-        height="706"
-        loading="lazy"
-        decoding="async"
-      />
-      <button
-        className={styles.animationToggle}
-        type="button"
-        aria-label={isPaused ? 'Play sharing animation' : 'Pause sharing animation'}
-        onClick={() => setIsPaused((paused) => !paused)}
-      >
-        {isPaused ? 'Play' : 'Pause'}
-      </button>
-    </div>
-  )
-}
-
 export default function Tutorials() {
   usePageMetadata('tutorials')
   const { hash } = useLocation()
 
   useEffect(() => {
-    if (hash === '#google-saved-places') {
-      document.getElementById('google-saved-places')?.scrollIntoView()
-    }
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView()
   }, [hash])
 
   return (
@@ -136,7 +95,7 @@ export default function Tutorials() {
                 className={styles.panel}
                 id={tutorial.id}
                 key={tutorial.title}
-                open={hash === '#google-saved-places' ? tutorial.id === 'google-saved-places' : index === 0}
+                open={TUTORIALS.some(item => `#${item.id}` === hash) ? `#${tutorial.id}` === hash : index === 0}
               >
                 <summary>
                   <span>{tutorial.title}</span>
@@ -148,12 +107,6 @@ export default function Tutorials() {
                     <li key={stepIndex}>{step}</li>
                   ))}
                 </ol>
-
-                {tutorial.animation && (
-                  <div className={styles.videoMedia}>
-                    <TutorialAnimation animation={tutorial.animation} />
-                  </div>
-                )}
 
                 {tutorial.screenshots && (
                   <div
@@ -175,16 +128,7 @@ export default function Tutorials() {
 
                 {tutorial.video && (
                   <div className={styles.videoMedia}>
-                    <video
-                      className={styles.tutorialVideo}
-                      controls
-                      playsInline
-                      preload="metadata"
-                      aria-label={tutorial.video.label}
-                    >
-                      <source src={tutorial.video.src} type={tutorial.video.type} />
-                      Your browser does not support the video tag.
-                    </video>
+                    <SavingVideo demo={tutorial.video} className={styles.tutorialVideo} />
                   </div>
                 )}
               </details>

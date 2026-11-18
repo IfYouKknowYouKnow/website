@@ -5,7 +5,6 @@ import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import ProductStory from '../components/ProductStory'
 import Personalization from '../components/Personalization'
-import RotatingWord from '../components/RotatingWord'
 import HeroRecommendations from '../components/HeroRecommendations'
 import { HERO_MOOD_EXAMPLES } from '../heroMoodExamples'
 import communityPlaces from '../cityGuideCommunityPlaces.js'
@@ -71,28 +70,10 @@ function useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen) {
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.dataset.visible = 'true'; reveal.unobserve(entry.target) } })
     }, { threshold: .12 })
     page.querySelectorAll('[data-reveal]').forEach(element => reveal.observe(element))
-    let frame = 0
-    const hero = page.querySelector('[data-hero]')
-    function update() {
-      frame = 0
-      const total = document.documentElement.scrollHeight - window.innerHeight
-      page.style.setProperty('--scroll-progress', total > 0 ? window.scrollY / total : 0)
-      page.dataset.scrolled = window.scrollY > 24
-      if (!media.matches) page.style.setProperty('--ticker-travel', `${window.scrollY * -.11}px`)
-      if (!media.matches && hero.getBoundingClientRect().bottom > 0) {
-        page.style.setProperty('--hero-travel', `${Math.min(window.scrollY * .085, 65)}px`)
-        page.style.setProperty('--photo-travel', `${Math.min(window.scrollY * .04, 30)}px`)
-        page.style.setProperty('--hero-rotate', `${Math.min(window.scrollY * .075, 50)}deg`)
-      }
-    }
-    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update) }
-    const motionChange = () => { page.dataset.motion = !media.matches; schedule() }
+    const motionChange = () => { page.dataset.motion = !media.matches }
     motionChange()
-    update()
     media.addEventListener('change', motionChange)
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    return () => { reveal.disconnect(); media.removeEventListener('change', motionChange); window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); window.cancelAnimationFrame(frame) }
+    return () => { reveal.disconnect(); media.removeEventListener('change', motionChange) }
   }, [pageRef])
   useEffect(() => {
     if (!isMenuOpen) return
@@ -346,14 +327,13 @@ export default function Landing({ initialStats } = {}) {
 
   return <div className={styles.page} ref={pageRef}>
     <a className={styles.skipLink} href="#main-content">Skip to content</a>
-    <div className={styles.scrollProgress} aria-hidden="true" />
     <header className={styles.nav}>
       <div className={styles.navInner}>
         <Link className={styles.brand} to="/" aria-label="YouKnow home"><img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" width="145" height="43" /></Link>
         <button className={styles.menuToggle} type="button" aria-expanded={isMenuOpen} aria-controls="primary-links" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? 'Close −' : 'Menu +'}</button>
         <nav id="primary-links" className={`${styles.navLinks} ${isMenuOpen ? styles.navLinksOpen : ''}`} aria-label="Primary navigation" onClick={() => setIsMenuOpen(false)}>
-          <a href="#how-it-works">The app</a><a href="#community">Your people</a><a href="#guides">City guides</a><Link to="/about">Our story</Link>
-          <a className={styles.navCta} href="#download">Get YouKnow <Icon /></a>
+          <a href="#how-it-works">Product</a><a href="#community">Community</a><a href="#guides">City guides</a><Link to="/about">About</Link>
+          <a className={styles.navCta} href="#download">Get YouKnow</a>
         </nav>
       </div>
     </header>
@@ -362,48 +342,51 @@ export default function Landing({ initialStats } = {}) {
       <section className={styles.hero} data-hero aria-labelledby="hero-heading">
         <div className={`${styles.heroInner} ${styles.wrap}`}>
         <div className={styles.heroCopy}>
-          <span className={styles.heroEyebrow}><span className={styles.liveDot} /> YOUR PEOPLE KNOW A PLACE.</span>
-          <h1 id="hero-heading">GOOD SPOTS.<br /><span>GREAT PEOPLE.</span></h1>
-          <p className={styles.heroDescription}>Less “where should we go?”<br />More “you have to try this.”</p>
-          <p className={styles.heroSubline}>Your friends. Curators you trust. Their favourite spots.<br />One map. Shaped by your taste.</p>
-          <div className={styles.moodPicker} role="group" aria-label="Choose a mood for the homepage preview">
-            {HERO_MOOD_EXAMPLES.map((example, index) => <button type="button" key={example.label} aria-pressed={heroMood === index}
-              aria-controls="hero-recommendations" onClick={() => { setHeroMood(index); setHeroPlace(0) }}>{example.label}</button>)}
+          <span className={styles.heroEyebrow}>Welcome to YouKnow</span>
+          <h1 id="hero-heading">Your map starts<br /><span>with you.</span></h1>
+          <p className={styles.heroDescription}>
+            <span className={styles.desktopHeroDescription}>Save the places you love. Find your next favourites through people who get you.</span>
+            <span className={styles.mobileHeroDescription}>Good places, from people you trust.</span>
+          </p>
+          <div className={styles.heroActions}>
+            <a className={styles.primaryButton} href="#download">Get YouKnow</a>
+            <a className={styles.heroExplore} href="#how-it-works">Explore the app <span aria-hidden="true">↓</span></a>
           </div>
-          <AppIdentity />
           <StoreButtons />
           <span className={styles.freeNote}>Completely free. On iOS & Android.</span>
-          <a className={styles.heroExplore} href="#how-it-works"><span aria-hidden="true">↓</span> A little look inside</a>
         </div>
         <div className={styles.heroVisual} data-mood={heroMood}>
-          <span className={styles.heroSpark} aria-hidden="true">✳</span>
-          <div className={styles.heroPhoto}>
-            <img key={heroMood} src={`/images/editorial/${mood.image}.jpg`} alt={mood.photoAlt} width="1400" height="960" fetchpriority="high" />
-            <p>{mood.caption}</p>
+          <div className={styles.visualHeading}><span>Find your next favourite.</span><span>Pick a mood</span></div>
+          <div className={styles.moodPicker} role="group" aria-label="Choose a mood for the homepage preview">
+            {HERO_MOOD_EXAMPLES.map((example, index) => <button type="button" key={example.label} aria-pressed={heroMood === index}
+              aria-controls="hero-recommendations" onClick={() => { setHeroMood(index); setHeroPlace(0) }}><img src={example.persona} alt="" width="26" height="26" />{example.label}</button>)}
           </div>
-          <div className={styles.heroPhone}>
-            <img src="/images/youknow-map-860.webp" srcSet="/images/youknow-map-430.webp 430w, /images/youknow-map-860.webp 860w" sizes="(max-width:420px) 190px, 245px" alt="YouKnow app map showing real recommendations around Zurich." width="1290" height="2796" fetchpriority="high" />
-            <span className={styles.heroMapPick} aria-hidden="true" key={`${heroMood}-${heroPlace}`}
-              style={{ left: `${selectedHeroPlace.x}%`, top: `${selectedHeroPlace.y}%`, '--source-accent': mood.accent }}>
-              <span>{mood.initial}</span><strong>{mood.name}’s pick</strong>
-            </span>
+          <div className={styles.heroScene}>
+            <div className={styles.heroPhoto}>
+              <img key={heroMood} src={`/images/editorial/${mood.image}.jpg`} alt={mood.photoAlt} width="1400" height="960" fetchpriority="high" />
+              <p>{mood.caption}</p>
+            </div>
+            <div className={styles.heroPhone}>
+              <img src="/images/youknow-map-860.webp" srcSet="/images/youknow-map-430.webp 430w, /images/youknow-map-860.webp 860w" sizes="(max-width:760px) clamp(184px,58vw,244px), (max-width:900px) 220px, 245px" alt="YouKnow app map showing real recommendations around Zurich." width="1290" height="2796" fetchpriority="high" />
+              <span className={styles.heroMapPick} aria-hidden="true" key={`${heroMood}-${heroPlace}`}
+                style={{ left: `${selectedHeroPlace.x}%`, top: `${selectedHeroPlace.y}%`, '--source-accent': mood.accent }}>
+                <span>{mood.initial}</span><strong>{mood.name}’s pick</strong>
+              </span>
+            </div>
           </div>
-          <span className={styles.heroSourceTag}>FROM {mood.name.toUpperCase()}’S MAP ↗</span>
           <HeroRecommendations mood={mood} selectedIndex={heroPlace} onSelect={setHeroPlace} />
         </div>
-        <div className={styles.heroBottom}><span>The map built by people YouKnow.</span><span>EN / DE / FR / IT</span><a href="#how-it-works">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
+        <div className={styles.heroBottom}><span>Local knowledge. A world of possibilities.</span><span>AVAILABLE IN EN / DE / FR / IT</span><a href="#how-it-works">DISCOVER YOUKNOW <span aria-hidden="true">↓</span></a></div>
         </div>
       </section>
 
       <section className={styles.stats} aria-label="YouKnow community stats">
         <div className={styles.wrap}>
-          <div><strong>{formatCount(positiveCountOrFallback(stats.curatedPlaces, FALLBACK_STATS.curatedPlaces))}<span>+</span></strong><span>places worth passing on</span></div>
+          <div><strong>{formatCount(positiveCountOrFallback(stats.curatedPlaces, FALLBACK_STATS.curatedPlaces))}<span>+</span></strong><span>curated places</span></div>
           <div><strong>{formatCount(cityCount)}</strong><span>cities and counting</span></div>
-          <p>Local knowledge.<br /><span>A world of possibilities.</span></p>
+          <p>Recommendations with a point of view.<br /><span>From your friends to independent guides.</span></p>
         </div>
       </section>
-
-      <div className={styles.ticker} aria-hidden="true"><div>{Array.from({ length: 6 }, (_, index) => <span key={index}>YOUR PEOPLE <b>✳</b> GOOD SPOTS <b>↗</b> REAL PLANS <b>✳</b> </span>)}</div></div>
 
       <div className={styles.wrap}><ProductStory /></div>
 
@@ -411,12 +394,12 @@ export default function Landing({ initialStats } = {}) {
 
       <section className={`${styles.collection} ${styles.wrap}`} id="community" aria-labelledby="collection-heading">
         <div className={styles.sectionHeader} data-reveal>
-          <div><span className={styles.eyebrow}>YOUR TASTE. YOUR LITTLE WORLD.</span><h2 id="collection-heading">YOUR MAP.<br /><span>YOUR KIND OF GOOD.</span></h2></div>
-          <p>From the places you already love<br />to the ones you haven’t met yet.</p>
+          <div><span className={styles.eyebrow}>BETTER WITH YOUR PEOPLE</span><h2 id="collection-heading">Good taste.<br /><span>Better connected.</span></h2></div>
+          <p>A personal collection of places, shaped by<br />the people and guides you choose to follow.</p>
         </div>
         <div className={styles.featureGrid}>
           {COLLECTION_FEATURES.map(feature => <article className={styles.featureCard} data-theme={feature.theme} key={feature.number} data-reveal>
-            <div className={styles.cardTop}><Icon name={feature.icon} /><span>{feature.number} / COLLECTION</span></div>
+            <div className={styles.cardTop}><Icon name={feature.icon} /><span>Made for your map</span></div>
             <h3>{feature.title}</h3><p>{feature.text}</p>
             <div className={styles.cardScreen}><img src={feature.src} srcSet={feature.srcSet} sizes={feature.srcSet ? '240px' : undefined} alt={feature.alt} width="1290" height="2796" loading="lazy" decoding="async" /></div>
           </article>)}
@@ -432,7 +415,7 @@ export default function Landing({ initialStats } = {}) {
       <section className={styles.travel} id="guides" aria-labelledby="travel-heading">
         <div className={styles.wrap}>
           <div className={styles.sectionHeader} data-reveal>
-            <div><span className={styles.eyebrow}>A LITTLE FURTHER AFIELD</span><h2 id="travel-heading">New city.<br /><span>Already in the know.</span></h2></div>
+            <div><span className={styles.eyebrow}>LOCAL KNOWLEDGE, EVERYWHERE</span><h2 id="travel-heading">A new city.<br /><span>A familiar feeling.</span></h2></div>
             <div className={styles.travelIntro}><p>Explore recommendations in <strong>{formatCount(cityCount)} cities and counting.</strong> These are just a few city previews.</p><a className={styles.textLink} href="#download">Explore more cities in the app <Icon /></a></div>
           </div>
           <div className={styles.cityControls}>
@@ -447,8 +430,8 @@ export default function Landing({ initialStats } = {}) {
               event.preventDefault()
               scrollCities(event.key === 'ArrowRight' ? 1 : -1)
             }
-          }}>{CITY_GUIDES.map((guide, index) => <Link className={styles.cityCard} to={guide.href} key={guide.city} data-reveal>
-            <div className={styles.cityImage}><img src={guide.image} srcSet={`${guide.image.replace('-860.webp', '-430.webp')} 430w, ${guide.image} 860w`} sizes="230px" alt={guide.alt} width="1290" height="2796" loading="lazy" decoding="async" /><span className={styles.cityBadge}>CITY PREVIEW / 0{index + 1}</span><span className={styles.cityArrow}><Icon /></span></div>
+          }}>{CITY_GUIDES.map((guide) => <Link className={styles.cityCard} to={guide.href} key={guide.city} data-reveal>
+            <div className={styles.cityImage}><img src={guide.image} srcSet={`${guide.image.replace('-860.webp', '-430.webp')} 430w, ${guide.image} 860w`} sizes="230px" alt={guide.alt} width="1290" height="2796" loading="lazy" decoding="async" /><span className={styles.cityBadge}>Your next stop</span><span className={styles.cityArrow}><Icon /></span></div>
             <div className={styles.cityCopy}><h3>{guide.city}</h3><p>{guide.mood}</p>{guide.picks && <p className={styles.cityCommunityPicks}><span>COMMUNITY PICKS</span>{guide.picks.join(' · ')}</p>}</div>
           </Link>)}</div>
           <div className={styles.moodLinks}><span>ZURICH, BY MOOD</span><Link to="/zurich/cafes/">Coffee stops ↗</Link><Link to="/zurich/cosy-restaurants/">Cosy dinners ↗</Link><Link to="/zurich/bars/">One more drink ↗</Link><Link to="/zurich/date-night/">Date night ↗</Link><Link to="/zurich/hidden-gems/">Hidden gems ↗</Link></div>
@@ -457,7 +440,7 @@ export default function Landing({ initialStats } = {}) {
 
       <section className={`${styles.curators} ${styles.wrap}`} id="curators" aria-labelledby="curator-heading">
         <div className={styles.curatorVisual} data-reveal>
-          <span className={styles.curatorVisualLabel}>GOOD TASTE TRAVELS.</span>
+          <span className={styles.curatorVisualLabel}>CURATED BY PEOPLE. SHARED WITH PURPOSE.</span>
           <svg className={styles.sharingRoute} viewBox="0 0 500 500" fill="none" aria-hidden="true"><path d="M-30 250C40 340 75 165 165 190S290 330 375 250 465 125 530 170" stroke="currentColor" strokeWidth="2" strokeDasharray="7 9" /></svg>
           <div className={styles.placeTicket}>
             <div className={styles.ticketPin}><Icon name="place" /></div>
@@ -468,8 +451,8 @@ export default function Landing({ initialStats } = {}) {
           <div className={styles.sharingPeople}><Icon name="people" /><span>Shared with your people</span></div>
           <p className={styles.sharingHeadline}>Know a good place?<br /><em>Pass it on.</em></p>
         </div>
-        <div className={styles.curatorCopy} data-reveal><span className={styles.eyebrow}>FOR THE ONES WHO ALWAYS KNOW A PLACE</span><h2 id="curator-heading">Your good taste.<br /><span>A little more shared.</span></h2><p>For friends, creators, communities and local connoisseurs. Collect your favourite places, share your map, and help someone find their next favourite.</p>
-          <button type="button" className={styles.textButton} onClick={() => setIsCuratorFormOpen(!isCuratorFormOpen)} aria-expanded={isCuratorFormOpen} aria-controls="curator-form">{isCuratorFormOpen ? 'Close application' : 'Become a curator'}<Icon /></button>
+        <div className={styles.curatorCopy} data-reveal><span className={styles.eyebrow}>FOR PEOPLE WITH GOOD TASTE</span><h2 id="curator-heading">Your perspective.<br /><span>Worth sharing.</span></h2><p>For friends, creators, communities and local connoisseurs. Collect your favourite places, share your map, and help someone find their next favourite.</p>
+          <button type="button" className={styles.textButton} onClick={() => setIsCuratorFormOpen(!isCuratorFormOpen)} aria-expanded={isCuratorFormOpen} aria-controls="curator-form">{isCuratorFormOpen ? 'Close application' : 'Become a curator'}</button>
           {isCuratorFormOpen && <form id="curator-form" name="curator-application" method="POST" data-netlify="true" onSubmit={handleCuratorSubmit} className={styles.curatorForm}>
             <input type="hidden" name="form-name" value="curator-application" />
             <label>Your name<input className={styles.input} type="text" name="name" autoComplete="name" value={curatorForm.name} onChange={handleCuratorChange} required /></label>
@@ -482,12 +465,12 @@ export default function Landing({ initialStats } = {}) {
       </section>
 
       <section className={`${styles.faqSection} ${styles.wrap}`} id="faq" aria-labelledby="faq-heading">
-        <div data-reveal><span className={styles.eyebrow}>A FEW THINGS TO KNOW</span><h2 id="faq-heading">Good questions.</h2><p>Before your next great find.</p></div>
+        <div data-reveal><span className={styles.eyebrow}>THE DETAILS</span><h2 id="faq-heading">A few things<br />to know.</h2><p>Everything you need to get started.</p></div>
         <div>{faqItems.map((item, index) => <details className={styles.faqItem} key={item.question} open={index === 0}><summary>{item.question}<span className={styles.faqIcon} aria-hidden="true" /></summary><p>{item.answer}</p></details>)}</div>
       </section>
 
       <section className={styles.download} id="download" aria-labelledby="download-heading">
-        <div className={styles.wrap} data-reveal><span className={styles.eyebrow}>YOUR NEXT FAVOURITE IS OUT THERE.</span><h2 id="download-heading" aria-label="Go somewhere great.">Go somewhere<RotatingWord /><span className={styles.downloadArrow} aria-hidden="true">↗</span></h2><div className={styles.downloadBottom}><p>Start with a place you already love.<br />See where your people take you.</p><div><AppIdentity /><StoreButtons /><span className={styles.freeNote}>Free to download. Made to go places.</span></div></div></div>
+        <div className={styles.wrap} data-reveal><span className={styles.eyebrow}>TAKE GOOD TASTE WITH YOU</span><h2 id="download-heading">Your next favourite.<br /><span>Already on the map.</span></h2><div className={styles.downloadBottom}><p>Start with a place you already love.<br />See where your people take you.</p><div><AppIdentity /><StoreButtons /><span className={styles.freeNote}>Free to download. On iOS & Android.</span></div></div></div>
       </section>
     </main>
 
@@ -495,7 +478,7 @@ export default function Landing({ initialStats } = {}) {
       <div className={styles.wrap}>
         <div className={styles.footerTop} id="waitlist">
           <div><Link to="/" className={styles.footerBrand} aria-label="YouKnow home"><img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" width="160" height="48" /></Link><p>Good places. Better together.</p></div>
-          <div className={styles.newsletter}><label htmlFor="newsletter-email">A little YouKnow in your inbox.</label><form name="waitlist" method="POST" data-netlify="true" onSubmit={handleSubmit}><input type="hidden" name="form-name" value="waitlist" /><input id="newsletter-email" type="email" name="email" autoComplete="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required /><button type="submit" disabled={isSubmitting} aria-label="Join mailing list">{isSubmitting ? '…' : <Icon />}</button></form>{toast && <p className={styles.formStatus} role="status">{toast}</p>}</div>
+          <div className={styles.newsletter}><label htmlFor="newsletter-email">News, places and things worth sharing.</label><form name="waitlist" method="POST" data-netlify="true" onSubmit={handleSubmit}><input type="hidden" name="form-name" value="waitlist" /><input id="newsletter-email" type="email" name="email" autoComplete="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required /><button type="submit" disabled={isSubmitting} aria-label="Join mailing list">{isSubmitting ? '…' : <Icon />}</button></form>{toast && <p className={styles.formStatus} role="status">{toast}</p>}</div>
         </div>
         <div className={styles.footerMiddle}><nav aria-label="Footer navigation"><Link to="/about">Our story</Link><Link to="/tutorials">How to save</Link><a href="#curators">For curators</a><a href="#faq">FAQ</a><Link to="/privacy">Privacy</Link><a href="/sitemap.html">All pages</a></nav><div className={styles.support}><span>SUPPORTED BY</span><img src="/sph_logo.jpeg" alt="ETH Student Project House" width="75" height="38" loading="lazy" /><img src="/asl-logo-white.svg" alt="Agentic Systems Lab" width="110" height="30" loading="lazy" /></div></div>
         <div className={styles.footerBottom}><span>© 2026 YouKnow by Marie-Louise Dugua & Fabio Baldini</span><a href="#main-content">BACK TO TOP ↑</a></div>

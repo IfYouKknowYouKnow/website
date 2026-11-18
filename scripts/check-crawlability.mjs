@@ -85,13 +85,13 @@ for (const page of pages) {
     const initialText = textContent(tree).replace(/\s+/g, ' ')
     const exportedText = markdown.replace(/\s+/g, ' ')
     for (const passage of [
-      'The map built by people YouKnow.',
+      'Local knowledge. A world of possibilities.',
       'Instagram, TikTok and Google Maps',
       'Start with people you trust.',
       'Find people who get your taste.',
-      'Good finds.',
-      'Made into real plans.',
-      'Already in the know.',
+      'From a recommendation',
+      'to your next plan.',
+      'A familiar feeling.',
       'Import a shared Google Maps list',
       'The more you interact, the more it feels like you.',
     ]) {
@@ -99,14 +99,17 @@ for (const page of pages) {
       assert.ok(exportedText.includes(passage), `/: text exports contain ${passage}`)
     }
     assert.deepEqual(JSON.parse(textContent(select('script', 'id', 'landing-stats-data')[0])), record.community_stats)
-    const demos = elements.filter(node => node.tagName === 'video')
+    const personalization = select('section', 'id', 'make-it-yours')[0]
+    assert.ok(personalization, '/: personalization section exists')
+    const demos = findAll(personalization, node => node.tagName === 'video')
     assert.equal(demos.length, 3, '/: three personalization videos in initial HTML')
-    for (const video of demos) {
-      await fs.access(`dist${attr(video, 'poster')}`)
-      const source = findAll(video, node => node.tagName === 'source')[0]
-      assert.ok(attr(source, 'src'), '/: video sources are crawlable without clicking or scrolling')
-      await fs.access(`dist${attr(source, 'src')}`)
-    }
+  }
+  for (const video of elements.filter(node => node.tagName === 'video')) {
+    assert.ok(attr(video, 'poster'), `${route}: video has a still preview`)
+    await fs.access(`dist${attr(video, 'poster')}`)
+    const source = findAll(video, node => node.tagName === 'source')[0]
+    assert.ok(attr(source, 'src'), `${route}: video sources are crawlable without clicking or scrolling`)
+    await fs.access(`dist${attr(source, 'src')}`)
   }
   for (const faq of (record.structured_data['@graph'] || []).filter((entity) => entity['@type'] === 'FAQPage')) {
     for (const question of faq.mainEntity) {

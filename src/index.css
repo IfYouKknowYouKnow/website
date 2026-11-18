@@ -1,20 +1,9 @@
-/* latin-ext */
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: 'Hanken Grotesk';
   font-style: normal;
-  font-weight: 400 700;
+  font-weight: 100 900;
   font-display: swap;
-  src: url(/fonts/space-grotesk-latin-ext.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url(/fonts/space-grotesk-latin.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('/fonts/hanken-grotesk-variable.ttf') format('truetype');
 }
 
 *, *::before, *::after {
@@ -24,6 +13,12 @@
 }
 
 :root {
+  --onboarding-ink: #23252a;
+  --onboarding-blue: #395a75;
+  --onboarding-muted: #686d73;
+  --onboarding-surface: #ffffff;
+  --onboarding-map: url('/images/onboarding/zurich-map.jpg');
+  --onboarding-shadow: 0 22px 44px -8px #1f29371a, 0 2px 6px #1f29370f;
   --brand-blue: #86c6fd;
   --brand-blue-rgb: 134, 198, 253;
   --bg: #0c1520;
@@ -46,7 +41,7 @@ html {
 
 body {
   font-size: 19.2px;
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -58,7 +53,7 @@ a {
   text-decoration: none;
 }
 
-input, button {
+input, button, textarea, select {
   font-family: inherit;
 }
 
@@ -140,7 +135,7 @@ input, button {
 .city-nav-button {
   padding: 10px 17px;
   border: 1px solid var(--city-ink);
-  border-radius: 4px;
+  border-radius: 999px;
   color: var(--city-ink);
 }
 
@@ -203,7 +198,7 @@ input, button {
   justify-content: center;
   min-height: 52px;
   padding: 0 22px;
-  border-radius: 4px;
+  border-radius: 999px;
   background: var(--city-blue);
   color: #fff;
   font-size: 13px;
@@ -392,7 +387,7 @@ input, button {
 .city-tags li {
   padding: 7px 12px;
   border: 1px solid var(--city-line);
-  border-radius: 4px;
+  border-radius: 999px;
   background: #e5eadd;
   color: #58634f;
   font-size: 10px;
@@ -609,7 +604,7 @@ img[src="/images/youknow-wordmark.png"] {
 .city-community-signal { margin-top:10px; color:#3157ff; font-size:12px; font-weight:600; }
 .city-hero-art::before, .city-hero-art::after { display: none; }
 .city-hero-art img { display: block; width: min(100%, 245px); height: auto; min-height: 0; border: 5px solid #12121c; border-radius: 30px; box-shadow: 5px 7px 0 #12121c20; }
-.city-nav-button { background: #12121c; border-radius: 4px; color: #fff; font-size: 12px; }
+.city-nav-button { background: #12121c; border-radius: 999px; color: #fff; font-size: 12px; }
 .city-continue-button { background: #b8d8eb; color: #3157ff; }
 .city-continue-button:hover { background: #d6eaf5; color: #3157ff; }
 .city-page :is(a,summary):focus-visible { outline: 3px solid #2570aa; outline-offset: 5px; }

@@ -2,7 +2,7 @@
 // Place names and map coordinates are taken from the existing app screenshot.
 export const HERO_MOOD_EXAMPLES = [
   {
-    label: '☕ Coffee run', image: 'cafe', photoAlt: 'A café with leafy plants and a sunny window.',
+    label: 'Coffee', persona: '/images/onboarding/coffee-person.png', image: 'cafe', photoAlt: 'A café with leafy plants and a sunny window.',
     caption: 'Your new regular.', name: 'Ana', initial: 'A', source: 'Your friend',
     heading: 'Ana recommends these spots near you.', accent: '#dfff4f',
     places: [
@@ -11,7 +11,7 @@ export const HERO_MOOD_EXAMPLES = [
     ],
   },
   {
-    label: '🍸 After dark', image: 'bar', photoAlt: 'An inviting bar with warm lamps.',
+    label: 'After dark', persona: '/images/onboarding/night-person.png', image: 'bar', photoAlt: 'An inviting bar with warm lamps.',
     caption: 'One more round?', name: 'Maya', initial: 'M', source: 'Local curator you follow',
     heading: 'Maya knows where your night should start.', accent: '#ff88c5',
     places: [
@@ -20,7 +20,7 @@ export const HERO_MOOD_EXAMPLES = [
     ],
   },
   {
-    label: '🍝 Dinner plans', image: 'restaurant', photoAlt: 'A restaurant ready for your next dinner plan.',
+    label: 'Dinner', persona: '/images/onboarding/dinner-person.png', image: 'restaurant', photoAlt: 'A restaurant ready for your next dinner plan.',
     caption: 'Dinner is sorted.', name: 'Luca', initial: 'L', source: 'Food curator you follow',
     heading: 'Luca’s dinner picks. Your next good plan.', accent: '#b9dfff',
     places: [

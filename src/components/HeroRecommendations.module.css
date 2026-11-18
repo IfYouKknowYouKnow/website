@@ -1,27 +1,28 @@
-.card { position:absolute; z-index:5; right:0; bottom:18px; width:305px; padding:18px; color:#12121c; background:#fff; border:2px solid #12121c; border-radius:22px; box-shadow:5px 5px 0 var(--source-accent); animation:cardIn .35s cubic-bezier(.2,.7,.3,1); }
+.card { position:absolute; z-index:5; right:0; bottom:23px; width:280px; padding:18px; color:var(--onboarding-ink); background:#fff; border:1px solid #fff; border-radius:28px; box-shadow:var(--onboarding-shadow); animation:cardIn .35s cubic-bezier(.2,.7,.3,1); }
 .header { display:flex; align-items:center; gap:10px; }
-.avatar { display:grid; place-items:center; flex-shrink:0; width:36px; height:36px; color:#12121c; background:var(--source-accent); border:1px solid #12121c; border-radius:50%; font-size:17px; font-weight:700; }
+.avatar { display:grid; place-items:center; flex-shrink:0; width:36px; height:36px; color:var(--onboarding-ink); background:var(--source-accent,#dce9ff); border:1px solid #0000000c; border-radius:50%; font-size:17px; font-weight:650; }
 .identity { display:grid; gap:1px; min-width:0; }
-.identity strong { font-size:14px; font-weight:700; line-height:1.2; }
+.identity strong { font-size:14px; font-weight:650; line-height:1.2; }
 .identity > span { color:#555565; font-size:10px; line-height:1.4; }
-.example { margin-left:auto; align-self:start; padding:3px 6px; color:#565665; background:#f1f1f8; border-radius:5px; font-size:9px; line-height:1.4; }
-.card h2 { margin-top:13px; max-width:250px; font-size:20px; font-weight:700; letter-spacing:-.05em; line-height:1.12; text-wrap:pretty; }
+.example { margin-left:auto; align-self:start; padding:3px 6px; color:#565665; background:#f1f1f8; border-radius:999px; font-size:9px; line-height:1.4; }
+.card h2 { margin-top:13px; max-width:250px; font-size:20px; font-weight:650; letter-spacing:-.035em; line-height:1.12; text-wrap:pretty; }
 .places { display:grid; gap:7px; margin-top:13px; }
-.places button { display:flex; align-items:center; gap:9px; width:100%; min-height:43px; padding:9px 10px; color:#12121c; background:#fff; border:1px solid #d8d8e3; border-radius:11px; text-align:left; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
-.places button:hover { border-color:#12121c; transform:translateX(2px); }
-.places button[aria-pressed='true'] { background:var(--source-accent); border-color:#12121c; }
+.places button { display:flex; align-items:center; gap:9px; width:100%; min-height:43px; padding:9px 10px; color:var(--onboarding-ink); background:#fff; border:1px solid #d8d8e3; border-radius:14px; text-align:left; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
+.places button:hover { border-color:#9cb6c9; }
+.places button[aria-pressed='true'] { background:#e5eef5; border-color:#c9d9e8; }
 .placeEmoji { flex-shrink:0; font-size:17px; line-height:1; }
 .places strong { font-size:12px; font-weight:600; line-height:1.3; }
 .distance { display:inline-flex; align-items:center; flex-shrink:0; gap:7px; margin-left:auto; font-size:10px; line-height:1.3; }
 .distance > span { font-size:13px; }
 .reason { margin-top:13px; padding-top:11px; border-top:1px solid #dedee8; }
-.reason > span { color:#555565; font-size:8px; font-weight:600; letter-spacing:.07em; }
+.reason > span { color:#555565; font-size:10px; font-weight:600; letter-spacing:.02em; }
 .reason > p { margin-top:5px; min-height:31px; font-size:12px; line-height:1.4; letter-spacing:-.015em; animation:cardIn .2s ease-out; }
 .hint { display:block; margin-top:9px; color:#646472; font-size:9px; }
 @keyframes cardIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-@media(max-width:1150px) and (min-width:901px) { .card { right:-5px; bottom:13px; width:280px; padding:16px; } .card h2 { font-size:19px; } }
-@media(max-width:900px) { .card { position:relative; right:auto; bottom:auto; margin-left:auto; width:330px; max-width:100%; } }
-@media(max-width:760px) { .card { width:310px; } }
+@media(max-width:1150px) and (min-width:901px) { .card { right:0; bottom:23px; width:265px; padding:16px; } .card h2 { font-size:19px; } }
+@media(max-width:900px) { .card { right:0; bottom:23px; width:265px; padding:15px; } }
+@media(max-width:760px) { .card { width:275px; bottom:5px; } }
 @media(max-width:420px) { .card { width:265px; padding:15px; } .card h2 { font-size:19px; } .reason > p { font-size:11px; min-height:31px; } .identity > span { font-size:9px; } .places strong { font-size:11px; } .distance { font-size:9px; } }
 @media(max-width:360px) { .card { width:245px; padding:13px; } .card h2 { font-size:18px; } .places button { padding-inline:8px; gap:7px; } }
+@media(max-width:760px) { .card { position:relative; right:auto; bottom:auto; margin:0; width:100%; padding:18px; } .card h2 { max-width:100%; } }
 @media(prefers-reduced-motion:reduce) { .card,.reason > p { animation:none; } .places button { transition:none; } .places button:hover { transform:none; } }
