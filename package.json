@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build && node scripts/prerender-pages.mjs && node scripts/check-crawlability.mjs",
     "preview": "vite preview",
-    "check:crawlability": "node scripts/check-crawlability.mjs"
+    "check:crawlability": "node scripts/check-crawlability.mjs",
+    "refresh:guides": "node scripts/refresh-guide-fallbacks.mjs",
+    "i18n:check": "node scripts/extract-messages.mjs",
+    "i18n:places": "node scripts/place-translation-source.mjs"
   },
   "dependencies": {
     "mapbox-gl": "^3.6.0",

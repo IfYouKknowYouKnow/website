@@ -269,3 +269,16 @@
 .panel:hover, .panel[open] { border-color: rgba(var(--brand-blue-rgb), .32); }
 .page :is(a, summary):focus-visible { outline: 3px solid var(--brand-blue); outline-offset: 5px; }
 @media (prefers-reduced-motion: reduce) { .page *, .page *::before, .page *::after { transition: none !important; } }
+
+.languages {
+  display: block;
+  margin-top: 48px;
+  color: #575766;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.languages a:hover {
+  color: #3157ff;
+}

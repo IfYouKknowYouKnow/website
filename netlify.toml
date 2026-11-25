@@ -13,9 +13,51 @@
   to = "/about#team"
   status = 301
 
+# English is served from the root. /en is only an alias people may type.
+[[redirects]]
+  from = "/en"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/en/*"
+  to = "/:splat"
+  status = 301
+
 [[redirects]]
   from = "/about"
   to = "/about.html"
+  status = 200
+
+# German, French and Italian pages live under /de, /fr and /it with the same paths.
+[[redirects]]
+  from = "/de/about"
+  to = "/de/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/de/tutorials"
+  to = "/de/tutorials.html"
+  status = 200
+
+[[redirects]]
+  from = "/fr/about"
+  to = "/fr/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/fr/tutorials"
+  to = "/fr/tutorials.html"
+  status = 200
+
+[[redirects]]
+  from = "/it/about"
+  to = "/it/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/it/tutorials"
+  to = "/it/tutorials.html"
   status = 200
 
 [[redirects]]

@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './Personalization.module.css'
+import { msg, useI18n } from '../i18n'
 
 const ACTIONS = [
-  { id: 'recommend', title: 'Recommend', illustration: '/images/onboarding/recommend.png', label: 'SHARE A FAVOURITE', description: 'Recommend the places you love so your friends can discover them too.' },
-  { id: 'wishlist', title: 'Wishlist', illustration: '/images/onboarding/wishlist.png', label: 'SAVE FOR LATER', description: 'Keep the places you want to try in one collection, ready for your next plan.' },
-  { id: 'dislike', title: 'Dislike', illustration: '/images/onboarding/dislike.png', label: 'REFINE YOUR TASTE', description: 'Let YouKnow know when a place is not for you, and help your friends make a more informed choice.' },
+  { id: 'recommend', title: msg('Recommend'), illustration: '/images/onboarding/recommend.png', label: msg('SHARE A FAVOURITE'), description: msg('Recommend the places you love so your friends can discover them too.') },
+  { id: 'wishlist', title: msg('Wishlist'), illustration: '/images/onboarding/wishlist.png', label: msg('SAVE FOR LATER'), description: msg('Keep the places you want to try in one collection, ready for your next plan.') },
+  { id: 'dislike', title: msg('Dislike'), illustration: '/images/onboarding/dislike.png', label: msg('REFINE YOUR TASTE'), description: msg('Let YouKnow know when a place is not for you, and help your friends make a more informed choice.') },
 ]
 
 export default function Personalization() {
+  const { tr } = useI18n()
   const sectionRef = useRef(null)
   const [playing, setPlaying] = useState(false)
 
@@ -45,25 +47,25 @@ export default function Personalization() {
 
   return <section className={styles.section} id="make-it-yours" aria-labelledby="personalization-heading" ref={sectionRef}>
     <div className={styles.heading} data-reveal>
-      <div><span className={styles.eyebrow}>A LITTLE MORE YOU</span><h2 id="personalization-heading">A map that learns<br /><span>your taste.</span></h2></div>
+      <div><span className={styles.eyebrow}>{tr('A LITTLE MORE YOU')}</span><h2 id="personalization-heading">{tr('A map that learns')}<br /><span>{tr('your taste.')}</span></h2></div>
       <div className={styles.intro}>
-        <p><strong>The more you interact, the more it feels like you.</strong> Your recommendations, wishlist and dislikes help YouKnow learn your taste and personalize what you discover.</p>
-        <button type="button" onClick={() => setPlaying(!playing)} aria-pressed={playing} aria-controls="personalization-demos"><span aria-hidden="true">{playing ? 'Ⅱ' : '▶'}</span>{playing ? 'Pause demos' : 'Play demos'}</button>
+        <p><strong>{tr('The more you interact, the more it feels like you.')}</strong>{' '}{tr('Your recommendations, wishlist and dislikes help YouKnow learn your taste and personalize what you discover.')}</p>
+        <button type="button" onClick={() => setPlaying(!playing)} aria-pressed={playing} aria-controls="personalization-demos"><span aria-hidden="true">{playing ? 'Ⅱ' : '▶'}</span>{playing ? tr('Pause demos') : tr('Play demos')}</button>
       </div>
     </div>
     <div className={styles.grid} id="personalization-demos">
       {ACTIONS.map((action) => <article className={styles.card} data-action={action.id} key={action.id} data-reveal>
         <div className={styles.cardCopy}>
-          <div className={styles.actionMeta}><span aria-hidden="true"><img src={action.illustration} alt="" width="64" height="64" loading="lazy" /></span><span>{action.label}</span></div>
-          <h3>{action.title}</h3><p id={`${action.id}-description`}>{action.description}</p>
+          <div className={styles.actionMeta}><span aria-hidden="true"><img src={action.illustration} alt="" width="64" height="64" loading="lazy" /></span><span>{tr(action.label)}</span></div>
+          <h3>{tr(action.title)}</h3><p id={`${action.id}-description`}>{tr(action.description)}</p>
         </div>
         <div className={styles.screen}>
-          <video muted loop playsInline preload="none" poster={`/videos/personalization/${action.id}-poster.jpg`} aria-label={`${action.title} a place in YouKnow`} aria-describedby={`${action.id}-description`}>
+          <video muted loop playsInline preload="none" poster={`/videos/personalization/${action.id}-poster.jpg`} aria-label={tr('{action} a place in YouKnow', { action: tr(action.title) })} aria-describedby={`${action.id}-description`}>
             <source src={`/videos/personalization/${action.id}.mp4`} type="video/mp4" />
           </video>
         </div>
       </article>)}
     </div>
-    <p className={styles.note}><span aria-hidden="true">↗</span> Your taste shapes your map. Your finds help shape theirs.</p>
+    <p className={styles.note}><span aria-hidden="true">↗</span>{' '}{tr('Your taste shapes your map. Your finds help shape theirs.')}</p>
   </section>
 }

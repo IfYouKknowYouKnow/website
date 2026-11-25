@@ -1,4 +1,5 @@
 import communityPlaces from './cityGuideCommunityPlaces.js'
+import enCopy from './locales/guides.en.js'
 
 const ZURICH_PLACES = [
   {
@@ -263,277 +264,85 @@ const BERLIN_PLACES = [
   },
 ]
 
-function cityFaq(city) {
-  return [
-    {
-      question: `Where do these ${city} recommendations come from?`,
-      answer: `They come from real places saved and recommended in YouKnow. The public guide shows five examples; the app contains the wider ${city} community map.`,
-    },
-    {
-      question: 'Does YouKnow use star ratings?',
-      answer:
-        'No. YouKnow is built around recommendations from friends, local communities, creators and people whose taste you trust rather than anonymous star ratings.',
-    },
-    {
-      question: `Can I save my own ${city} places?`,
-      answer:
-        'Yes. In YouKnow you can save places, organise them on your map and share lists with friends or your community.',
-    },
-  ]
+
+// Which places each guide asks for. All wording comes from the language's copy
+// module (src/locales/guides.<lang>.js); nothing here is shown to visitors.
+const KIND_CONFIG = {
+  restaurants: { requiredCategories: ['restaurant'] },
+  bars: { requiredCategories: ['bar', 'wine_bar'] },
+  cafes: { requiredCategories: ['cafe'] },
+  hotels: { requiredCategories: ['hotel'] },
+}
+const KINDS = Object.keys(KIND_CONFIG)
+
+const ZURICH_TOPIC_CONFIG = {
+  'cosy-restaurants': { requiredCategories: ['restaurant'], requiredTerms: ['Cosy', 'cozy'],
+    fallbackPlaces: [ZURICH_PLACES[1], ZURICH_PLACES[2], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE] },
+  cafes: { kind: 'cafes', preferPrimaryCategory: true, requiredCategories: ['cafe'], fallbackPlaces: ZURICH_PLACES },
+  bars: { kind: 'bars', preferPrimaryCategory: true, requiredCategories: ['bar', 'wine_bar'], fallbackPlaces: ZURICH_PLACES },
+  'date-night': { requiredTerms: ['Great for dates', 'great for dates', 'Romantic', 'romantic'],
+    fallbackPlaces: [ZURICH_PLACES[1], ZURICH_PLACES[2], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE] },
+  'hidden-gems': { requiredTerms: ['Hidden gem', 'hidden gem', 'Local favourite', 'local favourite'],
+    fallbackPlaces: [ZURICH_PLACES[0], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE, SILEX] },
 }
 
-const TOPICS = {
-  'cosy-restaurants': {
-    slug: 'cosy-restaurants',
-    title: 'Cosy Restaurants in Zurich',
-    eyebrow: 'Zurich by vibe',
-    intro:
-      'Looking for a cosy dinner in Zurich? Here are five restaurant matches from the YouKnow community to start with, selected using real saves within the cosy restaurant filter.',
-    sectionTitle: 'Five cosy Zurich places to try',
-    sectionIntro:
-      'Each place below is a real YouKnow recommendation with the category, address, description and vibe metadata currently available in the community map.',
-    ctaTitle: 'We picked 5. There are more on YouKnow.',
-    ctaBody: 'Explore more cosy restaurants in Zurich in the app.',
-    ctaLabel: 'Discover more cosy restaurants on YouKnow',
-    requiredCategories: ['restaurant'],
-    requiredTerms: ['Cosy', 'cozy'],
-    fallbackPlaces: [ZURICH_PLACES[1], ZURICH_PLACES[2], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE],
-    contentSections: [
-      {
-        title: 'What makes a restaurant feel cosy?',
-        body: 'A cosy restaurant is less about a formal score and more about context: warm atmosphere, comfortable conversation, welcoming service and the kind of room that suits an unhurried dinner. YouKnow keeps those vibe signals attached to the place so you can search for how an evening should feel.',
-      },
-      {
-        title: 'Where to find cosy restaurants in Zurich',
-        body: 'Zurich’s most inviting dinner spots are spread across the centre and its surrounding neighbourhoods, from old-town rooms to relaxed terraces and local café-restaurants. The address on every recommendation helps you place it in the city before opening the full map in YouKnow.',
-      },
-      {
-        title: 'Finding restaurants by vibe instead of rating',
-        body: 'A single rating cannot tell you whether a place is right for a quiet date, a lively group dinner or an easy weeknight meal. Searching by vibe adds that missing context and lets recommendations from people you trust do the useful work.',
-      },
-    ],
-  },
-  cafes: {
-    slug: 'cafes',
-    title: 'Cafés in Zurich',
-    eyebrow: 'Zurich café guide',
-    intro:
-      'Looking for coffee in Zurich? Start with five real café recommendations saved by the YouKnow community.',
-    sectionTitle: 'Five Zurich cafés to start with',
-    sectionIntro: 'These public picks are a small preview of the cafés available on the YouKnow map.',
-    ctaTitle: 'Want to keep exploring?',
-    ctaBody: 'Find more cafés across Zurich on YouKnow.',
-    ctaLabel: 'Discover more Zurich cafés on YouKnow',
-    requiredCategories: ['cafe'],
-    fallbackPlaces: ZURICH_PLACES,
-    contentSections: [
-      {
-        title: 'Choosing a Zurich café for the moment',
-        body: 'The right café depends on the plan: a quick espresso, an unhurried breakfast, a place to work or somewhere to meet a friend. Community tags in YouKnow keep that context visible alongside the address and category.',
-      },
-      {
-        title: 'Coffee recommendations beyond a generic rating',
-        body: 'A rating says little about atmosphere or who a café suits. Saved recommendations and descriptive signals make it easier to choose a place that fits the time of day and the experience you want.',
-      },
-    ],
-  },
-  bars: {
-    slug: 'bars',
-    title: 'Bars in Zurich',
-    eyebrow: 'Zurich bar guide',
-    intro:
-      'Looking for a bar in Zurich? Start with five real places saved and recommended by the YouKnow community.',
-    sectionTitle: 'Five Zurich bars to try',
-    sectionIntro: 'These picks preview the bars and drinking spots available on the community map.',
-    ctaTitle: 'The night does not end here.',
-    ctaBody: 'Discover more bars in Zurich on YouKnow.',
-    ctaLabel: 'Discover more Zurich bars on YouKnow',
-    requiredCategories: ['bar', 'wine_bar'],
-    fallbackPlaces: ZURICH_PLACES,
-    contentSections: [
-      {
-        title: 'Finding the right kind of bar in Zurich',
-        body: 'A rooftop drink, a lively group bar and a quiet wine spot answer different questions. YouKnow combines categories with real vibe tags so you can start with the kind of evening you want.',
-      },
-      {
-        title: 'Why local bar recommendations need context',
-        body: 'Useful recommendations explain more than whether someone liked a place. Atmosphere, occasion and community saves help turn a long list of Zurich bars into a smaller set that fits the night.',
-      },
-    ],
-  },
-  'date-night': {
-    slug: 'date-night',
-    title: 'Date Night Places in Zurich',
-    eyebrow: 'Zurich by vibe',
-    intro:
-      'Planning a date night in Zurich? Here are five real places matched with date-friendly or romantic community tags in YouKnow.',
-    sectionTitle: 'Five Zurich date-night picks',
-    sectionIntro: 'Use these community recommendations as a starting point, then explore the wider map in the app.',
-    ctaTitle: 'Find the right place for the two of you.',
-    ctaBody: 'Explore more date-night recommendations in Zurich on YouKnow.',
-    ctaLabel: 'Discover more date-night places on YouKnow',
-    requiredTerms: ['Great for dates', 'great for dates', 'Romantic', 'romantic'],
-    fallbackPlaces: [ZURICH_PLACES[1], ZURICH_PLACES[2], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE],
-    contentSections: [
-      {
-        title: 'Planning a Zurich date night by atmosphere',
-        body: 'The best choice depends on whether the evening calls for intimate conversation, a lively room, dinner or drinks. Date-friendly and romantic tags give each recommendation the context a single popularity score cannot.',
-      },
-      {
-        title: 'From a first idea to the full map',
-        body: 'Use the five public picks to understand the range, then continue in YouKnow to compare more community recommendations and save the places that suit your own plan.',
-      },
-    ],
-  },
-  'hidden-gems': {
-    slug: 'hidden-gems',
-    title: 'Hidden Gems in Zurich',
-    eyebrow: 'Zurich beyond the obvious',
-    intro:
-      'Looking beyond the obvious Zurich addresses? Start with five real community places tagged as hidden gems or local favourites in YouKnow.',
-    sectionTitle: 'Five local Zurich picks',
-    sectionIntro: 'These real records are a small preview of the community’s wider Zurich map.',
-    ctaTitle: 'There is more beneath the surface.',
-    ctaBody: 'Discover more local recommendations across Zurich on YouKnow.',
-    ctaLabel: 'Discover more Zurich hidden gems on YouKnow',
-    requiredTerms: ['Hidden gem', 'hidden gem', 'Local favourite', 'local favourite'],
-    fallbackPlaces: [ZURICH_PLACES[0], MILCHBAR, CAFE_HENRICI, MONOCLE_CAFE, SILEX],
-    contentSections: [
-      {
-        title: 'What makes a Zurich place feel like a local find?',
-        body: 'A local find is not defined by obscurity alone. It is often a place people return to, save for friends or value for a particular mood. Community signals help surface that context without inventing a universal hidden-gem ranking.',
-      },
-      {
-        title: 'Explore beyond the five public picks',
-        body: 'These five recommendations show the kind of local context available on YouKnow. The app keeps the wider Zurich map, where more saved places can be explored by category, people and vibe.',
-      },
-    ],
-  },
-}
+// queryCity is the name stored in the place database. Tokyo has no hotel guide:
+// its hotel records are too thin to publish.
+const CITY_CONFIG = [
+  { slug: 'zurich', queryCity: 'Zurich', kinds: KINDS, fallbackPlaces: ZURICH_PLACES, topics: ZURICH_TOPIC_CONFIG },
+  { slug: 'geneva', queryCity: 'Geneva', kinds: KINDS, fallbackPlaces: GENEVA_PLACES },
+  { slug: 'berlin', queryCity: 'Berlin', kinds: KINDS, fallbackPlaces: BERLIN_PLACES },
+  { slug: 'milan', queryCity: 'Milan', kinds: KINDS, community: true },
+  { slug: 'paris', queryCity: 'Paris', kinds: KINDS, community: true },
+  { slug: 'tokyo', queryCity: 'Tokyo', kinds: ['restaurants', 'bars', 'cafes'], community: true },
+]
 
-function communityCityGuide(slug, city, contentSections) {
+function categoryTopic(copy, config, city, kind, existing) {
+  const kindCopy = copy.kinds[kind]
+  const faq = [kindCopy.faq(city), ...copy.cityFaq(city)]
+  const localContext = copy.localContext[config.slug][kind]
+  if (existing) return { ...existing, contentSections: [localContext, ...existing.contentSections], faq }
   return {
-    slug, city, path: `/${slug}/`,
-    title: `Discover ${city} Like a Local`,
-    eyebrow: 'YouKnow city guide',
-    intro: `Your next ${city} find starts with people who know a good place. Explore five of the most recommended spots from the YouKnow community, then find more in the app.`,
-    sectionTitle: `Top picks in ${city}`,
-    sectionIntro: `Five places ranked by community recommendations, with saves breaking ties. This is a small preview of the wider ${city} map; rankings update as the community shares new finds.`,
-    ranking: 'recommendations',
-    ctaTitle: 'Five good places. A whole city to explore.',
-    ctaBody: `Discover more ${city} recommendations from friends and curators you trust. Save your favourites and build your own map in YouKnow.`,
-    ctaLabel: `Explore more of ${city} on YouKnow`,
-    fallbackPlaces: communityPlaces[slug],
-    topics: {}, contentSections, faq: cityFaq(city),
+    slug: kind, kind, ...kindCopy.topic(city), ...KIND_CONFIG[kind], preferPrimaryCategory: true,
+    contentSections: [localContext, kindCopy.choosing(city)], faq,
   }
 }
 
-export const cityGuides = {
-  zurich: {
-    slug: 'zurich',
-    city: 'Zurich',
-    path: '/zurich/',
-    title: 'Discover Zurich Like a Local',
-    eyebrow: 'YouKnow city guide',
-    intro:
-      'Looking for restaurants, cafés, bars and hidden gems in Zurich? Start with five real places saved and recommended by the YouKnow community.',
-    sectionTitle: 'Places to start with in Zurich',
-    sectionIntro:
-      'These five community picks are ranked using real save activity in YouKnow. They are a useful preview, not the full Zurich map.',
-    ctaTitle: 'Want the full list?',
-    ctaBody:
-      'YouKnow contains more restaurant, café and bar recommendations across Zurich, curated and saved by people in the community.',
-    ctaLabel: 'Discover more places in Zurich on YouKnow',
-    fallbackPlaces: ZURICH_PLACES,
-    topics: TOPICS,
-    contentSections: [
-      {
-        title: 'How to discover Zurich beyond the obvious places',
-        body: 'Start with context, not a generic ranking. A recommendation for a quiet coffee serves a different plan from a rooftop drink or a relaxed dinner. YouKnow brings those signals together on a living map shaped by people who actually saved the places.',
-      },
-      {
-        title: 'Why recommendations from people you trust are different',
-        body: 'Anonymous ratings flatten every visit into one number. A recommendation from a friend, local curator or community keeps the useful part: who liked the place, what it suits and why it may fit your own plans in Zurich.',
-      },
-    ],
-    faq: cityFaq('Zurich'),
-  },
-  geneva: {
-    slug: 'geneva',
-    city: 'Geneva',
-    path: '/geneva/',
-    title: 'Discover Geneva Like a Local',
-    eyebrow: 'YouKnow city guide',
-    intro:
-      'Looking for restaurants, cafés, bars and hidden gems in Geneva? Start with five real places saved and recommended by the YouKnow community.',
-    sectionTitle: 'Places to start with in Geneva',
-    sectionIntro:
-      'These five community picks are ranked using real save activity in YouKnow. They are a useful preview, not the full Geneva map.',
-    ctaTitle: 'Want the full list?',
-    ctaBody:
-      'YouKnow contains more restaurant, café and bar recommendations across Geneva, curated and saved by people in the community.',
-    ctaLabel: 'Discover more places in Geneva on YouKnow',
-    fallbackPlaces: GENEVA_PLACES,
-    topics: {},
-    contentSections: [
-      {
-        title: 'How to discover Geneva beyond the obvious places',
-        body: 'Start with the plan rather than a generic ranking. A relaxed lakeside café, an intimate dinner and a lively bar serve different moments. YouKnow keeps those useful signals attached to recommendations from people who saved the places.',
-      },
-      {
-        title: 'Why community recommendations add useful context',
-        body: 'Anonymous ratings compress every visit into one number. Recommendations from friends, local curators and communities preserve what a place suits and why it may fit your own plans in Geneva.',
-      },
-    ],
-    faq: cityFaq('Geneva'),
-  },
-  berlin: {
-    slug: 'berlin',
-    city: 'Berlin',
-    path: '/berlin/',
-    title: 'Discover Berlin Like a Local',
-    eyebrow: 'YouKnow city guide',
-    intro:
-      'Looking for restaurants, cafés, bars and hidden gems in Berlin? Start with five real places saved and recommended by the YouKnow community.',
-    sectionTitle: 'Places to start with in Berlin',
-    sectionIntro:
-      'These five community picks are ranked using real save activity in YouKnow. They are a useful preview, not the full Berlin map.',
-    ctaTitle: 'Want the full list?',
-    ctaBody:
-      'YouKnow contains more restaurant, café and bar recommendations across Berlin, curated and saved by people in the community.',
-    ctaLabel: 'Discover more places in Berlin on YouKnow',
-    fallbackPlaces: BERLIN_PLACES,
-    topics: {},
-    contentSections: [
-      {
-        title: 'How to discover Berlin beyond the obvious places',
-        body: 'Berlin changes block by block and plan by plan. Starting with atmosphere, category and trusted recommendations makes it easier to find a neighbourhood café, dinner spot or late-night bar that fits the moment.',
-      },
-      {
-        title: 'Why local context matters in a city this varied',
-        body: 'A single rating cannot explain whether a place suits a quiet morning, a casual group meal or a night out. YouKnow keeps community saves and vibe signals together so recommendations remain useful.',
-      },
-    ],
-    faq: cityFaq('Berlin'),
-  },
-  milan: communityCityGuide('milan', 'Milan', [
-    { title: 'From a coffee stop to a long dinner', body: 'A pastry stop, an aperitivo and a dinner with friends all call for something different. Start with the places the community recommends, then use categories and vibe tags to find the Milan spot that fits your plan.' },
-    { title: 'Keep your own Milan shortlist', body: 'Save the places you want to try alongside the ones you already love. Follow friends and curators whose taste matches yours, and keep their Milan recommendations together on your map.' },
-  ]),
-  paris: communityCityGuide('paris', 'Paris', [
-    { title: 'Find your kind of Paris', body: 'A neighbourhood bistro, a wine bar and a coffee with a friend each make a different kind of day. Community recommendations give you a starting point, with addresses and vibe tags to help you choose.' },
-    { title: 'Good addresses are better shared', body: 'Keep the Paris places you hear about in one place. Save a friend’s recommendation, follow a curator you trust and share your own finds when someone asks where to go.' },
-  ]),
-  tokyo: communityCityGuide('tokyo', 'Tokyo', [
-    { title: 'Make room for more than dinner', body: 'The Tokyo community map includes places to eat, drink and explore. Start with these recommendations, then follow the categories and vibe tags that fit the kind of day or night you have in mind.' },
-    { title: 'Turn recommendations into a Tokyo map', body: 'Bring the places your friends mention and the curators you follow into one shortlist. Keep your want-to-go spots ready in YouKnow, then pass on the places you end up loving.' },
-  ]),
+function buildCityGuide(copy, config) {
+  const city = copy.cities[config.slug]
+  // Hand-written topics for this city (only Zurich has them): the copy plus its query filters.
+  const custom = Object.fromEntries(Object.entries(config.topics || {}).map(([slug, topicConfig]) =>
+    [slug, { slug, ...copy.zurichTopics[slug], ...topicConfig }]))
+  const topics = {}
+  for (const kind of config.kinds) topics[kind] = categoryTopic(copy, config, city, kind, custom[kind])
+  for (const [slug, topic] of Object.entries(custom)) if (!topics[slug]) topics[slug] = topic
+  const hub = config.community
+    ? { ...copy.communityHub(city), ranking: 'recommendations', contentSections: copy.communitySections[config.slug] }
+    : copy.hubs[config.slug]
+  return {
+    slug: config.slug, city, queryCity: config.queryCity, path: `/${config.slug}/`, ...hub,
+    meta: copy.hubMeta(city, config.kinds.includes('hotels')),
+    fallbackPlaces: config.fallbackPlaces || communityPlaces[config.slug],
+    topics, faq: copy.cityFaq(city),
+  }
 }
+
+// One set of guides per language, built on first use.
+const built = new Map()
+export function getCityGuides(copy = enCopy) {
+  if (!built.has(copy)) built.set(copy, Object.fromEntries(CITY_CONFIG.map((config) => [config.slug, buildCityGuide(copy, config)])))
+  return built.get(copy)
+}
+
+// English guides, for scripts and anything that only needs slugs and paths.
+export const cityGuides = getCityGuides()
+
+export const categoryLabels = (copy = enCopy) => Object.fromEntries(KINDS.map((kind) => [kind, copy.kinds[kind].plural]))
 
 export const PUBLIC_PLACE_LIMIT = 5
 
-export function resolveCityGuide(citySlug, topicSlug) {
-  const cityGuide = cityGuides[citySlug]
+export function resolveCityGuide(citySlug, topicSlug, copy = enCopy) {
+  const cityGuide = getCityGuides(copy)[citySlug]
   if (!cityGuide) return null
   if (!topicSlug) return cityGuide
 
@@ -546,8 +355,9 @@ export function resolveCityGuide(citySlug, topicSlug) {
     path: `/${cityGuide.slug}/${topic.slug}/`,
     topicSlug: topic.slug,
     topics: cityGuide.topics,
-    faq: cityGuide.faq,
+    faq: topic.faq || cityGuide.faq,
     fallbackPlaces: topic.fallbackPlaces || [],
+    fallbackKey: `${cityGuide.slug}/${topic.slug}`,
   }
 }
 
@@ -557,7 +367,7 @@ export function buildPlacesUrl(guide, supabaseUrl) {
     'select',
     'id,name,description,category_labels,tags,hard_tags,address,city,emoji,save_count,recommendation_count',
   )
-  url.searchParams.set('city', `ilike.${guide.city}`)
+  url.searchParams.set('city', `ilike.${guide.queryCity}`)
   if (guide.requiredCategories?.length) {
     url.searchParams.set('category_labels', `ov.{${guide.requiredCategories.join(',')}}`)
   }
@@ -571,8 +381,17 @@ export function buildPlacesUrl(guide, supabaseUrl) {
       ? 'recommendation_count.desc.nullslast,save_count.desc.nullslast'
       : 'save_count.desc.nullslast,recommendation_count.desc.nullslast',
   )
-  url.searchParams.set('limit', String(PUBLIC_PLACE_LIMIT))
+  // Category guides fetch a wider window so selectPlaces can put real matches first.
+  url.searchParams.set('limit', String(guide.preferPrimaryCategory ? PUBLIC_PLACE_LIMIT * 4 : PUBLIC_PLACE_LIMIT))
   return url
+}
+
+// A place tagged "museum, restaurant" should not outrank actual restaurants on a
+// restaurant guide. Keep the community order, but list primary-category matches first.
+export function selectPlaces(guide, rows) {
+  if (!Array.isArray(rows) || !guide.preferPrimaryCategory || !guide.requiredCategories?.length) return normalizePlaces(rows)
+  const isPrimary = (place) => guide.requiredCategories.includes(place?.category_labels?.[0])
+  return normalizePlaces([...rows.filter(isPrimary), ...rows.filter((place) => !isPrimary(place))])
 }
 
 export function normalizePlaces(rows) {
@@ -609,4 +428,18 @@ export function displayTags(place, topicSlug) {
     })
     .slice(0, 3)
     .map(formatLabel)
+}
+
+// Applies a language's place copy (src/locales/places.<lang>.js) to records for one
+// guide: the translated description, plus the tag and category labels shown on the card.
+// Anything without a translation keeps its original text.
+export function localizePlaces(guide, places, placeCopy) {
+  if (!placeCopy) return places
+  return places.map((place) => ({
+    ...place,
+    description: placeCopy.descriptions[place.id] || place.description,
+    displayCity: guide.city,
+    displayTags: displayTags(place, guide.topicSlug).map((tag) => placeCopy.tags[tag] || tag),
+    displayCategories: (place.category_labels || []).slice(0, 2).map((label) => placeCopy.categories[label] || formatLabel(label)),
+  }))
 }

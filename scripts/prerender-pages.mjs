@@ -4,10 +4,7 @@ import { createServer, loadEnv } from 'vite'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server.js'
-import { metadataTags, pageMetadata, pageStructuredData, privacyMetadata, cityMetadata, cityStructuredData, SITE_URL } from '../src/pageMetadata.js'
-import { buildPlacesUrl, cityGuides, normalizePlaces, resolveCityGuide } from '../src/cityGuides.js'
 import { escapeHtml, formatLinks, htmlToMarkdown, machinePaths } from './content-formats.mjs'
-import { FALLBACK_STATS, normalizeLandingStats } from '../src/landingContent.js'
 
 const template = await fs.readFile('dist/index.html', 'utf8')
 const env = { ...loadEnv('production', process.cwd(), 'VITE_'), ...process.env }
@@ -18,54 +15,62 @@ const server = await createServer({
   appType: 'custom',
 })
 const pages = []
+const untranslatedPlaces = {}
+let SITE_URL, LOCALES, LOCALE_NAMES, missingTranslations, locales
 
-function pageHtml(page, schema, markup, route, records, stats) {
-  let html = template.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
-  for (const [tag, attribute, name, valueAttribute, value] of metadataTags(page)) {
+function pageHtml(page, schema, markup, route, { records, stats } = {}) {
+  let html = template.replace('<html lang="en">', `<html lang="${page.locale}">`)
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
+  for (const [tag, attribute, name, valueAttribute, value] of metadata.metadataTags(page)) {
     const pattern = new RegExp(`<${tag}\\s+${attribute}="${name}"[^>]*>`)
     const element = `<${tag} ${attribute}="${name}" ${valueAttribute}="${escapeHtml(value)}" />`
     html = pattern.test(html) ? html.replace(pattern, element) : html.replace('</head>', `${element}\n</head>`)
   }
   html = html.replace(/<script\b[^>]*type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/,
     `<script id="page-structured-data" type="application/ld+json">${JSON.stringify(schema).replaceAll('<', '\\u003c')}</script>`)
-  if (records) html = html.replace('</head>', `<script id="city-guide-data" type="application/json">${JSON.stringify({ path: route, places: records }).replaceAll('<', '\\u003c')}</script>\n</head>`)
+  // Tell search engines which URL serves each language of this page.
+  const hreflang = (page.alternates || []).map(({ hreflang, href }) => `<link rel="alternate" hreflang="${hreflang}" href="${href}" />`).join('\n')
+  if (hreflang) html = html.replace('</head>', `${hreflang}\n</head>`)
+  if (records) html = html.replace('</head>', `<script id="city-guide-data" type="application/json">${JSON.stringify({ path: page.path, locale: page.locale, places: records }).replaceAll('<', '\\u003c')}</script>\n</head>`)
   if (stats) html = html.replace('</head>', `<script id="landing-stats-data" type="application/json">${JSON.stringify(stats)}</script>\n</head>`)
   return html.replace('</head>', `${formatLinks(route)}\n</head>`)
     .replace('<div id="root"></div>', `<div id="root">${markup}</div>`)
 }
 
-async function emit(route, file, page, schema, html, extra = {}) {
+async function emit(route, page, schema, html, extra = {}) {
+  const file = route.endsWith('/') ? `${route.slice(1)}index.html` : `${route.slice(1)}.html`
   await fs.mkdir(path.dirname(`dist/${file}`), { recursive: true })
   await fs.writeFile(`dist/${file}`, html)
   const formats = machinePaths(route)
   const markdown = `Source: ${page.canonical}\n\n${htmlToMarkdown(html, page.canonical)}`
-  const record = { url: page.canonical, title: page.title, description: page.description, language: 'en',
+  const record = { url: page.canonical, title: page.title, description: page.description, language: page.locale,
+    ...(page.alternates ? { alternates: page.alternates } : {}),
     markdown_url: `${SITE_URL}${formats.markdown}`, json_url: `${SITE_URL}${formats.json}`,
     markdown, structured_data: schema, ...extra }
   await fs.writeFile(`dist${formats.markdown}`, markdown)
   await fs.writeFile(`dist${formats.json}`, JSON.stringify(record, null, 2) + '\n')
   pages.push({ route, file, ...record })
-  console.log(`[prerender] ${route}: HTML, Markdown and JSON`)
 }
 
-async function publicPlaces(guide) {
+async function publicPlaces(guide, selectPlaces, normalizePlaces, buildPlacesUrl, topicFallbackPlaces) {
   if (!offline && env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY) {
     try {
       const response = await fetch(buildPlacesUrl(guide, env.VITE_SUPABASE_URL), {
         headers: { apikey: env.VITE_SUPABASE_ANON_KEY, Authorization: `Bearer ${env.VITE_SUPABASE_ANON_KEY}` },
-        signal: AbortSignal.timeout(8000),
+        signal: AbortSignal.timeout(20000),
       })
       if (!response.ok) throw new Error(`Public places returned ${response.status}`)
-      const places = normalizePlaces(await response.json())
+      const places = selectPlaces(guide, await response.json())
       if (places.length) return { places, source: 'public-database' }
     } catch {
       console.warn(`[prerender] ${guide.path}: using checked-in public records`)
     }
   }
-  return { places: normalizePlaces(guide.fallbackPlaces), source: 'checked-in-public-records' }
+  const fallback = guide.fallbackPlaces?.length ? guide.fallbackPlaces : topicFallbackPlaces[guide.fallbackKey]
+  return { places: normalizePlaces(fallback), source: 'checked-in-public-records' }
 }
 
-async function publicStats() {
+async function publicStats(FALLBACK_STATS, normalizeLandingStats) {
   if (!offline && env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY) {
     try {
       const url = new URL(`/rest/v1/${env.VITE_SUPABASE_STATS_TABLE || 'website_stats'}`, env.VITE_SUPABASE_URL)
@@ -74,7 +79,7 @@ async function publicStats() {
       url.searchParams.set('limit', '1')
       const response = await fetch(url, {
         headers: { apikey: env.VITE_SUPABASE_ANON_KEY, Authorization: `Bearer ${env.VITE_SUPABASE_ANON_KEY}` },
-        signal: AbortSignal.timeout(8000),
+        signal: AbortSignal.timeout(20000),
       })
       if (!response.ok) throw new Error('Public stats unavailable')
       const [row] = await response.json()
@@ -86,57 +91,116 @@ async function publicStats() {
   return { stats: FALLBACK_STATS, source: 'checked-in-community-counts' }
 }
 
+let metadata
 try {
-  const landingSnapshot = await publicStats()
-  for (const [key, name, file] of [['home', 'Landing', 'index.html'], ['about', 'About', 'about.html'], ['tutorials', 'Tutorials', 'tutorials.html']]) {
-    const page = pageMetadata[key]
-    const route = new URL(page.canonical).pathname
-    const { default: Component } = await server.ssrLoadModule(`/src/pages/${name}.jsx`)
-    const stats = key === 'home' ? landingSnapshot.stats : undefined
-    const markup = renderToString(React.createElement(StaticRouter, { location: route }, React.createElement(Component, { initialStats: stats })))
-    const schema = pageStructuredData(key, stats ? { cityCount: stats.cities } : undefined)
-    await emit(route, file, page, schema, pageHtml(page, schema, markup, route, undefined, stats),
-      stats ? { community_stats: stats, stats_source: landingSnapshot.source } : {})
-  }
+  // Load the app's modules through Vite once, so pages and metadata share one language registry.
+  const i18nModule = await server.ssrLoadModule('/src/i18n.js')
+  metadata = await server.ssrLoadModule('/src/pageMetadata.js')
+  const guideModule = await server.ssrLoadModule('/src/cityGuides.js')
+  const { TEAM, founderPath } = await server.ssrLoadModule('/src/team.js')
+  const { FALLBACK_STATS, normalizeLandingStats } = await server.ssrLoadModule('/src/landingContent.js')
+  const { default: topicFallbackPlaces } = await server.ssrLoadModule('/src/cityGuideTopicPlaces.js')
+  const components = {}
+  for (const name of ['Landing', 'About', 'Tutorials', 'Founder', 'CityGuide']) components[name] = (await server.ssrLoadModule(`/src/pages/${name}.jsx`)).default
+  ;({ SITE_URL } = metadata)
+  ;({ LOCALES, LOCALE_NAMES, missingTranslations } = i18nModule)
+  // PRERENDER_LOCALES=en,de limits the export while working on one language.
+  locales = process.env.PRERENDER_LOCALES ? process.env.PRERENDER_LOCALES.split(',') : LOCALES
+  const { cityGuides, resolveCityGuide, selectPlaces, normalizePlaces, buildPlacesUrl, localizePlaces } = guideModule
 
-  // Publish the complete existing legal notice at its canonical URL, without an iframe dependency.
-  const policy = await fs.readFile('public/privacy.html', 'utf8')
-  const policySchema = { '@context': 'https://schema.org', '@type': 'WebPage', name: privacyMetadata.title, url: privacyMetadata.canonical }
-  const policyHtml = policy.replace(/<html>/i, '<!doctype html>\n<html lang="en">').replace('</head>',
-    `<meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="${escapeHtml(privacyMetadata.description)}" /><link rel="canonical" href="${privacyMetadata.canonical}" />${formatLinks('/privacy')}<script id="page-structured-data" type="application/ld+json">${JSON.stringify(policySchema)}</script></head>`)
-  await emit('/privacy', 'privacy.html', privacyMetadata, policySchema, policyHtml)
+  // Community numbers and place records are the same in every language; read them once.
+  const landingSnapshot = await publicStats(FALLBACK_STATS, normalizeLandingStats)
+  const guideKeys = Object.values(cityGuides).flatMap((guide) => [[guide.slug], ...Object.keys(guide.topics).map((topic) => [guide.slug, topic])])
+  // The public database cancels statements after a few seconds, and thirty guide queries
+  // at once exceed that. Read a few guides at a time.
+  const snapshots = new Array(guideKeys.length)
+  let next = 0
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    while (next < guideKeys.length) {
+      const index = next++
+      const [city, topic] = guideKeys[index]
+      snapshots[index] = await publicPlaces(resolveCityGuide(city, topic), selectPlaces, normalizePlaces, buildPlacesUrl, topicFallbackPlaces)
+    }
+  }))
 
-  const { default: CityGuide } = await server.ssrLoadModule('/src/pages/CityGuide.jsx')
-  const guides = Object.values(cityGuides).flatMap((guide) => [guide, ...Object.values(guide.topics || {}).map((topic) => resolveCityGuide(guide.slug, topic.slug))])
-  const snapshots = await Promise.all(guides.map(publicPlaces))
-  for (let index = 0; index < guides.length; index++) {
-    const guide = guides[index]
-    const { places, source } = snapshots[index]
-    if (!places.length) throw new Error(`No public records for ${guide.path}`)
-    const page = cityMetadata(guide)
-    const schema = cityStructuredData(guide, places)
-    const markup = renderToString(React.createElement(StaticRouter, { location: guide.path },
-      React.createElement(CityGuide, { initialGuide: guide, initialRecords: places })))
-    await emit(guide.path, `${guide.path.slice(1)}index.html`, page, schema,
-      pageHtml(page, schema, markup, guide.path, places), { places, places_source: source })
+  for (const locale of locales) {
+    await i18nModule.loadLocale(locale)
+    const i18n = i18nModule.createI18n(locale)
+    const placeCopy = await i18nModule.loadPlaceCopy(locale)
+    const render = (Component, route, props) => renderToString(
+      React.createElement(i18nModule.I18nProvider, { locale },
+        React.createElement(StaticRouter, { location: `${i18n.prefix}${route}`, basename: i18n.prefix || undefined },
+          React.createElement(Component, props))))
+
+    for (const [key, name] of [['home', 'Landing'], ['about', 'About'], ['tutorials', 'Tutorials']]) {
+      const page = metadata.getPageMetadata(key, i18n)
+      const stats = key === 'home' ? landingSnapshot.stats : undefined
+      const schema = metadata.pageStructuredData(key, i18n, stats ? { cityCount: stats.cities } : undefined)
+      const route = `${i18n.prefix}${page.path}`
+      await emit(route, page, schema, pageHtml(page, schema, render(components[name], page.path, { initialStats: stats }), route, { stats }),
+        stats ? { community_stats: stats, stats_source: landingSnapshot.source } : {})
+    }
+
+    // One profile page per founder, so a search for either name has a page of its own to land on.
+    for (const person of TEAM) {
+      const page = metadata.founderMetadata(person, i18n)
+      const schema = metadata.founderStructuredData(person, i18n)
+      const route = `${i18n.prefix}${page.path}`
+      await emit(route, page, schema, pageHtml(page, schema, render(components.Founder, page.path, { initialFounder: person }), route))
+    }
+
+    if (locale === 'en') {
+      // Publish the complete existing legal notice at its canonical URL, without an iframe dependency.
+      const { privacyMetadata } = metadata
+      const policy = await fs.readFile('public/privacy.html', 'utf8')
+      const policySchema = { '@context': 'https://schema.org', '@type': 'WebPage', name: privacyMetadata.title, url: privacyMetadata.canonical }
+      const policyHtml = policy.replace(/<html>/i, '<!doctype html>\n<html lang="en">').replace('</head>',
+        `<meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="${escapeHtml(privacyMetadata.description)}" /><link rel="canonical" href="${privacyMetadata.canonical}" />${formatLinks('/privacy')}<script id="page-structured-data" type="application/ld+json">${JSON.stringify(policySchema)}</script></head>`)
+      await emit('/privacy', privacyMetadata, policySchema, policyHtml)
+    }
+
+    for (let index = 0; index < guideKeys.length; index++) {
+      const [citySlug, topicSlug] = guideKeys[index]
+      const guide = resolveCityGuide(citySlug, topicSlug, i18n.guides)
+      const { places: records, source } = snapshots[index]
+      if (!records.length) throw new Error(`No public records for ${guide.path}`)
+      const places = localizePlaces(guide, records, placeCopy)
+      if (placeCopy) for (const place of records) if (!placeCopy.descriptions[place.id] && place.description) (untranslatedPlaces[locale] ||= new Set()).add(place.name)
+      const page = metadata.cityMetadata(guide, i18n)
+      const schema = metadata.cityStructuredData(guide, places, i18n)
+      const route = `${i18n.prefix}${page.path}`
+      await emit(route, page, schema,
+        pageHtml(page, schema, render(components.CityGuide, page.path, { initialGuide: guide, initialRecords: places }), route, { records: places }),
+        { places, places_source: source })
+    }
+    console.log(`[prerender] ${locale}: ${pages.filter((page) => page.language === locale).length} pages as HTML, Markdown and JSON`)
   }
 } finally {
   await server.close()
 }
 
+// Every visible string must be translated; a missing one would leave English on a translated page.
+const missing = Object.entries(missingTranslations).filter(([, keys]) => keys.size)
+for (const [locale, keys] of missing) console.error(`[prerender] ${locale}: ${keys.size} untranslated strings\n${[...keys].map((key) => `  - ${key}`).join('\n')}`)
+if (missing.length && process.env.ALLOW_UNTRANSLATED !== '1') throw new Error('Untranslated interface strings. Add them to src/locales/ui.<lang>.js.')
+// Place descriptions change with the community's picks, so missing ones only warn: the page shows the original text.
+for (const [locale, names] of Object.entries(untranslatedPlaces)) console.warn(`[prerender] ${locale}: ${names.size} places without a translated description (${[...names].slice(0, 8).join(', ')}${names.size > 8 ? ', …' : ''}). See docs/seo.md.`)
+
 // Derive discovery resources only from successfully rendered pages. Omit unverified lastmod dates.
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((page) => `  <url><loc>${escapeHtml(page.url)}</loc></url>`).join('\n')}\n</urlset>\n`
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${pages.map((page) =>
+  `  <url><loc>${escapeHtml(page.url)}</loc>${(page.alternates || []).map(({ hreflang, href }) => `<xhtml:link rel="alternate" hreflang="${hreflang}" href="${escapeHtml(href)}"/>`).join('')}</url>`).join('\n')}\n</urlset>\n`
 await fs.writeFile('dist/sitemap.xml', sitemap)
-const index = pages.map(({ url, title, description, markdown_url, json_url }) => ({ url, title, description, markdown_url, json_url }))
+const index = pages.map(({ url, title, description, language, markdown_url, json_url }) => ({ url, title, description, language, markdown_url, json_url }))
 await fs.mkdir('dist/content', { recursive: true })
-await fs.writeFile('dist/content/index.json', JSON.stringify({ name: 'YouKnow', url: `${SITE_URL}/`, pages: index }, null, 2) + '\n')
+await fs.writeFile('dist/content/index.json', JSON.stringify({ name: 'YouKnow', url: `${SITE_URL}/`, languages: locales, pages: index }, null, 2) + '\n')
 await fs.writeFile('dist/content/site.json', JSON.stringify({ name: 'YouKnow', pages: pages.map(({ route, file, ...record }) => record) }, null, 2) + '\n')
-await fs.writeFile('dist/llms.txt', `# YouKnow\n\n> YouKnow is a free iOS and Android app for discovering restaurants, bars, cafes, clubs and experiences through people you trust.\n\n## Public pages\n\n${pages.map((page) => `- [${page.title}](${page.markdown_url}): ${page.description}`).join('\n')}\n\n## Optional\n\n- [Page index](${SITE_URL}/content/index.json): canonical URLs and alternate formats.\n- [Public content](${SITE_URL}/content/site.json): all public page text and guide records as JSON.\n- [Combined text](${SITE_URL}/llms-full.txt): all public pages as Markdown.\n- [Sitemap](${SITE_URL}/sitemap.xml): canonical HTML pages.\n`)
+const byLanguage = (render) => locales.map((locale) => `## ${LOCALE_NAMES[locale]}\n\n${pages.filter((page) => page.language === locale).map(render).join('\n')}`).join('\n\n')
+await fs.writeFile('dist/llms.txt', `# YouKnow\n\n> YouKnow is a free iOS and Android app for discovering restaurants, bars, cafes, hotels, clubs and experiences through people you trust. The website is available in English, German, French and Italian.\n\n${byLanguage((page) => `- [${page.title}](${page.markdown_url}): ${page.description}`)}\n\n## Optional\n\n- [Page index](${SITE_URL}/content/index.json): canonical URLs and alternate formats.\n- [Public content](${SITE_URL}/content/site.json): all public page text and guide records as JSON.\n- [Combined text](${SITE_URL}/llms-full.txt): all public pages as Markdown.\n- [Sitemap](${SITE_URL}/sitemap.xml): canonical HTML pages.\n`)
 await fs.writeFile('dist/llms-full.txt', pages.map((page) => page.markdown).join('\n---\n\n'))
 await fs.writeFile('dist/_headers', pages.map((page) => {
   const { markdown, json } = machinePaths(page.route)
   return [markdown, json].map((route) => `${route}\n  Link: <${page.url}>; rel="canonical", <${SITE_URL}/llms.txt>; rel="describedby"\n  X-Robots-Tag: noindex\n`).join('\n')
 }).join('\n'))
-await fs.writeFile('dist/sitemap.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>All pages | YouKnow</title><meta name="description" content="Browse YouKnow pages and city guides."><link rel="canonical" href="${SITE_URL}/sitemap.html"></head><body><main><h1>YouKnow pages and city guides</h1><ul>${pages.map((page) => `<li><a href="${page.route}">${escapeHtml(page.title)}</a></li>`).join('')}</ul><p><a href="/content/index.json">JSON page index</a> · <a href="/llms.txt">Markdown page index</a></p></main></body></html>`)
+await fs.writeFile('dist/sitemap.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>All pages | YouKnow</title><meta name="description" content="Browse YouKnow pages and city guides."><link rel="canonical" href="${SITE_URL}/sitemap.html"></head><body><main><h1>YouKnow pages and city guides</h1>${locales.map((locale) => `<h2 lang="${locale}">${LOCALE_NAMES[locale]}</h2><ul lang="${locale}">${pages.filter((page) => page.language === locale).map((page) => `<li><a href="${page.route}">${escapeHtml(page.title)}</a></li>`).join('')}</ul>`).join('')}<p><a href="/content/index.json">JSON page index</a> · <a href="/llms.txt">Markdown page index</a></p></main></body></html>`)
 await fs.writeFile('dist/404.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Page not found | YouKnow</title></head><body><main><h1>Page not found</h1><p><a href="/">Explore YouKnow</a> or <a href="/sitemap.html">browse our pages and guides</a>.</p></main></body></html>')
-console.log(`[discovery] ${pages.length} public pages exported`)
+console.log(`[discovery] ${pages.length} public pages exported in ${locales.length} languages`)

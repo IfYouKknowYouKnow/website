@@ -485,6 +485,14 @@
   letter-spacing: -.05em;
 }
 
+.personCard h3 .personName {
+  display: inline;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: none;
+}
+
 .personBackground {
   display: grid;
   gap: 9px;

@@ -1,0 +1,4 @@
+.switcher { white-space: nowrap; }
+.switcher a { text-decoration: none; }
+.switcher a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.switcher a[aria-current] { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }

@@ -1,0 +1,165 @@
+.profile {
+  padding: clamp(36px, 5vw, 64px) 0 clamp(82px, 10vw, 138px);
+}
+
+.profileInner {
+  max-width: 920px;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: clamp(36px, 6vw, 64px);
+  color: #575766;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.breadcrumb a:hover,
+.link:hover,
+.company p a:hover {
+  color: #3157ff;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 36px);
+}
+
+.portrait {
+  width: 148px;
+  border: 2px solid #12121c;
+  box-shadow: 5px 5px 0 var(--person-accent);
+}
+
+.header h1 {
+  margin: 14px 0 0;
+  color: #12121c;
+  font-size: clamp(40px, 6.4vw, 72px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.focus {
+  margin-top: 14px;
+  color: #3157ff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.lead {
+  max-width: 760px;
+  margin-top: clamp(32px, 5vw, 52px);
+  color: #12121c;
+  font-size: clamp(19px, 2.2vw, 24px);
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 56px);
+  margin-top: clamp(44px, 6vw, 72px);
+  padding-top: clamp(32px, 5vw, 48px);
+  border-top: 1px solid #dadae8;
+}
+
+.profile .profileInner h2 {
+  font-size: clamp(22px, 2.6vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.background {
+  display: grid;
+  gap: 9px;
+  margin-top: 20px;
+  padding-left: 18px;
+  color: #555565;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.background li::marker {
+  color: #3157ff;
+}
+
+.quote {
+  margin: 20px 0 0;
+  color: #12121c;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.company {
+  margin-top: clamp(44px, 6vw, 72px);
+  padding-top: clamp(32px, 5vw, 48px);
+  border-top: 1px solid #dadae8;
+}
+
+.company p {
+  max-width: 720px;
+  margin-top: 18px;
+  color: #555565;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.company p a {
+  color: #12121c;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: 26px;
+}
+
+.link {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 22px;
+  color: #12121c;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.18s ease;
+}
+
+.links .link {
+  margin-top: 0;
+}
+
+.notFound {
+  display: grid;
+  place-content: center;
+  gap: 16px;
+  min-height: 70vh;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .header {
+    grid-template-columns: 104px minmax(0, 1fr);
+  }
+
+  .portrait {
+    width: 104px;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,7 +1,9 @@
 # YouKnow Map SEO
 
-The marketing website exports 15 complete HTML pages: home, story, tutorials,
-privacy, six city guides and five Zurich topic guides. The same text is available
+The marketing website exports 149 complete HTML pages in four languages. Each
+language has 37 pages: home, story, tutorials, two founder profiles, six city guides,
+23 city category guides (restaurants, bars, cafés and hotels) and three Zurich mood
+guides. The privacy notice is a legal text and exists in English only. The same text is available
 to visitors and crawlers before JavaScript runs. The client hydrates this HTML.
 
 ## Implemented
@@ -15,12 +17,33 @@ to visitors and crawlers before JavaScript runs. The client hydrates this HTML.
 - Content stays visible before scroll animations run. Video source URLs, still posters and explanatory copy are present in the initial HTML; video playback stays lazy.
 - Hashed JavaScript and CSS assets receive long-lived cache headers. Netlify keeps unknown URLs as real 404s and app invitation/share pages out of the index.
 
+## Search targets
+
+| Search | Page that answers it |
+| --- | --- |
+| "restaurants in Zurich", "bars in Milan", "hotels in Geneva" … | `/{city}/{restaurants,bars,cafes,hotels}/`, titled "Restaurants in Zurich: Local Tips & Top Picks". Tokyo has no hotel guide because its hotel records are too thin. |
+| "Zurich restaurants bars hotels", "Zurich local tips" | `/{city}/` hub, which links to every category guide for the city. |
+| "Marie-Louise Dugua", "Fabio Baldini" | `/founders/{slug}/`: name in the title, heading and URL, `ProfilePage` and `Person` data with LinkedIn as `sameAs`. The About title also carries both names. |
+| "YouKnow", "YouKnow Map", "You Know Map app" | Homepage title, the "What is YouKnow Map?" answer, and `WebSite`/`Organization` names with alternate spellings. |
+| "app for restaurant recommendations", "local tips app" | Homepage title and description. |
+
+Category guides are defined in `src/cityGuides.js`: `CATEGORY_KINDS` holds the shared
+wording and `LOCAL_CONTEXT` the hand-written neighbourhood paragraph for each city and
+category. A guide exists only where both are present. Add a city or category there, then
+run `npm run refresh:guides` to update the checked-in records in
+`src/cityGuideTopicPlaces.js` (used when the public API is unavailable; the browser loads
+that file on demand, so it stays out of the main bundle). Places whose first category
+matches the guide are listed first, so a museum with a restaurant does not outrank
+restaurants. Founder details live in `src/team.js`.
+
 ## Checks
 
 `npm run build` exports the pages and runs `scripts/check-crawlability.mjs`.
 The check verifies unique titles/descriptions, headings, canonical URLs, structured
 data, visible FAQ content, sharing assets, video sources, sitemap membership,
-link reachability and the Markdown/JSON content exports. Use
+link reachability, the Markdown/JSON content exports, the category guides for every
+city (present, linked from the homepage and city hub, titled with the search phrase) and
+the founder profiles (name-led title, `Person` data, linked from About). Use
 `PRERENDER_OFFLINE=1 npm run build` to validate the checked-in data without API access.
 
 The built-site browser checks passed at 1440, 390 and 320 px, including retained
@@ -39,11 +62,50 @@ live response headers and redirects should also be checked after publishing.
 ## After deployment
 
 1. In the verified Google Search Console property for `https://ifykyk.app/`, submit `https://ifykyk.app/sitemap.xml`.
-2. Inspect the homepage and the Milan, Paris and Tokyo guides with URL Inspection. Confirm the fetched HTML, canonical URL and indexing status.
+2. Inspect the homepage, one category guide per language (for example `/de/zurich/restaurants/`, `/fr/geneva/restaurants/`, `/it/milan/restaurants/`) and both founder profiles with URL Inspection. Confirm the fetched HTML, canonical URL, detected language and indexing status.
 3. Monitor search queries, indexed pages and field Core Web Vitals. Use the results to choose further city/topic content based on actual demand and community coverage.
 
-The website is English. App language support does not create translated web pages,
-so there are no misleading hreflang declarations.
+## Languages
+
+English is served from the root (`/zurich/restaurants/`). German, French and Italian
+use the same paths under `/de/`, `/fr/` and `/it/` (`/de/zurich/restaurants/`).
+`/en/…` redirects to the root, so English has one address per page. Every page names
+its counterparts with `hreflang` tags (English is `x-default`), in the HTML head and in
+the sitemap, and sets `<html lang>` and `og:locale`. Visitors are never redirected by
+browser language; the switcher in the homepage hero and in every footer links to the
+same page in each language.
+
+How it fits together:
+
+- `src/i18n.js` holds the list of languages and the `tr()` translator. The router
+  basename is the language prefix, so routes and `<Link>`s need no changes per language.
+- **Interface strings** are written in English in the components, wrapped in `tr('…')`
+  (or `msg('…')` inside data constants), and translated in `src/locales/ui.<lang>.js`,
+  where the English string is the key. Placeholders such as `{city}` must be kept.
+- **City guide copy** lives in `src/locales/guides.<lang>.js`, one file per language
+  with the same shape as `guides.en.js`. `src/cityGuides.js` only holds query
+  configuration.
+- **Place descriptions and tags** come from the database in English. Translations for
+  the places the guides currently show are in `src/locales/places.<lang>.js`, keyed by
+  place id. A place without a translation shows its English description, and the build
+  prints a warning naming it.
+
+After changing copy or when the community's top picks change:
+
+| Command | What it tells you |
+| --- | --- |
+| `npm run i18n:check` | Interface strings missing from, or no longer used by, each language. |
+| `node scripts/check-guide-copy.mjs` | Whether each language's guide copy matches the English shape and title/description length budgets. |
+| `npm run i18n:places` | Which currently shown places lack a translated description. Add `-- file.json` to export the English source for translation. |
+
+`npm run build` fails if any interface string is untranslated, and checks that every
+translated page links only within its own language (apart from the switcher and the
+privacy notice). `PRERENDER_LOCALES=en,de npm run build` skips the other languages'
+pages while working on one, but the final checks expect all four.
+
+Style decisions for the translations: informal address (du / tu / tu), Swiss spelling
+in German (ss, no ß), local city names (Zürich, Genève, Milano …), and the founders
+described without grammatical gender ("Co-Founder").
 
 References: [Google JavaScript SEO](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics),
 [lazy-loaded content](https://developers.google.com/search/docs/crawling-indexing/javascript/lazy-loading),

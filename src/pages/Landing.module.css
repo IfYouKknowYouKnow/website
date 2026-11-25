@@ -133,6 +133,9 @@
 .moodLinks > span { color:#5e7687; font-family:inherit; font-size:12px; letter-spacing:.06em; margin-right:12px; }
 .moodLinks a { padding-block:10px; }
 .moodLinks a:hover { color:var(--blue); }
+.cityDirectory { display:grid; gap:2px; padding-top:24px; margin-top:28px; border-top:1px solid #ccd9e0; }
+.cityDirectory .moodLinks { padding-top:0; margin-top:0; border-top:0; }
+.cityDirectory .moodLinks > span { min-width:64px; }
 .curators { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:85px; padding-block:110px; }
 .curatorVisual { position:relative; height:470px; overflow:hidden; border:1px solid #fff; border-radius:var(--radius-panel); background:linear-gradient(#ffffffa0,#ffffff40),var(--onboarding-map) center / cover; color:var(--blue); box-shadow:var(--onboarding-shadow); }
 .curatorVisualLabel { position:absolute; top:28px; left:28px; font-family:inherit; font-size:12px; letter-spacing:.07em; }
@@ -204,6 +207,8 @@ textarea.input { resize:vertical; }
 .support img:last-child { width:110px; }
 .footerBottom { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid #ffffff18; padding-block:24px; color:#91a4af; font-size:10px; }
 .footerBottom a { font-family:inherit; font-size:12px; letter-spacing:.05em; }
+.footerBottom .founderLink { font-size:inherit; letter-spacing:inherit; }
+.footerBottom .founderLink:hover { color:#fff; }
 .page[data-motion='true'] [data-reveal][data-visible='true'] { animation:sectionReveal .6s ease-out both; }
 @keyframes sectionReveal { from { opacity:.3; transform:translateY(15px); } to { opacity:1; transform:none; } }
 @keyframes photoIn { from { opacity:.5; } to { opacity:1; } }
@@ -349,6 +354,9 @@ textarea.input { resize:vertical; }
   .cityCopy h3 { font-size:30px; }
   .moodLinks { gap:8px 20px; }
   .moodLinks > span { flex-basis:100%; }
+  .cityDirectory { gap:12px; }
+  .cityDirectory .moodLinks { gap:0 20px; }
+  .cityDirectory .moodLinks a { padding-block:7px; }
   .curators { grid-template-columns:1fr; gap:40px; padding-block:75px; }
   .curatorVisual { height:440px; }
   .sharingHeadline { font-size:clamp(32px,6.5vw,43px); }

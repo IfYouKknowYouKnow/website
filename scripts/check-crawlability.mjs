@@ -3,8 +3,11 @@ import fs from 'node:fs/promises'
 import { parse } from 'parse5'
 import { attr, findAll, htmlToMarkdown, textContent } from './content-formats.mjs'
 import { SITE_URL } from '../src/pageMetadata.js'
+import { LOCALES, OG_LOCALES, localePrefix } from '../src/i18n.js'
 
-const { pages } = JSON.parse(await fs.readFile('dist/content/index.json', 'utf8'))
+const { pages, languages } = JSON.parse(await fs.readFile('dist/content/index.json', 'utf8'))
+assert.deepEqual(languages, LOCALES, 'every language is exported')
+const pageUrls = new Set(pages.map((page) => page.url))
 const { pages: records } = JSON.parse(await fs.readFile('dist/content/site.json', 'utf8'))
 const sitemap = await fs.readFile('dist/sitemap.xml', 'utf8')
 const llms = await fs.readFile('dist/llms.txt', 'utf8')
@@ -24,8 +27,21 @@ for (const page of pages) {
   const file = route === '/' ? 'index.html' : route.endsWith('/') ? `${route.slice(1)}index.html` : `${route.slice(1)}.html`
   const html = await fs.readFile(`dist/${file}`, 'utf8')
   const tree = parse(html)
+  const prefix = localePrefix(page.language)
+  const isHome = route === `${prefix}/`
   const elements = findAll(tree, (node) => !!node.tagName)
   const select = (tag, name, value) => elements.filter((node) => node.tagName === tag && attr(node, name) === value)
+  // Language: the document says which language it is in, lives under that language's
+  // prefix, and names the same page in every other language.
+  assert.equal(attr(elements.find((node) => node.tagName === 'html'), 'lang'), page.language, `${route}: html lang`)
+  assert.ok(prefix ? route.startsWith(`${prefix}/`) : !LOCALES.some((locale) => route.startsWith(`/${locale}/`)), `${route}: language prefix`)
+  const hreflang = elements.filter((node) => node.tagName === 'link' && attr(node, 'rel') === 'alternate' && attr(node, 'hreflang'))
+  if (route !== '/privacy') {
+    assert.deepEqual(hreflang.map((node) => attr(node, 'hreflang')).sort(), [...LOCALES, 'x-default'].sort(), `${route}: hreflang for every language`)
+    for (const node of hreflang) assert.ok(pageUrls.has(attr(node, 'href')), `${route}: hreflang ${attr(node, 'hreflang')} points to an exported page`)
+    assert.equal(attr(hreflang.find((node) => attr(node, 'hreflang') === page.language), 'href'), page.url, `${route}: hreflang names itself`)
+    assert.ok(sitemap.includes(`<loc>${page.url}</loc><xhtml:link rel="alternate" hreflang="${LOCALES[0]}"`), `${route}: sitemap lists its languages`)
+  }
   assert.equal(select('link', 'rel', 'canonical').length, 1, `${route}: one canonical`)
   assert.equal(attr(select('link', 'rel', 'canonical')[0], 'href'), page.url)
   assert.equal(attr(select('meta', 'property', 'og:url')[0] || {}, 'content') || page.url, page.url)
@@ -47,6 +63,7 @@ for (const page of pages) {
   }
   if (route !== '/privacy') {
     assert.equal(attr(select('meta', 'property', 'og:site_name')[0], 'content'), 'YouKnow Map')
+    assert.equal(attr(select('meta', 'property', 'og:locale')[0], 'content'), OG_LOCALES[page.language], `${route}: og:locale`)
     assert.equal(attr(select('meta', 'property', 'og:title')[0], 'content'), title)
     assert.equal(attr(select('meta', 'property', 'og:description')[0], 'content'), description)
     assert.equal(attr(select('meta', 'name', 'twitter:card')[0], 'content'), 'summary_large_image')
@@ -98,6 +115,8 @@ for (const page of pages) {
       assert.ok(initialText.includes(passage), `/: initial HTML contains ${passage}`)
       assert.ok(exportedText.includes(passage), `/: text exports contain ${passage}`)
     }
+  }
+  if (isHome) {
     assert.deepEqual(JSON.parse(textContent(select('script', 'id', 'landing-stats-data')[0])), record.community_stats)
     const personalization = select('section', 'id', 'make-it-yours')[0]
     assert.ok(personalization, '/: personalization section exists')
@@ -120,7 +139,8 @@ for (const page of pages) {
   if (record.places) {
     const embedded = JSON.parse(textContent(select('script', 'id', 'city-guide-data')[0]))
     assert.deepEqual(embedded.places, record.places)
-    assert.equal(embedded.path, route)
+    assert.equal(`${prefix}${embedded.path}`, route)
+    assert.equal(embedded.locale, page.language)
     const cards = elements.filter((node) => attr(node, 'class') === 'city-place-card')
     assert.equal(cards.length, record.places.length)
     for (const place of record.places) assert.ok(markdown.includes(place.name.trim().replace(/\s+/g, ' ').replace(/([\\`*_\[\]])/g, '\\$1')))
@@ -132,9 +152,48 @@ for (const page of pages) {
     if (url.pathname === route && url.hash) {
       assert.ok(elements.some((node) => attr(node, 'id') === decodeURIComponent(url.hash.slice(1))), `${route}: anchor ${href} exists`)
     }
+    // A translated page must keep visitors in its language: only the language switcher
+    // (marked with hreflang) and the English-only privacy notice may leave it.
+    if (prefix && knownRoutes.has(url.pathname) && !attr(element, 'hreflang') && url.pathname !== '/privacy') {
+      assert.ok(url.pathname.startsWith(`${prefix}/`), `${route}: link ${href} leaves the ${page.language} site`)
+    }
     if (knownRoutes.has(url.pathname) || /^\/(place|invite|list|community|l)(\/|$)/.test(url.pathname)) continue
     await fs.access(`dist${url.pathname}`)
     linksChecked++
+  }
+}
+// Search targets, in every language: each city needs its category guides, and each founder a profile page.
+const { cityGuides } = await import('../src/cityGuides.js')
+const { TEAM, founderPath } = await import('../src/team.js')
+const recordFor = (route) => records.find((record) => new URL(record.url).pathname === route)
+for (const locale of LOCALES) {
+  const prefix = localePrefix(locale)
+  for (const city of Object.values(cityGuides)) {
+    for (const kind of ['restaurants', 'bars', 'cafes']) {
+      const route = `${prefix}${city.path}${kind}/`
+      assert.ok(knownRoutes.has(route), `${route}: category guide exists`)
+      assert.ok(pageLinks.get(`${prefix}${city.path}`).includes(route), `${prefix}${city.path}: links to ${route}`)
+      assert.ok(pageLinks.get(`${prefix}/`).includes(route), `${prefix}/: links to ${route}`)
+      // "Restaurants in Zurich: …", "Restaurants à Zurich : …", "Ristoranti a Zurigo: …"
+      assert.match(recordFor(route).title, /^\S+ (in|à|a) \S+/, `${route}: title leads with the search phrase`)
+    }
+  }
+  const homeGraph = recordFor(`${prefix}/`).structured_data['@graph']
+  const founders = homeGraph.find((entity) => entity['@type'] === 'Organization').founder
+  for (const person of TEAM) {
+    const route = `${prefix}${founderPath(person)}`
+    assert.ok(knownRoutes.has(route), `${route}: founder profile exists`)
+    assert.ok(recordFor(route).title.startsWith(person.name), `${route}: title leads with the name`)
+    const profile = recordFor(route).structured_data['@graph'].find((entity) => entity['@type'] === 'Person')
+    assert.equal(profile.name, person.name)
+    assert.deepEqual(profile.sameAs, [person.linkedin])
+    assert.ok(founders.some((founder) => founder['@id'] === profile['@id']), `${prefix}/: organization names ${person.name} as founder`)
+    assert.ok(pageLinks.get(`${prefix}/about`).includes(route), `${prefix}/about: links to ${route}`)
+  }
+  // A translated page that still shows the English heading was not translated.
+  if (prefix) for (const page of pages.filter((item) => item.language === locale)) {
+    const english = recordFor(new URL(page.url).pathname.slice(prefix.length))
+    if (!new URL(page.url).pathname.includes('/founders/')) assert.notEqual(page.description, english.description, `${page.url}: description is translated`)
   }
 }
 const reachable = new Set()
@@ -150,6 +209,7 @@ assert.equal(records.length, pages.length)
 assert.match(await fs.readFile('dist/404.html', 'utf8'), /noindex/)
 const netlify = await fs.readFile('netlify.toml', 'utf8')
 assert.match(netlify, /to = "\/404.html"\s+status = 404/)
+assert.match(netlify, /from = "\/en\/\*"\s+to = "\/:splat"\s+status = 301/, 'English has no /en copy: /en redirects to the root')
 // Netlify matches /city and /city/ as the same URL, including placeholders.
 // A browser redirect between them prevents crawlers from reaching the guide.
 for (const block of netlify.split(/^\[\[redirects\]\]\s*$/m).slice(1)) {
@@ -160,4 +220,4 @@ for (const block of netlify.split(/^\[\[redirects\]\]\s*$/m).slice(1)) {
   const normalize = (value) => new URL(value, SITE_URL).href.replace(/\/+$/, '')
   assert.notEqual(normalize(from), normalize(to), `Redirect loop after trailing-slash normalization: ${from} → ${to}`)
 }
-console.log(`[crawlability] ${pages.length} pages: initial HTML, canonicals, schema, FAQs, guide records, alternate formats, sitemap and links passed (${linksChecked} asset links).`)
+console.log(`[crawlability] ${pages.length} pages in ${LOCALES.length} languages: initial HTML, hreflang, canonicals, schema, FAQs, guide records, alternate formats, sitemap and links passed (${linksChecked} asset links).`)
