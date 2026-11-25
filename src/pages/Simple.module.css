@@ -20,7 +20,7 @@ main.main {
   max-width: 640px;
   margin-top: 26px;
   color: #575766;
-  font-size: clamp(18px, 2vw, 21px);
+  font-size: clamp(20px, 2.2vw, 23px);
   line-height: 1.55;
 }
 
@@ -49,7 +49,7 @@ main.main {
   gap: 14px;
   margin-top: 22px;
   color: #575766;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .icon img {
@@ -89,7 +89,7 @@ main.main {
 }
 
 .main .card :is(h2, h3) {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.04em;
@@ -98,7 +98,7 @@ main.main {
 .card p {
   margin-top: 10px;
   color: #575766;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.6;
 }
 
@@ -109,7 +109,7 @@ main.main {
   padding: 0;
   list-style: none;
   color: #3f3f52;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .list a,
@@ -131,7 +131,7 @@ main.main {
   gap: 6px;
   margin-top: 16px;
   color: #12121c;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 }
 

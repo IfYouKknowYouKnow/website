@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  font-size: 16px;
+  font-size: 18px;
   position: relative;
   isolation: isolate;
   color: #12121c;
@@ -48,7 +48,7 @@
   border-radius: 999px;
   background: #171b1d;
   color: white;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -63,7 +63,7 @@
 .kicker {
   margin-bottom: 16px;
   color: #3157ff;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -111,7 +111,7 @@
   min-height: 70px;
   padding: 0 22px;
   color: #12121c;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   list-style: none;
@@ -161,7 +161,7 @@
   gap: 12px;
   padding: 0 24px 24px 46px;
   color: #575766;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.55;
 }
 
@@ -239,12 +239,12 @@
   .panel summary {
     min-height: 64px;
     padding: 0 18px;
-    font-size: 17px;
+    font-size: 19px;
   }
 
   .panel ol {
     padding: 0 20px 22px 40px;
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .mediaGrid {
@@ -274,7 +274,7 @@
   display: block;
   margin-top: 48px;
   color: #575766;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.05em;
 }
