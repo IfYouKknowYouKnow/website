@@ -213,6 +213,8 @@ export default function About() {
           <p>{tr('© 2026 YouKnow by Marie-Louise Dugua & Fabio Baldini')}</p>
           <div className={styles.footerLinks}>
             <Link to="/tutorials">{tr('Tutorials')}</Link>
+            <Link to="/cities">{tr('City guides')}</Link>
+            <Link to="/download">{tr('Download the app')}</Link>
             <a href="/privacy">{tr('Privacy')}</a>
             <LanguageSwitcher />
           </div>

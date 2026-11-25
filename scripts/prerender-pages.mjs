@@ -16,6 +16,8 @@ const server = await createServer({
 })
 const pages = []
 const untranslatedPlaces = {}
+const staticPages = []   // written after all languages are rendered
+const siteSections = []
 let SITE_URL, LOCALES, LOCALE_NAMES, missingTranslations, locales
 
 function pageHtml(page, schema, markup, route, { records, stats } = {}) {
@@ -100,8 +102,9 @@ try {
   const { TEAM, founderPath } = await server.ssrLoadModule('/src/team.js')
   const { FALLBACK_STATS, normalizeLandingStats } = await server.ssrLoadModule('/src/landingContent.js')
   const { default: topicFallbackPlaces } = await server.ssrLoadModule('/src/cityGuideTopicPlaces.js')
+  const staticModule = await server.ssrLoadModule('/src/staticPages.js')
   const components = {}
-  for (const name of ['Landing', 'About', 'Tutorials', 'Founder', 'CityGuide']) components[name] = (await server.ssrLoadModule(`/src/pages/${name}.jsx`)).default
+  for (const name of ['Landing', 'About', 'Tutorials', 'Download', 'Cities', 'Founder', 'CityGuide']) components[name] = (await server.ssrLoadModule(`/src/pages/${name}.jsx`)).default
   ;({ SITE_URL } = metadata)
   ;({ LOCALES, LOCALE_NAMES, missingTranslations } = i18nModule)
   // PRERENDER_LOCALES=en,de limits the export while working on one language.
@@ -132,7 +135,7 @@ try {
         React.createElement(StaticRouter, { location: `${i18n.prefix}${route}`, basename: i18n.prefix || undefined },
           React.createElement(Component, props))))
 
-    for (const [key, name] of [['home', 'Landing'], ['about', 'About'], ['tutorials', 'Tutorials']]) {
+    for (const [key, name] of [['home', 'Landing'], ['about', 'About'], ['tutorials', 'Tutorials'], ['download', 'Download'], ['cities', 'Cities']]) {
       const page = metadata.getPageMetadata(key, i18n)
       const stats = key === 'home' ? landingSnapshot.stats : undefined
       const schema = metadata.pageStructuredData(key, i18n, stats ? { cityCount: stats.cities } : undefined)
@@ -173,7 +176,18 @@ try {
         pageHtml(page, schema, render(components.CityGuide, page.path, { initialGuide: guide, initialRecords: places }), route, { records: places }),
         { places, places_source: source })
     }
-    console.log(`[prerender] ${locale}: ${pages.filter((page) => page.language === locale).length} pages as HTML, Markdown and JSON`)
+    // The list of all pages, grouped the way a visitor would look for them, and this language's 404 page.
+    const own = pages.filter((page) => page.language === locale)
+    const label = (page) => page.title.replace(/ \| YouKnow Map.*$/, '').replace(/^YouKnow Map \| /, '')
+    const cityOf = (page) => page.route.slice(i18n.prefix.length).split('/')[1]
+    siteSections.push({ locale, groups: [
+      { title: 'YouKnow Map', pages: own.filter((page) => !page.places).map((page) => ({ route: page.route, label: label(page) })) },
+      ...Object.values(guideModule.getCityGuides(i18n.guides)).map((guide) => (
+        { title: guide.city, pages: own.filter((page) => page.places && cityOf(page) === guide.slug).map((page) => ({ route: page.route, label: label(page) })) })),
+    ] })
+    staticPages.push({ file: `${i18n.prefix.slice(1)}${i18n.prefix ? '/' : ''}404.html`, html: staticModule.notFoundHtml(i18n) })
+    if (locale === 'en') staticPages.push({ file: 'sitemap.html', html: () => staticModule.allPagesHtml(i18n, siteSections, `${SITE_URL}/sitemap.html`) })
+    console.log(`[prerender] ${locale}: ${own.length} pages as HTML, Markdown and JSON`)
   }
 } finally {
   await server.close()
@@ -201,6 +215,5 @@ await fs.writeFile('dist/_headers', pages.map((page) => {
   const { markdown, json } = machinePaths(page.route)
   return [markdown, json].map((route) => `${route}\n  Link: <${page.url}>; rel="canonical", <${SITE_URL}/llms.txt>; rel="describedby"\n  X-Robots-Tag: noindex\n`).join('\n')
 }).join('\n'))
-await fs.writeFile('dist/sitemap.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>All pages | YouKnow</title><meta name="description" content="Browse YouKnow pages and city guides."><link rel="canonical" href="${SITE_URL}/sitemap.html"></head><body><main><h1>YouKnow pages and city guides</h1>${locales.map((locale) => `<h2 lang="${locale}">${LOCALE_NAMES[locale]}</h2><ul lang="${locale}">${pages.filter((page) => page.language === locale).map((page) => `<li><a href="${page.route}">${escapeHtml(page.title)}</a></li>`).join('')}</ul>`).join('')}<p><a href="/content/index.json">JSON page index</a> · <a href="/llms.txt">Markdown page index</a></p></main></body></html>`)
-await fs.writeFile('dist/404.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Page not found | YouKnow</title></head><body><main><h1>Page not found</h1><p><a href="/">Explore YouKnow</a> or <a href="/sitemap.html">browse our pages and guides</a>.</p></main></body></html>')
+for (const { file, html } of staticPages) await fs.writeFile(`dist/${file}`, typeof html === 'function' ? html() : html)
 console.log(`[discovery] ${pages.length} public pages exported in ${locales.length} languages`)

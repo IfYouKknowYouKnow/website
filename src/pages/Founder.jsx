@@ -37,7 +37,7 @@ export default function Founder({ initialFounder } = {}) {
           <div className={about.navLinks} aria-label={tr('Primary')}>
             <Link to="/">{tr('Home')}</Link>
             <Link to="/about">{tr('About')}</Link>
-            <a className={about.navCta} href={i18n.href('/#download')}>{tr('Download')}</a>
+            <Link className={about.navCta} to="/download">{tr('Download')}</Link>
           </div>
         </div>
       </nav>

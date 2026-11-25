@@ -29,6 +29,47 @@
   to = "/about.html"
   status = 200
 
+# Download and city guide index pages, in every language.
+[[redirects]]
+  from = "/download"
+  to = "/download.html"
+  status = 200
+
+[[redirects]]
+  from = "/cities"
+  to = "/cities.html"
+  status = 200
+
+[[redirects]]
+  from = "/de/download"
+  to = "/de/download.html"
+  status = 200
+
+[[redirects]]
+  from = "/de/cities"
+  to = "/de/cities.html"
+  status = 200
+
+[[redirects]]
+  from = "/fr/download"
+  to = "/fr/download.html"
+  status = 200
+
+[[redirects]]
+  from = "/fr/cities"
+  to = "/fr/cities.html"
+  status = 200
+
+[[redirects]]
+  from = "/it/download"
+  to = "/it/download.html"
+  status = 200
+
+[[redirects]]
+  from = "/it/cities"
+  to = "/it/cities.html"
+  status = 200
+
 # German, French and Italian pages live under /de, /fr and /it with the same paths.
 [[redirects]]
   from = "/de/about"
@@ -92,6 +133,22 @@
   from = "/community/*"
   to = "/community/index.html"
   status = 200
+
+# Unknown URLs inside a language get that language's "not found" page.
+[[redirects]]
+  from = "/de/*"
+  to = "/de/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/fr/*"
+  to = "/fr/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/it/*"
+  to = "/it/404.html"
+  status = 404
 
 # Unknown URLs must return 404, rather than a successful copy of the homepage.
 [[redirects]]

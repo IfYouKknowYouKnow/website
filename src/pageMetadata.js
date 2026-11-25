@@ -1,5 +1,6 @@
 import { FALLBACK_STATS, getFaqItems } from './landingContent.js'
 import { TEAM, founderPath } from './team.js'
+import { getCityGuides } from './cityGuides.js'
 import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, createI18n, localePrefix } from './i18n.js'
 
 export const SITE_URL = 'https://ifykyk.app'
@@ -41,6 +42,18 @@ export function getPageMetadata(key, i18n = ENGLISH) {
     description: tr('Learn how to save places in YouKnow from Instagram, TikTok, photos, Google Saved Places, or a manual search.'),
     image: `${SITE_URL}/images/social-cards/tutorials.jpg`,
     imageAlt: tr('YouKnow Map: save places from Instagram, TikTok and Google Maps.'),
+  })
+  if (key === 'download') return page(i18n, '/download', {
+    title: tr('Download YouKnow Map | Free App for iPhone & Android'),
+    description: tr('Download YouKnow Map free on the App Store and Google Play. Save places from Instagram, TikTok and Google Maps, and find restaurants, bars and cafés through people you trust.'),
+    image: `${SITE_URL}/images/social-cards/home.jpg`,
+    imageAlt: tr('YouKnow Map: good spots, great people. Discover places through people you trust.'),
+  })
+  if (key === 'cities') return page(i18n, '/cities', {
+    title: tr('City Guides: Restaurants, Bars, Cafés & Hotels | YouKnow Map'),
+    description: tr('Local tips for Zurich, Geneva, Berlin, Milan, Paris and Tokyo: restaurants, bars, cafés and hotels recommended by the YouKnow community.'),
+    image: `${SITE_URL}/images/social-cards/home.jpg`,
+    imageAlt: tr('YouKnow Map: good spots, great people. Discover places through people you trust.'),
   })
   return page(i18n, '/', {
     title: tr('YouKnow Map | The App for Local Restaurant, Bar & Café Tips'),
@@ -153,6 +166,29 @@ export function pageStructuredData(key, i18n = ENGLISH, { cityCount = FALLBACK_S
         mainEntity: { '@id': ORGANIZATION_ID } },
       organizationEntity(i18n),
       breadcrumbs([['YouKnow', localizedUrl('/', locale)], [tr('About'), page.canonical]]),
+    ],
+  }
+  if (key === 'download') return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'WebPage', '@id': `${page.canonical}#page`, url: page.canonical, name: page.title, description: page.description,
+        inLanguage: locale, isPartOf: { '@id': WEBSITE_ID }, mainEntity: { '@id': `${SITE_URL}/#app` } },
+      { '@type': 'MobileApplication', '@id': `${SITE_URL}/#app`, name: 'YouKnow Map', alternateName: ['YouKnow', 'YK YouKnow'],
+        description: page.description, url: page.canonical, image: APP_ICON,
+        applicationCategory: 'LifestyleApplication', operatingSystem: 'iOS, Android',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        installUrl: STORE_URLS, publisher: { '@id': ORGANIZATION_ID }, sameAs: STORE_URLS },
+      breadcrumbs([['YouKnow', localizedUrl('/', locale)], [tr('Download'), page.canonical]]),
+    ],
+  }
+  if (key === 'cities') return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'CollectionPage', '@id': `${page.canonical}#page`, url: page.canonical, name: page.title, description: page.description,
+        inLanguage: locale, isPartOf: { '@id': WEBSITE_ID } },
+      { '@type': 'ItemList', itemListElement: Object.values(getCityGuides(i18n.guides)).map((guide, index) => (
+        { '@type': 'ListItem', position: index + 1, name: guide.title, url: localizedUrl(guide.path, locale) })) },
+      breadcrumbs([['YouKnow', localizedUrl('/', locale)], [tr('City guides'), page.canonical]]),
     ],
   }
   return {

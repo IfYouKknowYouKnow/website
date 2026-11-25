@@ -90,7 +90,7 @@ function PlaceCard({ place, topicSlug, rank }) {
 }
 
 function ContinueInAppCTA({ guide, publicPlaceCount }) {
-  const { tr, href } = useI18n()
+  const { tr } = useI18n()
   return (
     <aside className="city-continue" aria-label={tr('Continue in YouKnow')}>
       <div>
@@ -98,9 +98,9 @@ function ContinueInAppCTA({ guide, publicPlaceCount }) {
         <h2>{guide.ctaTitle}</h2>
         <p>{guide.ctaBody}</p>
       </div>
-      <a className="city-primary-button city-continue-button" href={href('/#download')}>
+      <Link className="city-primary-button city-continue-button" to="/download">
         {guide.ctaLabel} <span aria-hidden="true">→</span>
-      </a>
+      </Link>
     </aside>
   )
 }
@@ -117,7 +117,7 @@ function NotFound() {
 
 export default function CityGuide({ initialGuide, initialRecords } = {}) {
   const i18n = useI18n()
-  const { tr, href, locale, guides: copy } = i18n
+  const { tr, locale, guides: copy } = i18n
   const guides = getCityGuides(copy)
   const labels = categoryLabels(copy)
   const { citySlug, topicSlug: routeTopicSlug } = useParams()
@@ -166,8 +166,9 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
             <img src="/images/youknow-wordmark-blue-592.webp" alt="YouKnow" />
           </Link>
           <nav aria-label={tr('Guide navigation')}>
+            <Link to="/cities">{tr('City guides')}</Link>
             <Link to="/about">{tr('About')}</Link>
-            <a className="city-nav-button" href={href('/#download')}>{tr('Get YouKnow')}</a>
+            <Link className="city-nav-button" to="/download">{tr('Get YouKnow')}</Link>
           </nav>
         </div>
       </header>
@@ -180,7 +181,7 @@ export default function CityGuide({ initialGuide, initialRecords } = {}) {
               <p className="city-eyebrow">{guide.eyebrow}</p>
               <h1>{guide.title}</h1>
               <p className="city-lead">{guide.intro}</p>
-              <a className="city-primary-button" href={href('/#download')}>{tr('Find places on YouKnow →')}</a>
+              <Link className="city-primary-button" to="/download">{tr('Find places on YouKnow →')}</Link>
             </div>
             <div className="city-hero-art" data-city={guide.slug}>
               <img src={`/images/cities/${guide.slug}-app-860.webp`} srcSet={`/images/cities/${guide.slug}-app-430.webp 430w, /images/cities/${guide.slug}-app-860.webp 860w`} sizes="245px" fetchpriority="high" alt={tr('YouKnow’s {city} city view, with its map and recommended places.', { city: guide.city })} width="1290" height="2796" />

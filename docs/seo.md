@@ -1,9 +1,17 @@
 # YouKnow Map SEO
 
-The marketing website exports 149 complete HTML pages in four languages. Each
-language has 37 pages: home, story, tutorials, two founder profiles, six city guides,
-23 city category guides (restaurants, bars, cafés and hotels) and three Zurich mood
-guides. The privacy notice is a legal text and exists in English only. The same text is available
+The marketing website exports 157 complete HTML pages in four languages. Each
+language has 39 pages: home, story, tutorials, download, the city guide index, two
+founder profiles, six city guides, 23 city category guides (restaurants, bars, cafés
+and hotels) and three Zurich mood guides. The privacy notice is a legal text and
+exists in English only.
+
+`/download` and `/cities` exist so that "download the app" and "city guides" are real
+pages with their own titles, linked from the homepage footer and every guide. Google
+builds the sub-links under a search result from pages like these; sections of the
+homepage cannot become sub-links. The "page not found" page and the list of all pages
+(`/sitemap.html`) are plain HTML in the site's design, written per language from
+`src/staticPages.js`. The same text is available
 to visitors and crawlers before JavaScript runs. The client hydrates this HTML.
 
 ## Implemented

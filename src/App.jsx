@@ -7,6 +7,8 @@ import ShareLanding from './pages/ShareLanding'
 import Tutorials from './pages/Tutorials'
 import CityGuide from './pages/CityGuide'
 import Founder from './pages/Founder'
+import Download from './pages/Download'
+import Cities from './pages/Cities'
 import { I18nProvider, localePrefix } from './i18n'
 
 function ScrollToTop() {
@@ -36,6 +38,8 @@ export default function App({ locale = 'en' }) {
           <Route path="/team" element={<Navigate to="/about#team" replace />} />
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/download" element={<Download />} />
+          <Route path="/cities" element={<Cities />} />
           <Route path="/founders/:founderSlug" element={<Founder />} />
           <Route path="/:citySlug/:topicSlug" element={<CityGuide />} />
           <Route path="/:citySlug" element={<CityGuide />} />

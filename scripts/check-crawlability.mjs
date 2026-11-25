@@ -206,7 +206,7 @@ while (queue.length) {
 }
 for (const route of knownRoutes) assert.ok(reachable.has(route), `${route}: reachable from the homepage through crawlable links`)
 assert.equal(records.length, pages.length)
-assert.match(await fs.readFile('dist/404.html', 'utf8'), /noindex/)
+for (const locale of LOCALES) assert.match(await fs.readFile(`dist${localePrefix(locale)}/404.html`, 'utf8'), /noindex/, `${locale}: 404 page is not indexed`)
 const netlify = await fs.readFile('netlify.toml', 'utf8')
 assert.match(netlify, /to = "\/404.html"\s+status = 404/)
 assert.match(netlify, /from = "\/en\/\*"\s+to = "\/:splat"\s+status = 301/, 'English has no /en copy: /en redirects to the root')
