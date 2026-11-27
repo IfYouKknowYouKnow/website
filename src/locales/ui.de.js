@@ -1,12 +1,7 @@
 // German interface strings. Keys are the English source strings; see scripts/extract-messages.mjs.
 export default {
-  // src/components/HeroRecommendations.jsx
-  "Illustrative recommendations from friends and curators": "Beispielhafte Empfehlungen von Freunden und Kuratoren",
+  // src/pages/Landing.jsx (hero cards)
   "Example": "Beispiel",
-  "{name}’s example recommendations": "Beispielempfehlungen von {name}",
-  "Preview {place}, recommended by {name}": "Vorschau auf {place}, empfohlen von {name}",
-  "WHY {name} SAVED IT": "WARUM {name} DEN ORT GESPEICHERT HAT",
-  "Tap a spot to find it on the map.": "Tippe auf einen Spot, um ihn auf der Karte zu sehen.",
 
   // src/components/LanguageSwitcher.jsx
   "Language": "Sprache",
@@ -84,25 +79,12 @@ export default {
   "Watch the {label} saving video": "Speicher-Video ansehen: {label}",
 
   // src/heroMoodExamples.js
-  "A café with leafy plants and a sunny window.": "Ein Café mit Grünpflanzen und einem sonnigen Fenster.",
-  "Your new regular.": "Dein neues Stammcafé.",
   "Your friend": "Aus deinem Freundeskreis",
   "Ana recommends these spots near you.": "Ana empfiehlt diese Spots in deiner Nähe.",
-  "A flat white, a window seat, and no reason to rush.": "Ein Flat White, ein Fensterplatz und kein Grund zur Eile.",
-  "The spot for a long catch-up over a second coffee.": "Der Ort für lange Gespräche beim zweiten Kaffee.",
-  "After dark": "Am Abend",
-  "An inviting bar with warm lamps.": "Eine einladende Bar mit warmem Lampenlicht.",
-  "One more round?": "Noch eine Runde?",
   "Local curator you follow": "Kuratiert lokal. Du folgst.",
   "Maya knows where your night should start.": "Maya weiss, wo dein Abend beginnen sollte.",
-  "A cosy corner and a proper cocktail. Bring your favourite person.": "Eine gemütliche Ecke und ein richtig guter Cocktail. Bring deinen Lieblingsmenschen mit.",
-  "For the after-work drink that turns into the whole evening.": "Für den Feierabenddrink, aus dem der ganze Abend wird.",
-  "A restaurant ready for your next dinner plan.": "Ein Restaurant, bereit für deinen nächsten Dinner-Plan.",
-  "Dinner is sorted.": "Das Abendessen steht.",
   "Food curator you follow": "Kuratiert Food. Du folgst.",
   "Luca’s dinner picks. Your next good plan.": "Lucas Dinner-Tipps. Dein nächster guter Plan.",
-  "Pizza in the middle of the table. No overthinking required.": "Pizza in die Mitte des Tisches. Mehr Planung braucht es nicht.",
-  "A little sushi, good company, and the start of a great night.": "Ein bisschen Sushi, gute Gesellschaft und der Anfang eines grossartigen Abends.",
 
   // src/landingContent.js
   "What is YouKnow Map?": "Was ist YouKnow Map?",
@@ -269,21 +251,13 @@ export default {
   "Product": "Produkt",
   "Community": "Community",
   "City guides": "City Guides",
-  "Welcome to YouKnow": "Willkommen bei YouKnow",
   "Your map starts": "Deine Karte beginnt",
   "with you.": "mit dir.",
+  "A hand holding a phone with the YouKnow map of Zurich and its recommended places.": "Eine Hand hält ein Smartphone mit der YouKnow-Karte von Zürich und ihren empfohlenen Orten.",
   "Save the places you love. Find your next favourites through people who get you.": "Speichere die Orte, die du liebst. Finde deine nächsten Lieblingsorte über Menschen, die dich verstehen.",
   "Good places, from people you trust.": "Gute Orte, von Menschen, denen du vertraust.",
-  "Explore the app": "App entdecken",
   "Completely free. On iOS & Android.": "Komplett kostenlos. Für iOS & Android.",
-  "Find your next favourite.": "Finde deinen nächsten Lieblingsort.",
-  "Pick a mood": "Wähle eine Stimmung",
-  "Choose a mood for the homepage preview": "Stimmung für die Vorschau auf der Startseite wählen",
-  "YouKnow app map showing real recommendations around Zurich.": "Karte der YouKnow-App mit echten Empfehlungen rund um Zürich.",
-  "{name}’s pick": "Tipp von {name}",
-  "Local knowledge. A world of possibilities.": "Lokales Wissen. Eine Welt voller Möglichkeiten.",
   "AVAILABLE IN": "VERFÜGBAR AUF",
-  "DISCOVER YOUKNOW": "YOUKNOW ENTDECKEN",
   "YouKnow community stats": "Zahlen zur YouKnow-Community",
   "cities and counting": "Städte – Tendenz steigend",
   "Recommendations with a point of view.": "Empfehlungen mit Haltung.",

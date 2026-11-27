@@ -1,12 +1,7 @@
 // Italian interface strings. Keys are the English source strings; see scripts/extract-messages.mjs.
 export default {
-  // src/components/HeroRecommendations.jsx
-  "Illustrative recommendations from friends and curators": "Esempi di consigli di amici e curatori",
+  // src/pages/Landing.jsx (hero cards)
   "Example": "Esempio",
-  "{name}’s example recommendations": "Esempi di consigli di {name}",
-  "Preview {place}, recommended by {name}": "Anteprima di {place}, un consiglio di {name}",
-  "WHY {name} SAVED IT": "PERCHÉ {name} L’HA SALVATO",
-  "Tap a spot to find it on the map.": "Tocca un posto per trovarlo sulla mappa.",
 
   // src/components/LanguageSwitcher.jsx
   "Language": "Lingua",
@@ -84,25 +79,12 @@ export default {
   "Watch the {label} saving video": "Guarda il video di salvataggio: {label}",
 
   // src/heroMoodExamples.js
-  "A café with leafy plants and a sunny window.": "Un caffè con piante rigogliose e una vetrina piena di sole.",
-  "Your new regular.": "Il tuo nuovo posto fisso.",
   "Your friend": "La tua amica",
   "Ana recommends these spots near you.": "Ana ti consiglia questi posti vicino a te.",
-  "A flat white, a window seat, and no reason to rush.": "Un flat white, un posto alla finestra e nessun motivo per avere fretta.",
-  "The spot for a long catch-up over a second coffee.": "Il posto per una lunga chiacchierata davanti al secondo caffè.",
-  "After dark": "Dopo il tramonto",
-  "An inviting bar with warm lamps.": "Un bar invitante con lampade dalla luce calda.",
-  "One more round?": "Un altro giro?",
   "Local curator you follow": "Curatrice locale che segui",
   "Maya knows where your night should start.": "Maya sa dove deve iniziare la tua serata.",
-  "A cosy corner and a proper cocktail. Bring your favourite person.": "Un angolo accogliente e un cocktail fatto come si deve. Porta la tua persona preferita.",
-  "For the after-work drink that turns into the whole evening.": "Per l’aperitivo dopo il lavoro che diventa tutta la serata.",
-  "A restaurant ready for your next dinner plan.": "Un ristorante pronto per la tua prossima cena.",
-  "Dinner is sorted.": "La cena è decisa.",
   "Food curator you follow": "Curatore food che segui",
   "Luca’s dinner picks. Your next good plan.": "Le cene scelte da Luca. Il tuo prossimo bel programma.",
-  "Pizza in the middle of the table. No overthinking required.": "Pizza al centro del tavolo. Senza pensarci troppo.",
-  "A little sushi, good company, and the start of a great night.": "Un po’ di sushi, buona compagnia e l’inizio di una gran serata.",
 
   // src/landingContent.js
   "What is YouKnow Map?": "Che cos’è YouKnow Map?",
@@ -269,21 +251,13 @@ export default {
   "Product": "Prodotto",
   "Community": "Community",
   "City guides": "Guide alle città",
-  "Welcome to YouKnow": "Ti diamo il benvenuto su YouKnow",
   "Your map starts": "La tua mappa inizia",
   "with you.": "da te.",
+  "A hand holding a phone with the YouKnow map of Zurich and its recommended places.": "Una mano che tiene un telefono con la mappa YouKnow di Zurigo e i suoi posti consigliati.",
   "Save the places you love. Find your next favourites through people who get you.": "Salva i posti che ami. Trova i tuoi prossimi preferiti grazie a chi ti capisce.",
   "Good places, from people you trust.": "Bei posti, dalle persone di cui ti fidi.",
-  "Explore the app": "Esplora l’app",
   "Completely free. On iOS & Android.": "Completamente gratis. Su iOS e Android.",
-  "Find your next favourite.": "Trova il tuo prossimo preferito.",
-  "Pick a mood": "Scegli un mood",
-  "Choose a mood for the homepage preview": "Scegli un mood per l’anteprima in homepage",
-  "YouKnow app map showing real recommendations around Zurich.": "La mappa dell’app YouKnow con consigli reali nei dintorni di Zurigo.",
-  "{name}’s pick": "La scelta di {name}",
-  "Local knowledge. A world of possibilities.": "Dritte locali. Un mondo di possibilità.",
   "AVAILABLE IN": "DISPONIBILE IN",
-  "DISCOVER YOUKNOW": "SCOPRI YOUKNOW",
   "YouKnow community stats": "I numeri della community di YouKnow",
   "cities and counting": "città, in continua crescita",
   "Recommendations with a point of view.": "Consigli con un punto di vista.",
