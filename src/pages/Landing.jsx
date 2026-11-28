@@ -5,6 +5,8 @@ import { usePageMetadata } from '../usePageMetadata'
 import { appStoreHref, openIOSAppStore } from '../appStoreLink'
 import ProductStory from '../components/ProductStory'
 import Personalization from '../components/Personalization'
+import HeroRecommendations from '../components/HeroRecommendations'
+import HeroSourcePins from '../components/HeroSourcePins'
 import { HERO_MOOD_EXAMPLES } from '../heroMoodExamples'
 import communityPlaces from '../cityGuideCommunityPlaces.js'
 import { categoryLabels, getCityGuides } from '../cityGuides'
@@ -39,12 +41,6 @@ function AppIdentity() {
     <div><strong>YouKnow Map</strong><span>{tr('Look for this icon in the app stores.')}</span></div>
   </div>
 }
-
-// The hero photo (/images/hero-hand-phone-*.webp) is a cut-out of a free Pexels photo,
-// pexels.com/photo/hand-holding-iphone-mockup-8217475, with the cased phone redrawn as a slim one
-// showing the app's map screenshot (the fingers in front of it are the photo's).
-// Decorative map pins floating over the hero map.
-const HERO_PINS = ['🍸', '☕', '🍕', '🍣']
 
 function StoreButtons() {
   const { tr } = useI18n()
@@ -83,11 +79,7 @@ function useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen) {
     const motionChange = () => { page.dataset.motion = !media.matches }
     motionChange()
     media.addEventListener('change', motionChange)
-    // The navigation sits clear over the hero and turns solid once the page is scrolled.
-    const scrolled = () => { page.dataset.scrolled = window.scrollY > 8 }
-    scrolled()
-    window.addEventListener('scroll', scrolled, { passive: true })
-    return () => { reveal.disconnect(); media.removeEventListener('change', motionChange); window.removeEventListener('scroll', scrolled) }
+    return () => { reveal.disconnect(); media.removeEventListener('change', motionChange) }
   }, [pageRef])
   useEffect(() => {
     if (!isMenuOpen) return
@@ -173,6 +165,8 @@ export default function Landing({ initialStats } = {}) {
   const { tr, href, formatNumber: formatCount, guides: copy } = i18n
   const guides = getCityGuides(copy)
   const labels = categoryLabels(copy)
+  const [heroMood, setHeroMood] = useState(0)
+  const [heroPlace, setHeroPlace] = useState(0)
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState('')
@@ -191,7 +185,7 @@ export default function Landing({ initialStats } = {}) {
   const [cityScroll, setCityScroll] = useState({ start: true, end: false })
   const cityCount = positiveCountOrFallback(stats.cities, FALLBACK_STATS.cities)
   const faqItems = getFaqItems(cityCount, i18n)
-  const [friend, , curator] = HERO_MOOD_EXAMPLES
+  const mood = HERO_MOOD_EXAMPLES[heroMood]
 
   usePageMetadata('home', { cityCount })
   useScrollDesign(pageRef, isMenuOpen, setIsMenuOpen)
@@ -352,38 +346,39 @@ export default function Landing({ initialStats } = {}) {
     <main id="main-content">
       <section className={styles.hero} data-hero aria-labelledby="hero-heading">
         <div className={`${styles.heroInner} ${styles.wrap}`}>
+        <div className={styles.heroCopy}>
+          <span className={styles.heroEyebrow}>{tr('Welcome to YouKnow')}</span>
           <h1 id="hero-heading">{tr('Your map starts')}<br /><span>{tr('with you.')}</span></h1>
-          <div className={styles.heroAside}>
-            <p className={styles.heroDescription}>
-              <span className={styles.desktopHeroDescription}>{tr('Save the places you love. Find your next favourites through people who get you.')}</span>
-              <span className={styles.mobileHeroDescription}>{tr('Good places, from people you trust.')}</span>
-            </p>
-            <a className={styles.heroButton} href="#download">{tr('Get YouKnow')}</a>
-            <StoreButtons />
-            <span className={styles.freeNote}>{tr('Completely free. On iOS & Android.')}</span>
+          <p className={styles.heroDescription}>
+            <span className={styles.desktopHeroDescription}>{tr('Save the places you love. Find your next favourites through people who get you.')}</span>
+            <span className={styles.mobileHeroDescription}>{tr('Good places, from people you trust.')}</span>
+          </p>
+          <div className={styles.heroActions}>
+            <a className={styles.primaryButton} href="#download">{tr('Get YouKnow')}</a>
+            <a className={styles.heroExplore} href="#how-it-works">{tr('Explore the app')}{' '}<span aria-hidden="true">↓</span></a>
           </div>
-          <div className={styles.heroStage}>
-            {HERO_PINS.map(emoji => <span className={styles.heroPin} aria-hidden="true" key={emoji}>{emoji}</span>)}
-            <img className={styles.heroHand} src="/images/hero-hand-phone-1280.webp" srcSet="/images/hero-hand-phone-760.webp 760w, /images/hero-hand-phone-1280.webp 1280w"
-              sizes="(max-width:760px) min(130vw,520px), 620px" alt={tr('A hand holding a phone with the YouKnow map of Zurich and its recommended places.')} width="2356" height="2606" fetchpriority="high" />
-            <div className={`${styles.heroCard} ${styles.heroPick}`} aria-hidden="true">
-              <div className={styles.heroPerson}>
-                <span style={{ background: friend.accent }}>{friend.initial}</span>
-                <span><strong>{friend.name}</strong>{tr(friend.source)}</span>
-                <span className={styles.heroTag}>{tr('Example')}</span>
-              </div>
-              <p className={styles.heroPlace}><span>{friend.places[0].emoji}</span>{friend.places[0].name}<small>{friend.places[0].distance}</small></p>
-            </div>
-            <div className={`${styles.heroCard} ${styles.heroTrust}`} aria-hidden="true">
-              <span className={styles.heroFaces}>{HERO_MOOD_EXAMPLES.map(example => <img src={example.persona} alt="" width="34" height="34" key={example.name} />)}</span>
-              <span>{tr('Good places, from people you trust.')}</span>
-            </div>
-            <div className={`${styles.heroCard} ${styles.heroList}`} aria-hidden="true">
-              <div><strong>{tr(curator.heading)}</strong><span className={styles.heroTag}>{tr('Example')}</span></div>
-              {curator.places.map(place => <p className={styles.heroPlace} key={place.name}><span>{place.emoji}</span>{place.name}<small>{place.distance}</small></p>)}
-            </div>
-            <div className={styles.heroFoot}><span>{tr('AVAILABLE IN')}</span> <LanguageSwitcher /></div>
+          <StoreButtons />
+          <span className={styles.freeNote}>{tr('Completely free. On iOS & Android.')}</span>
+        </div>
+        <div className={styles.heroVisual} data-mood={heroMood}>
+          <div className={styles.visualHeading}><span>{tr('Find your next favourite.')}</span><span>{tr('Pick a mood')}</span></div>
+          <div className={styles.moodPicker} role="group" aria-label={tr('Choose a mood for the homepage preview')}>
+            {HERO_MOOD_EXAMPLES.map((example, index) => <button type="button" key={example.label} aria-pressed={heroMood === index}
+              aria-controls="hero-recommendations" onClick={() => { setHeroMood(index); setHeroPlace(0) }}><img src={example.persona} alt="" width="26" height="26" />{tr(example.label)}</button>)}
           </div>
+          <div className={styles.heroScene}>
+            <div className={styles.heroPhoto}>
+              <img key={heroMood} src={`/images/editorial/${mood.image}.jpg`} alt={tr(mood.photoAlt)} width="1400" height="960" fetchpriority="high" />
+              <p>{tr(mood.caption)}</p>
+            </div>
+            <div className={styles.heroPhone}>
+              <img src="/images/youknow-map-860.webp" srcSet="/images/youknow-map-430.webp 430w, /images/youknow-map-860.webp 860w" sizes="(max-width:760px) clamp(184px,58vw,244px), (max-width:900px) 220px, 245px" alt={tr('YouKnow app map showing real recommendations around Zurich.')} width="1290" height="2796" fetchpriority="high" />
+              <HeroSourcePins />
+            </div>
+          </div>
+          <HeroRecommendations mood={mood} selectedIndex={heroPlace} onSelect={setHeroPlace} />
+        </div>
+        <div className={styles.heroBottom}><span>{tr('Local knowledge. A world of possibilities.')}</span><span>{tr('AVAILABLE IN')} <LanguageSwitcher /></span><a href="#how-it-works">{tr('DISCOVER YOUKNOW')}{' '}<span aria-hidden="true">↓</span></a></div>
         </div>
       </section>
 

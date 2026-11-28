@@ -1,0 +1,46 @@
+.layer { position:absolute; z-index:3; inset:5px; container-type:inline-size; pointer-events:none; }
+.tile { position:absolute; z-index:2; display:grid; place-items:center; width:21%; aspect-ratio:1; padding:3.4%; background:#fff; border-radius:27%; box-shadow:0 10px 22px -8px #1f293759,0 1px 3px #1f29371f; transform:translate(-50%,-50%) rotate(3deg); animation:tileBump 12s var(--delay) infinite both; }
+.tile img { display:block; width:100%; height:100%; object-fit:contain; border-radius:0; }
+.pin { position:absolute; z-index:3; left:var(--px); top:var(--py); font-size:20px; font-size:clamp(11px,10.5cqw,24px); line-height:1; transform:translate(-50%,-50%); animation:pinX 12s var(--delay) infinite both,pinY 12s var(--delay) infinite both,pinShow 12s var(--delay) infinite both; }
+/* The emoji on a soft cloud, with the source in its top corner and a dot marking the spot. */
+.glyph { position:relative; display:grid; place-items:center; width:2.1em; height:1.7em; font-family:'Apple Color Emoji','Noto Color Emoji','Segoe UI Emoji',sans-serif; }
+.glyph::before { content:''; position:absolute; z-index:-1; inset:.1em .16em; background:#fff; border-radius:50%; box-shadow:0 .12em .4em #1f293747,0 0 .2em #ffffff; }
+.glyph::after { content:''; position:absolute; left:50%; top:100%; width:.24em; height:.24em; margin:.06em 0 0 -.12em; background:#23252a; border:.04em solid #fff; border-radius:50%; }
+.badge { position:absolute; right:-.08em; top:-.3em; display:grid; place-items:center; width:.95em; height:.95em; padding:.13em; background:#fff; border-radius:50%; box-shadow:0 1px 3px #1f293740; }
+.badge img { display:block; width:100%; height:100%; object-fit:contain; border-radius:0; }
+/* Landing: a ring and a few sparks, as in the app. */
+.burst { position:absolute; z-index:-2; left:50%; top:50%; width:1em; height:1em; margin:-.5em 0 0 -.5em; border:.1em solid var(--blue,#395a75); border-radius:50%; opacity:0; animation:burstRing 12s var(--delay) infinite both; }
+.burst::after { content:''; position:absolute; left:50%; top:50%; width:.14em; height:.14em; margin:-.07em 0 0 -.07em; background:var(--blue,#395a75); border-radius:50%; box-shadow:.92em .38em,.38em .92em,-.38em .92em,-.92em .38em,-.92em -.38em,-.38em -.92em,.38em -.92em,.92em -.38em; color:var(--blue,#395a75); }
+/* One 12-second loop per source: the flight takes about a second, then the pin stays. */
+@keyframes pinX {
+  0%,2% { left:var(--sx); animation-timing-function:cubic-bezier(.65,0,.35,1); }
+  10%,100% { left:var(--px); }
+}
+@keyframes pinY {
+  0%,2% { top:var(--sy); animation-timing-function:cubic-bezier(.33,1,.68,1); }
+  5.6% { top:var(--peak); animation-timing-function:cubic-bezier(.32,0,.67,0); }
+  10%,100% { top:var(--py); }
+}
+@keyframes pinShow {
+  0%,2% { opacity:0; transform:translate(-50%,-50%) scale(.45); }
+  3% { opacity:1; }
+  6% { transform:translate(-50%,-50%) scale(1.7); }
+  10% { transform:translate(-50%,-50%) scale(1.45); }
+  12% { transform:translate(-50%,-50%) scale(.88); }
+  13.6% { transform:translate(-50%,-50%) scale(1.07); }
+  15%,86% { opacity:1; transform:translate(-50%,-50%) scale(1); }
+  91%,100% { opacity:0; transform:translate(-50%,-50%) scale(.6); }
+}
+@keyframes burstRing {
+  0%,10% { opacity:0; transform:scale(1.2); }
+  10.5% { opacity:.6; }
+  15%,100% { opacity:0; transform:scale(3.3); }
+}
+@keyframes tileBump {
+  0%,1% { transform:translate(-50%,-50%) rotate(3deg) scale(1); }
+  2.4% { transform:translate(-50%,-50%) rotate(3deg) scale(1.16); }
+  5%,100% { transform:translate(-50%,-50%) rotate(3deg) scale(1); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .tile,.pin,.burst { animation:none; }
+}

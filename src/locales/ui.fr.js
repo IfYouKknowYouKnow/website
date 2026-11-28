@@ -1,7 +1,11 @@
 // French interface strings. Keys are the English source strings; see scripts/extract-messages.mjs.
 export default {
-  // src/pages/Landing.jsx (hero cards)
+  // src/components/HeroRecommendations.jsx
+  "Illustrative recommendations from friends and curators": "Exemples de recommandations d’amis et de curateurs",
   "Example": "Exemple",
+  "{name}’s example recommendations": "Exemples de recommandations : {name}",
+  "Preview {place}, recommended by {name}": "Voir {place}, recommandé par {name}",
+  "WHY {name} SAVED IT": "POURQUOI {name} L’A ENREGISTRÉ",
 
   // src/components/LanguageSwitcher.jsx
   "Language": "Langue",
@@ -79,12 +83,25 @@ export default {
   "Watch the {label} saving video": "Regarder la vidéo d’enregistrement : {label}",
 
   // src/heroMoodExamples.js
+  "A café with leafy plants and a sunny window.": "Un café avec des plantes vertes et une fenêtre ensoleillée.",
+  "Your new regular.": "Ton nouveau QG.",
   "Your friend": "Ton amie",
   "Ana recommends these spots near you.": "Ana te recommande ces adresses près de toi.",
+  "A flat white, a window seat, and no reason to rush.": "Un flat white, une place près de la fenêtre et aucune raison de se presser.",
+  "The spot for a long catch-up over a second coffee.": "L’endroit idéal pour se raconter sa vie autour d’un deuxième café.",
+  "After dark": "À la nuit tombée",
+  "An inviting bar with warm lamps.": "Un bar accueillant aux lumières chaudes.",
+  "One more round?": "Une autre tournée ?",
   "Local curator you follow": "Curatrice locale que tu suis",
   "Maya knows where your night should start.": "Maya sait où ta soirée doit commencer.",
+  "A cosy corner and a proper cocktail. Bring your favourite person.": "Un coin cosy et un vrai bon cocktail. Viens avec ta personne préférée.",
+  "For the after-work drink that turns into the whole evening.": "Pour l’afterwork qui finit par durer toute la soirée.",
+  "A restaurant ready for your next dinner plan.": "Un restaurant prêt pour ton prochain dîner.",
+  "Dinner is sorted.": "Le dîner, c’est réglé.",
   "Food curator you follow": "Curateur food que tu suis",
   "Luca’s dinner picks. Your next good plan.": "Les adresses de Luca pour dîner. Ton prochain bon plan.",
+  "Pizza in the middle of the table. No overthinking required.": "Une pizza au milieu de la table. Pas besoin de se prendre la tête.",
+  "A little sushi, good company, and the start of a great night.": "Quelques sushis, de la bonne compagnie et le début d’une belle soirée.",
 
   // src/landingContent.js
   "What is YouKnow Map?": "Qu’est-ce que YouKnow Map ?",
@@ -251,13 +268,20 @@ export default {
   "Product": "Produit",
   "Community": "Communauté",
   "City guides": "Guides de ville",
+  "Welcome to YouKnow": "Bienvenue sur YouKnow",
   "Your map starts": "Ta carte commence",
   "with you.": "avec toi.",
-  "A hand holding a phone with the YouKnow map of Zurich and its recommended places.": "Une main tenant un téléphone avec la carte YouKnow de Zurich et ses adresses recommandées.",
   "Save the places you love. Find your next favourites through people who get you.": "Enregistre les adresses que tu aimes. Trouve tes prochains coups de cœur grâce à ceux qui te comprennent.",
   "Good places, from people you trust.": "De bonnes adresses, par des gens de confiance.",
+  "Explore the app": "Explorer l’app",
   "Completely free. On iOS & Android.": "Entièrement gratuit. Sur iOS & Android.",
+  "Find your next favourite.": "Trouve ton prochain coup de cœur.",
+  "Pick a mood": "Choisis ton humeur",
+  "Choose a mood for the homepage preview": "Choisir une humeur pour l’aperçu de la page d’accueil",
+  "YouKnow app map showing real recommendations around Zurich.": "Carte de l’app YouKnow avec de vraies recommandations autour de Zurich.",
+  "Local knowledge. A world of possibilities.": "Des conseils de locaux. Un monde de possibilités.",
   "AVAILABLE IN": "DISPONIBLE EN",
+  "DISCOVER YOUKNOW": "DÉCOUVRIR YOUKNOW",
   "YouKnow community stats": "Chiffres de la communauté YouKnow",
   "cities and counting": "villes, et ça continue",
   "Recommendations with a point of view.": "Des recommandations avec un vrai point de vue.",

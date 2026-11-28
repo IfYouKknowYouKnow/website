@@ -102,7 +102,7 @@ for (const page of pages) {
     const initialText = textContent(tree).replace(/\s+/g, ' ')
     const exportedText = markdown.replace(/\s+/g, ' ')
     for (const passage of [
-      'Save the places you love. Find your next favourites through people who get you.',
+      'Local knowledge. A world of possibilities.',
       'Instagram, TikTok and Google Maps',
       'Start with people you trust.',
       'Find people who get your taste.',
